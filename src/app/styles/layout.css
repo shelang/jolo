@@ -1,0 +1,22 @@
+.site-layout-background{
+    background-color: '#fff';
+}
+#root,
+div[data-reactroot] {
+  height: 100%;
+}
+.ant-layout {
+  /* background-color: #F3F9F9; */
+  /* background-color: #e6f7ff; */
+  height: 100%;
+}
+.layout-content{
+  min-height: 500px;
+  background-color: #fff;
+  margin: 24px 16px;
+  padding: 24px;
+}
+.ant-card-head{
+  padding: 0;
+}
+
