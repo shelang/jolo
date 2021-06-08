@@ -1,5 +1,7 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, Select } from 'antd'
+
+const { Option } = Select
 
 export const FormItem = (props) => {
     let formElement = null
@@ -22,6 +24,22 @@ export const FormItem = (props) => {
                 />
             </Form.Item>
             break
+        // case 'select' :
+        //     formElement = <Form.Item
+        //         name={props.name}
+        //         rules={[{
+        //             required: props.required,
+        //             message: props.message
+        //             }]}
+        //     >
+        //             <Select 
+        //                 placeholder={props.selectItem.placeholder}>
+        //                 <Option value="male">Male</Option>
+        //                 <Option value="female">Female</Option>
+        //                 <Option value="other">Other</Option>
+        //             </Select>
+        //         </Form.Item>
+        //         break    
         case 'button' :
             formElement = <Form.Item>
                 <Button 
@@ -30,6 +48,7 @@ export const FormItem = (props) => {
                     className={props.buttonClassName}
                     onClick={props.click}
                     disabled={props.disabled}
+                    size={props.buttonSize}
                     >
                     {/* {props.buttonValue} */}
                     {props.children}

@@ -120,7 +120,7 @@ export const auth = (_username, _password) => {
             // , 
             // payload: { 'text': language.tokens['YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT'], show : true, type: 'success' }
         })
-            dispatch(checkAuthTimeout(_token_payload.exp))
+            // dispatch(checkAuthTimeout(_token_payload.exp))
       })
         .catch(err => {
             console.log(err)

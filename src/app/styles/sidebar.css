@@ -14,7 +14,11 @@
   }
 ._sidebar_sider{
     background: #fff;
+    max-width: 240px;
+    min-width: 240px;
+    width: 240px;
 }
+
 ._custom_divider{
     margin: 0;
 }
@@ -39,12 +43,37 @@
     /* background-color: #fff; */
     color: #1890ff;
 }
+/* .panel-container .ant-card-body{
+    display: flex;
+    justify-content: flex-start;
+} */
 .ant-tooltip-arrow-content{
     background-color: #1890ff;
     width: 8px;
     height: 8px;
 }
-
+.panel-container .ant-card-head{
+    font-weight: bold;
+    font-size: 17px;
+}
+.form-item-col .ant-form-item-label > label {
+    color: #808080;
+    font-size: 14px;
+    font-weight: bold;
+}
+/* .row-content{
+    padding-bottom: 15px;
+} */
+.form-item-col .ant-input {
+    background-color: rgb(236, 236, 236);
+}
+.row-content .ant-btn{
+    width: 40%;
+    border-radius: 4px;
+}
+/* .row-content .ant-col{
+    padding: 10px;
+} */
 /* .anticon {
     line-height: 25px;
 } */

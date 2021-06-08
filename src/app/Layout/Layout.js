@@ -7,15 +7,15 @@ const Layout = (props) => {
   return (
     <React.Fragment>
       {
-        props.is_login ? (
-          <DashboardLayout />
+        !props.is_login ? (
+          <>{props.children}</>   
         )
         :
-        null
+        <DashboardLayout />
       }         
-      <>{props.children}</>
+      
     </React.Fragment>
   );
 };
 
-export default React.memo(Layout)
+export default Layout

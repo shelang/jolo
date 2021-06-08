@@ -10,6 +10,8 @@
     "LINKS_LIST_PAGE":"Links List page",
     "LOG_OUT": "Log out",
     "TITLE": "Title",
+    "URL": "URL",
+    "STATUS": "Status",
     "PLEASE_INPUT_USERNAME": "Please input your Username!",
     "PLEASE_INPUT_PASSWORD": "Please input your Password!",
     "MAX_USER_NAME_CHAR_LIMIT": "Maximum Username Length is 200 Characters",
@@ -22,5 +24,10 @@
     "ENTER_YOUR_USER_NAME": "Enter your Username",
     "ENTER_YOUR_VERIFICATION_CODE": "Enter your Password",
     "ENTER_USER_NAME_AND_VERIFICATION_CODE": "Enter your Username and your Password",
-    "YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT": "You have successfully logged in to your account"
+    "YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT": "You have successfully logged in to your account",
+    "SELECT_YOUR_STATUS": "select your status",
+    "PLEASE_SELECT_STATUS": "Please select status!",
+    "EXPIRE_DATE": "Expire Date",
+    "DESCRIPTION":"description",
+    "CREATE":"create"
 }

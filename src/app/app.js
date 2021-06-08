@@ -19,19 +19,6 @@ export const AppWrapper = (props) => {
     dispatch(actions.checkAuthState())
   }, [onAutoSignIn])
 
-  
-  // const childRoutes = [
-  //   {
-  //     'path':'/create',
-  //     'component': CreateLink,
-  //     'exactly': true,
-  //   },
-  //   {
-  //     'path':'/list',
-  //     'component': LinksList
-  //   }
-  // ];
-
   let routes = (
     <Switch>
       <Route path="/login" exact component={Login}/>

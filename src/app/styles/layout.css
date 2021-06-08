@@ -11,10 +11,16 @@ div[data-reactroot] {
   height: 100%;
 }
 .layout-content{
-  min-height: 500px;
+  /* min-height: 500px; */
+  height: 90%;
   background-color: #fff;
-  margin: 24px 16px;
-  padding: 24px;
+  margin: 0;
+  padding: 0;
+  margin-top: 20px;
+  padding-right: 24px;
+  padding-left: 24px;
+  /* margin: 24px 16px;
+  padding: 24px; */
 }
 .ant-card-head{
   padding: 0;
