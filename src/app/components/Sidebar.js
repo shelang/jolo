@@ -41,7 +41,7 @@ const Sidebar = (props) => {
     //         if(item.url && isActive(item.url, history)){
     //             set_active_key(item.key)
     //           }
-    //        console.log("2222222",item)   
+    //         
     //        if (menu.length === 0) {
     //         return (
     //             <Menu.Item key={item.key}>

@@ -6,6 +6,7 @@ export const logout = () => {
     return dispatch => {
         localStorage.removeItem('token')
         localStorage.removeItem('refresh')
+        localStorage.removeItem('expireDate')
         localStorage.removeItem('is_launched_account')
         dispatch({ type : 'APP_LOGOUT'}) 
     }
@@ -115,7 +116,10 @@ export const auth = (_username, _password) => {
             dispatch({ type : 'AUTH_SUCCESS', 
                 payload: { 'token' : res.data.token, 'refresh': res.data.refresh} 
             })
-            dispatch({ type : 'LAUNCH_ACCOUNT', payload: { 'text': language.tokens['YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT'], show : true, type: 'success' }})
+            dispatch({ type : 'LAUNCH_ACCOUNT'
+            // , 
+            // payload: { 'text': language.tokens['YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT'], show : true, type: 'success' }
+        })
             dispatch(checkAuthTimeout(_token_payload.exp))
       })
         .catch(err => {

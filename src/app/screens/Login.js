@@ -31,7 +31,7 @@ export const Login = () => {
         //login validation
         if (user_name.length > 200) {
             set_button_status({ status: false, error: language.tokens['MAX_USER_NAME_CHAR_LIMIT'] })
-        }else if(password.length > 72){
+        }else if(password.length > 72) {
             set_button_status({ status: false, error: language.tokens['MAX_PASS_CHAR_LIMIT'] })
         }else if (user_name === '' && password === '') {
             set_button_status({ status: false, error: language.tokens['ENTER_USER_NAME_AND_VERIFICATION_CODE'] })

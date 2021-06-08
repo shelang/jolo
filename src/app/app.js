@@ -12,41 +12,47 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 export const AppWrapper = (props) => {
 
   const is_launched_account = useSelector(state => state.app.is_launched_account)
-  const alert = useSelector(state => state.app.alert)
   const { onAutoSignIn } = props
   const dispatch = useDispatch()
-  
+ 
   useEffect(() => {
     dispatch(actions.checkAuthState())
   }, [onAutoSignIn])
 
-  useEffect(() => {
-		if (alert.show)
-            setTimeout(dispatch, 5000, { 'type': 'APP_SET_ALERT' })
-	}, [alert])
+  
+  // const childRoutes = [
+  //   {
+  //     'path':'/create',
+  //     'component': CreateLink,
+  //     'exactly': true,
+  //   },
+  //   {
+  //     'path':'/list',
+  //     'component': LinksList
+  //   }
+  // ];
 
-
-    let routes = (
-      <Switch>
-        <Route path="/login" component={Login}/>
-        <Redirect to="/login" />
-      </Switch>
-    )
+  let routes = (
+    <Switch>
+      <Route path="/login" exact component={Login}/>
+      <Redirect to="/login" />
+    </Switch>
+  )
 
     if(is_launched_account) {
-    
       routes = (
         <Switch>
+          {/* <Route path="/login" component={Login}/> */}
           <Route path='/create' exact component={CreateLink}/>
           <Route path='/list' component={LinksList}/>
           <Route path="/logout" component={LogOut}/>
-          <Redirect to='/create' />
+          <Route path="/" component={Layout}/>
         </Switch>
       );
     }
 
     return(
-      <Layout is_login={is_launched_account} is_alert={alert}>{routes}</Layout>
+      <Layout is_login={is_launched_account}>{routes}</Layout>
     )
 }
     
