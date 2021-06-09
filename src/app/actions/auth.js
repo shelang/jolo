@@ -124,9 +124,9 @@ export const auth = (_username, _password) => {
       })
         .catch(err => {
             console.log(err)
-            dispatch({ type : 'AUTH_FAIL', 
-                // payload: { 'text': err.response.data.message , show : true, type: 'error' } 
-            })
+            // dispatch({ type : 'AUTH_FAIL', 
+            //     payload: { 'text': err , show : true, type: 'error' } 
+            // })
         });
     }
 } 

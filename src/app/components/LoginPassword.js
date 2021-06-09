@@ -92,11 +92,11 @@ export const LoginPassword = (props) => {
                         :null    
                     }
                 </Form>
-                {
+                {/* {
                     props.messageAuth.show && (
                         notify(props.messageAuth.text, props.messageAuth.type)                                             
                     )  
-                }
+                } */}
             </>
     )
 }

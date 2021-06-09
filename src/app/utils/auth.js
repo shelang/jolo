@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
-
 const validate = function(history) {
-    // const isLoggedIn = !!window.localStorage.getItem("uid");
-    // if (!isLoggedIn && history.location.pathname != "/login") {
+
+    // const is_logged_in = !!window.localStorage.getItem("uid");
+    // if (!is_logged_in && history.location.pathname != "/login") {
     //   if (history.location.pathname !== "/create") {
     //     history.replace("/create");
     // }

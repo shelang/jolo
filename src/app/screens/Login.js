@@ -10,7 +10,7 @@ export const Login = () => {
     const [password, set_password] = useState('')
     const [button_status, set_button_status] = useState({ status: false, error: null })
     const loading_status = useSelector(state => state.auth.loading)
-    const alert = useSelector(state => state.auth.alert)
+    // const alert = useSelector(state => state.auth.alert)
     const dispatch = useDispatch()
 
     const validation_form = (username, pass) => {
@@ -73,7 +73,7 @@ export const Login = () => {
                onSubmitForm={(e) => submitHandler(e)}
                errorMessage={button_status}
                loading={loading_status}
-               messageAuth={alert}
+            //    messageAuth={alert}
             />           
     )
 

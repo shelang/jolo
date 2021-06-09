@@ -6,13 +6,13 @@ const Layout = (props) => {
 
   return (
     <React.Fragment>
-      {
+      {/* {
         !props.is_login ? (
           <>{props.children}</>   
         )
-        :
+        : */}
         <DashboardLayout />
-      }         
+      {/* }          */}
       
     </React.Fragment>
   );

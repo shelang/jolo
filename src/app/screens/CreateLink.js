@@ -3,13 +3,13 @@ import PanelBox from '../components/PanelBox'
 import { Form, Input, Row, Col, Select, DatePicker} from 'antd'
 import FormItem from '../components/FormItem'
 import language from '../resources/js/languages_dict'
+import '../styles/create_link.css'
 
 const { Option } = Select
 const { TextArea } = Input
 
 const CreateLink = () => {
 
-    
 const submithandler = () => {
     console.log()
 }
@@ -102,7 +102,7 @@ const onChangeTextAreaHandler = (e) => {
                 </Row> 
                 <br />
                 <br />
-                <Row>
+                <Row className='ant-form-inline row-content'>
                     <Col flex={1}>
                         <FormItem
                             // click={props.onSubmitForm}
