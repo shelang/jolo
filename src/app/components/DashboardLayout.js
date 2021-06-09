@@ -2,12 +2,11 @@ import React from 'react'
 import { Layout } from 'antd'
 import Header from '../components/CustomHeader'
 import Sidebar from '../components/Sidebar'
-// import NavPath from '../components/NavPath'
 import '../styles/layout.css'
 import { Route, Redirect } from 'react-router-dom'
 import authHOC from '../utils/auth'
 import { childRoutes }  from '../route'
-import notify from '../utils/notify'
+// import notify from '../utils/notify'
 
 const { Content } = Layout
 

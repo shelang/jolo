@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, { Component } from "react"
+import { withRouter } from "react-router-dom"
 
 const validate = function(history) {
-
     // const is_logged_in = !!window.localStorage.getItem("uid");
     // if (!is_logged_in && history.location.pathname != "/login") {
     //   if (history.location.pathname !== "/create") {
@@ -21,12 +20,11 @@ export default function authHOC(BaseComponent) {
         }
       }
       checkAuthentication(params) {
-
         const { history } = params;
         validate(history)
       }
       render() {
-        return <BaseComponent {...this.props} />;
+        return <BaseComponent {...this.props} />
       }
     }
     return withRouter(Restricted);
