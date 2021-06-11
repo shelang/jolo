@@ -1,8 +1,8 @@
-.panel-container .ant-card-head{
+.panel-box-container .ant-card-head{
     font-weight: bold;
     font-size: 17px;
 }
-.row-content .ant-btn{
+.row-content-button .ant-btn{
     width: 40%;
     border-radius: 4px;
 }
@@ -16,6 +16,18 @@
 } */
 .form-item-col .ant-input {
     background-color: rgb(236, 236, 236);
+}
+.panel-box-container .ant-form-inline .ant-form-item-with-help {
+    margin-bottom: 0;
+}
+.panel-box-container .row-content {
+    height: 130px;
+}
+.panel-box-container .row-content-button {
+    margin-bottom: 10px;
+}
+.row-content .ant-switch{
+    margin-bottom: 10px;
 }
 /* .row-content .ant-col{
     padding: 10px;

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Select } from 'antd'
+import { Form, Input, Button, Select, Switch } from 'antd'
 
 const { Option } = Select
 
@@ -9,12 +9,13 @@ export const FormItem = (props) => {
         case 'input' :
             formElement = <Form.Item
                 name={props.name}
+                label={props.label}
                 rules={[{
                     required: props.required,
                     message: props.message
                 }]}
                 hasFeedback={props.hasFeedback}
-            >
+            >      
                 <Input
                     value={props.inputValue}
                     onChange={props.change}
@@ -23,23 +24,36 @@ export const FormItem = (props) => {
                     placeholder={props.inputItem.placeholder}
                 />
             </Form.Item>
-            break
-        // case 'select' :
-        //     formElement = <Form.Item
-        //         name={props.name}
-        //         rules={[{
-        //             required: props.required,
-        //             message: props.message
-        //             }]}
-        //     >
-        //             <Select 
-        //                 placeholder={props.selectItem.placeholder}>
-        //                 <Option value="male">Male</Option>
-        //                 <Option value="female">Female</Option>
-        //                 <Option value="other">Other</Option>
-        //             </Select>
-        //         </Form.Item>
-        //         break    
+            break;
+        case 'inputwithswitch' :
+                formElement = <Form.Item
+                    name={props.name}
+                    label={props.label}
+                    rules={[{
+                        required: props.required,
+                        message: props.message
+                    }]}
+                    hasFeedback={props.hasFeedback}
+                >      
+                    {props.itemSwitch?
+                    <span>
+                        <Switch onChange={props.inputItem.radioButtonAction} size={props.inputItem.size}/>    
+                    </span>:null }          
+                    <Input
+                        disabled={props.disabled}
+                        value={props.inputValue}
+                        onChange={props.change}
+                        prefix={props.inputItem.inputIcon ? props.inputItem.renderIcon() : null} 
+                        type={props.inputItem.inputType ? props.inputItem.inputType : null}   
+                        placeholder={props.inputItem.placeholder}
+                    />
+                </Form.Item>
+                break;  
+        case 'switch' :
+            formElement = <Form.Item label={props.label} name={props.name}>
+                        <Switch size={props.size} onChange={props.change} />    
+                </Form.Item>
+            break;                
         case 'button' :
             formElement = <Form.Item>
                 <Button 
@@ -54,7 +68,7 @@ export const FormItem = (props) => {
                     {props.children}
                 </Button>
             </Form.Item>
-            break
+            break;
         default :
             formElement = <Form.Item></Form.Item>   
     }

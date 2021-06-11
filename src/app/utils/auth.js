@@ -12,15 +12,15 @@ const validate = function(history) {
 export default function authHOC(BaseComponent) {
     class Restricted extends Component {
       componentWillMount() {
-        this.checkAuthentication(this.props);
+        this.checkAuthentication(this.props)
       }
       componentWillReceiveProps(nextProps) {
         if (nextProps.location !== this.props.location) {
-          this.checkAuthentication(nextProps);
+          this.checkAuthentication(nextProps)
         }
       }
       checkAuthentication(params) {
-        const { history } = params;
+        const { history } = params
         validate(history)
       }
       render() {

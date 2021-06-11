@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table } from 'antd';
+import { Table } from 'antd'
 import PanelBox from '../components/PanelBox'
 import language from '../resources/js/languages_dict'
 
@@ -70,7 +70,7 @@ const LinksList = () => {
       ];
 
     const handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+        console.log('parameters', pagination, filters, sorter);
         set_sorted_info(sorter)
     }
     return(

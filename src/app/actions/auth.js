@@ -1,6 +1,5 @@
 
 import axios from 'axios'
-import language from '../resources/js/languages_dict'
 
 export const logout = () => {
     return dispatch => {
@@ -107,7 +106,7 @@ export const auth = (_username, _password) => {
       .then(res => {
             let _token_payload = parseJwt(res.data.token)
             const expireDate = new Date(
-                _token_payload.iat + _token_payload.exp
+                ( _token_payload.iat * 1000 ) + ( _token_payload.exp * 1000 )
             )
             localStorage.setItem('token', res.data.token)
             localStorage.setItem('refresh', res.data.refresh)
@@ -116,8 +115,7 @@ export const auth = (_username, _password) => {
             dispatch({ type : 'AUTH_SUCCESS', 
                 payload: { 'token' : res.data.token, 'refresh': res.data.refresh} 
             })
-            dispatch({ type : 'LAUNCH_ACCOUNT'
-            // , 
+            dispatch({ type : 'LAUNCH_ACCOUNT', payload: { 'token' : res.data.token } 
             // payload: { 'text': language.tokens['YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT'], show : true, type: 'success' }
         })
             // dispatch(checkAuthTimeout(_token_payload.exp))

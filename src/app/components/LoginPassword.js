@@ -55,7 +55,6 @@ export const LoginPassword = (props) => {
                     {
                         props.loading ? 
                         <FormItem
-                            click={props.onSubmitForm}
                             itemType="button"
                             buttonClassName="login-form-button"
                             buttonType="primary"
@@ -75,14 +74,13 @@ export const LoginPassword = (props) => {
                                 {language.tokens['LOG_IN']}
                             </FormItem>
                         :
-                            <FormItem
-                                click={props.onSubmitForm}
+                            <FormItem                             
                                 disabled={true}
                                 itemType="button"
                                 buttonClassName="login-form-button"
                                 buttonType="primary"
                                 htmlType="submit"
-                                >
+                            >
                                 {language.tokens['LOG_IN']}
                             </FormItem> 
                     }                
