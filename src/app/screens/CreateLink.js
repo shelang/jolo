@@ -8,6 +8,7 @@ import * as actions from '../actions'
 import loading_spinner from '../resources/js/loading_spinner'
 import Loading from '../components/Loading'
 import '../styles/create_link.css'
+import { useHistory } from 'react-router-dom'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -28,8 +29,11 @@ const CreateLink = () => {
     const [button_status, set_button_status] = useState({ status: false, error: null })
     const token = useSelector(state => state.app.token)
     const loading = useSelector(state => state.createlink.loading)
+    const alert = useSelector(state => state.createlink.alert)
     const dispatch = useDispatch()
+    const history = useHistory()
     const text_input = useRef()
+    const is_first_run = useRef(true)
     
     const clickSwitchHandler = () => {
         set_radio_button((prev) => (!prev))
@@ -45,6 +49,7 @@ const CreateLink = () => {
 
     const validation_form = (title, url,index_status, index_mode,exp_date, des, hash, param, token) => {
         dispatch(actions.createLink(title, url, index_status, index_mode, exp_date, des, hash, param, token))
+        history.push('/create')
     }
 
     const submithandler = (e) => {
@@ -72,7 +77,7 @@ const CreateLink = () => {
             validation_form(title, url_item, target_status, target_mode, date, description, domain_password, radio_button, token)
         }  
     }
-
+    
     useEffect(() => {
         if (title && url_item) {
             set_button_status({ status: false, error: null })
@@ -98,8 +103,17 @@ const CreateLink = () => {
     const onChangeTextAreaHandler = (e) => {
         set_description(e.target.value)
     } 
+
+    useEffect(() => {
+        if (is_first_run.current) {
+            is_first_run.current = false
+            return
+        }
+        if(alert.show){
+            setTimeout(dispatch, 6000, { 'type': 'CODE_SET_ALERT' })
+        }   
+    },[alert])
    
-    
     return(
         
         <PanelBox title={language.tokens['CREATE_LINK_PAGE']} className='panel-box-container'>
@@ -273,12 +287,18 @@ const CreateLink = () => {
                     <Col flex={4}></Col>
                 </Row>  
                 <Row className='ant-form-inline'>
-                    <Col flex={1}>
+                    <Col flex={1}>                 
                         {
                             button_status.error ?
                                 <Alert message={button_status.error} type="error" showIcon/>
                             :null    
                         } 
+                        {
+                            alert.show ?
+                                <Alert message={alert.text} type="success" />
+                                :
+                            null
+                        }           
                     </Col>
                     <Col flex={4}></Col>
                 </Row>       

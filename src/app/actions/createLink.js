@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import language from '../resources/js/languages_dict'
 
 export const createLink = (_title, _url, _status, _mode, _exp, _des, _hash, _param, token) => {
     return dispatch => {     
@@ -27,17 +28,16 @@ export const createLink = (_title, _url, _status, _mode, _exp, _des, _hash, _par
         
         let axiosConfig = {
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token 
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'                
             }
-        } 
+        }
      axios
        .post(url, data, axiosConfig)
        .then(res => {
            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!", res)
-            dispatch({ type : 'CREATE_LINK_SUCCESS'
-            // , 
-            //      payload: { } 
+            dispatch({ type : 'CREATE_LINK_SUCCESS', payload: { 'text': language.tokens['YOUR_INFORMATION_SUCCESSFULLY_REGISTERED'], 
+            show : true, type: 'error' }
             })
         })
         .catch(err => {

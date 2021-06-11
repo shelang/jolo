@@ -32,8 +32,8 @@
     "CREATE":"create",
     "THIS_IS_EXAMPLE": "This is example",
     "URL_EXAMPLE": "https://example.com",
-    "ACTIVE" : "Active",
-    "DEACTIVE" : "Deactive",
+    "ACTIVE" : "ACTIVE",
+    "DEACTIVE" : "DEACTIVE",
     "DOMAIN_PASSWORD": "Domain password",
     "THIS_FIELD_IS_OPTIONAL":"This field is optional",
     "REDIRECT_MODE": "Redirect Mode",
@@ -45,5 +45,6 @@
     "MAX_DOMAIN_PASSWORD_CHAR_LIMIT": "Maximum Domain password Length is 20 Characters",
     "PLEASE_INPUT_DESCRIPTION": "Please input Description!",
     "PLEASE_SELECT_EXPIRE_DATE": "Please Select Expire Date!",
-    "ENTER_TITLE_AND_URL": "Enter Title and URL"
+    "ENTER_TITLE_AND_URL": "Enter Title and URL",
+    "YOUR_INFORMATION_SUCCESSFULLY_REGISTERED": "Your information successfully registered"
 }
