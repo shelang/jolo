@@ -6,6 +6,7 @@ import Login from './screens/Login'
 import Layout from './Layout/Layout'
 import CreateLink from './screens/CreateLink'
 import LinksList from './screens/LinksList'
+import CreateStatus from './screens/CreateStatus'
 import LogOut from './screens/LogOut'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 
@@ -32,6 +33,7 @@ export const AppWrapper = (props) => {
           {/* <Route path="/login" component={Login}/> */}
           <Route path='/create' exact component={CreateLink}/>
           <Route path='/list' component={LinksList}/>
+          <Route path='/createStatus' component={CreateStatus}/>
           <Route path="/logout" component={LogOut}/>
           <Route path="/" component={Layout}/>
         </Switch>

@@ -1,6 +1,7 @@
 import React from 'react'
 import LinksList from '../screens/LinksList'
 import CreateLink from '../screens/CreateLink'
+import CreateStatus from '../screens/CreateStatus'
 import LogOut from '../screens/LogOut'
 
 export const childRoutes = [
@@ -12,6 +13,10 @@ export const childRoutes = [
   {
     'path':'/list',
     'component': LinksList
+  },
+  {
+    'path':'/createStatus',
+    'component': CreateStatus
   },
   {
     'path':'/logout',

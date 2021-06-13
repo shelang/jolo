@@ -15,13 +15,17 @@ export const FormItem = (props) => {
                     message: props.message
                 }]}
                 hasFeedback={props.hasFeedback}
+                initialvalues={props.inputName ? props.defaultValue : null}
             >      
                 <Input
                     value={props.inputValue}
+                    defaultValue={props.defaultValue}
+                    name={props.inputName}
                     onChange={props.change}
-                    prefix={props.inputItem.inputIcon ? props.inputItem.renderIcon() : null} 
+                    prefix={props.inputItem && props.inputItem.inputIcon ? props.inputItem.renderIcon() : null} 
                     type={props.inputItem.inputType ? props.inputItem.inputType : null}   
                     placeholder={props.inputItem.placeholder}
+                    disabled={props.disabled}
                 />
             </Form.Item>
             break;

@@ -1,12 +1,12 @@
-
 import axios from 'axios'
+import CookieService from '../services/CookieService'
 
 export const logout = () => {
     return dispatch => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('refresh')
-        localStorage.removeItem('expireDate')
-        localStorage.removeItem('is_launched_account')
+        CookieService.remove('token')
+        CookieService.remove('refresh')
+        CookieService.remove('expireDate')
+
         dispatch({ type : 'APP_LOGOUT'}) 
     }
 }
@@ -25,17 +25,53 @@ export const checkAuthTimeout = expireTime => {
     }
 }
 
+export const getTokenAuth = refresh => {
+    return dispatch => {
+        let data = ''
+
+        let url=
+            "https://stg.snb.link/api/v1/login/refresh"
+        
+        let axiosConfig = {
+            headers: {
+                'Authorization': 'Bearer ' + refresh 
+            }
+        }
+             
+    axios
+        .post(url, data, axiosConfig)
+        .then(res => {
+            let _token_payload = parseJwt(res.data.token)
+            const expireDate = new Date(
+                ( _token_payload.iat * 1000 ) + ( _token_payload.exp * 1000) 
+            )
+            const options = { path: '/login', expires: expireDate}
+
+            CookieService.set('token', res.data.token, options)
+            CookieService.set('refresh', res.data.refresh, undefined)
+            CookieService.set('expireDate', expireDate, undefined) 
+
+            dispatch({ type : 'AUTH_SUCCESS', 
+                payload: { 'token' : res.data.token, 'refresh': res.data.refresh} 
+            })
+            // dispatch(checkAuthTimeout(_token_payload.exp))
+        })
+        .catch(err => {
+            console.log(err)
+        });        
+    }
+}
 
 export const checkAuthState = () => {
     return dispatch => {
-      const _token = localStorage.getItem('token')
-      const _refresh = localStorage.getItem('refresh')
+      const _token = CookieService.get('token')
+      const _refresh = CookieService.get('refresh')
+
       if (!_token) {
         dispatch(logout())
       } else {
-        const expirationDate = new Date(localStorage.getItem('expireDate'))
+        const expirationDate = new Date(CookieService.get('expireDate'))
         if (expirationDate < new Date()) {
-        //   dispatch(logout())
             let _refresh_payload = parseJwt(_refresh)
             if (_refresh_payload.exp > new Date()){
                 dispatch(getTokenAuth(_refresh))
@@ -53,34 +89,7 @@ export const checkAuthState = () => {
       }
     };
   }
-
-export const getTokenAuth = refresh => {
-    return dispatch => {
-        let data = ''
-
-        let url=
-            "https://stg.snb.link/api/v1/login/refresh"
-        
-        let axiosConfig = {
-            headers: {
-                'Authorization': 'Bearer ' + refresh 
-            }
-        }
-             
-    axios
-        .post(url, data, axiosConfig)
-        .then(res => {
-            localStorage.setItem('token', res.data.token)
-            localStorage.setItem('refresh', res.data.refresh)
-            dispatch({ type : 'AUTH_SUCCESS', 
-                payload: { 'token' : res.data.token, 'refresh': res.data.refresh} 
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        });        
-    }
-}  
+  
 
 export const auth = (_username, _password) => {
     return dispatch => {
@@ -100,24 +109,26 @@ export const auth = (_username, _password) => {
                 'Content-Type': 'application/json'
             }
         }  
-        
     axios
       .post(url, auth_data, axiosConfig)
       .then(res => {
+
             let _token_payload = parseJwt(res.data.token)
             const expireDate = new Date(
-                ( _token_payload.iat * 1000 ) + ( _token_payload.exp * 1000 )
+                ( _token_payload.iat * 1000 ) + ( _token_payload.exp * 1000) 
             )
-            localStorage.setItem('token', res.data.token)
-            localStorage.setItem('refresh', res.data.refresh)
-            localStorage.setItem('expireDate', expireDate)
-            localStorage.setItem('is_launched_account', 'true')
+            const options = { path: '/login', expires: expireDate}
+
+            CookieService.set('token', res.data.token, options)
+            CookieService.set('refresh', res.data.refresh, undefined)
+            CookieService.set('expireDate', expireDate, undefined)    
+
             dispatch({ type : 'AUTH_SUCCESS', 
                 payload: { 'token' : res.data.token, 'refresh': res.data.refresh} 
             })
             dispatch({ type : 'LAUNCH_ACCOUNT', payload: { 'token' : res.data.token } 
             // payload: { 'text': language.tokens['YOU_HAVE_SUCCESSFULLY_LOGGED_IN_TO_YOUR_ACCOUNT'], show : true, type: 'success' }
-        })
+            })
             // dispatch(checkAuthTimeout(_token_payload.exp))
       })
         .catch(err => {

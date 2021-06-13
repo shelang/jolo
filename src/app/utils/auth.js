@@ -2,12 +2,12 @@ import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
 
 const validate = function(history) {
-    // const is_logged_in = !!window.localStorage.getItem("uid");
-    // if (!is_logged_in && history.location.pathname != "/login") {
-    //   if (history.location.pathname !== "/create") {
-    //     history.replace("/create");
+    // const is_logged_in = !!window.localStorage.getItem("id");
+    // if (!is_logged_in && history.location.pathname != "/createStatus") {
+    //   if (history.location.pathname !== "/createStatus") {
+    //     history.replace("/createStatus");
     // }
-  };
+};
 
 export default function authHOC(BaseComponent) {
     class Restricted extends Component {

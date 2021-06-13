@@ -70,7 +70,7 @@ const LinksList = () => {
       ];
 
     const handleChange = (pagination, filters, sorter) => {
-        console.log('parameters', pagination, filters, sorter);
+        // console.log('parameters', pagination, filters, sorter);
         set_sorted_info(sorter)
     }
     return(

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PanelBox from '../components/PanelBox'
 import { Form, Input, Row, Col, Select, DatePicker, Alert } from 'antd'
+import moment from 'moment'
 import FormItem from '../components/FormItem'
 import language from '../resources/js/languages_dict'
 import * as actions from '../actions'
@@ -27,13 +28,17 @@ const CreateLink = () => {
     const [domain_password, set_domain_password] = useState('')
     const [radio_button, set_radio_button] = useState()
     const [button_status, set_button_status] = useState({ status: false, error: null })
+
     const token = useSelector(state => state.app.token)
     const loading = useSelector(state => state.createlink.loading)
+    const user = useSelector(state => state.createlink.user)
+    const url = useSelector(state => state.createlink.data)
     const alert = useSelector(state => state.createlink.alert)
+
     const dispatch = useDispatch()
     const history = useHistory()
+    
     const text_input = useRef()
-    const is_first_run = useRef(true)
     
     const clickSwitchHandler = () => {
         set_radio_button((prev) => (!prev))
@@ -47,9 +52,8 @@ const CreateLink = () => {
         }         
     },[])
 
-    const validation_form = (title, url,index_status, index_mode,exp_date, des, hash, param, token) => {
+    const validation_form = (title, url, index_status, index_mode, exp_date, des, hash, param, token) => {
         dispatch(actions.createLink(title, url, index_status, index_mode, exp_date, des, hash, param, token))
-        history.push('/create')
     }
 
     const submithandler = (e) => {
@@ -61,14 +65,14 @@ const CreateLink = () => {
         } else if (description.length > 255) {
             set_button_status({ status: false, error: language.tokens['MAX_DESCRIPTION_CHAR_LIMIT'] })
         } else if (domain_password.length > 20) {
-            set_button_status({ status: false, error: language.tokens['MAX_DOMAIN_PASSWORD_CHAR_LIMIT'] })
+            set_button_status({ status: false, error: language.tokens['MAX_HASH_URL_CHAR_LIMIT'] })
         } else if (description === '') {
             set_button_status({ status: false, error: language.tokens['PLEASE_INPUT_DESCRIPTION'] })
         } else if (expire_date === '') {
             set_button_status({ status: false, error: language.tokens['PLEASE_SELECT_EXPIRE_DATE'] })
         } else if( title === '' && url_item === '' ) { 
             set_button_status({ status: false, error: language.tokens['ENTER_TITLE_AND_URL'] })
-        }else {
+        } else {
             set_button_status({ status: false, error: null })
             let target_status =  select_info_status[select_index_status] === undefined ?
                 select_index_status.value : select_info_status[select_index_status]
@@ -105,15 +109,16 @@ const CreateLink = () => {
     } 
 
     useEffect(() => {
-        if (is_first_run.current) {
-            is_first_run.current = false
-            return
+        if(!loading){
+            if (user.exist === true) {
+                history.push('/createStatus', { 'url': url, 'message': alert.text })
+            }
+		}
+        return () => {
+            dispatch({ 'type': 'CREATE_USER_NOT_EXIST' }) 
         }
-        if(alert.show){
-            setTimeout(dispatch, 6000, { 'type': 'CODE_SET_ALERT' })
-        }   
-    },[alert])
-   
+	}, [loading])
+
     return(
         
         <PanelBox title={language.tokens['CREATE_LINK_PAGE']} className='panel-box-container'>
@@ -193,6 +198,8 @@ const CreateLink = () => {
                                     set_expire_date(dateString)
                                 }}
                                 showTime 
+                                showNow={false}
+                                disabledDate={(current) => { return current && current < moment().endOf('day') }}
                                 format="YYYY-MM-DD HH:mm:ss"
                                 style={{
                                     width: '100%',
@@ -219,8 +226,8 @@ const CreateLink = () => {
                     <Col span={8} className='form-item-col'>
                         <FormItem 
                             itemType="inputwithswitch"
-                            name={language.tokens['DOMAIN_PASSWORD']}               
-                            label={language.tokens['DOMAIN_PASSWORD']}
+                            name={language.tokens['HASH_URL']}               
+                            label={language.tokens['HASH_URL']}
                             inputValue={domain_password}
                             change={domainPasswordHandler}
                             itemSwitch={true}
@@ -229,7 +236,11 @@ const CreateLink = () => {
                             disabled={disabled}
                             inputItem={{
                                 placeholder: language.tokens['THIS_FIELD_IS_OPTIONAL'],
-                                radioButtonAction: () => set_disabled(previousState => !previousState),
+                                radioButtonAction: () => {
+                                    set_disabled(previousState => !previousState)
+                                    if(!disabled)
+                                        set_domain_password('')
+                                },
                                 size: 'small'                   
                             }}
                         >                        
@@ -293,12 +304,6 @@ const CreateLink = () => {
                                 <Alert message={button_status.error} type="error" showIcon/>
                             :null    
                         } 
-                        {
-                            alert.show ?
-                                <Alert message={alert.text} type="success" />
-                                :
-                            null
-                        }           
                     </Col>
                     <Col flex={4}></Col>
                 </Row>       

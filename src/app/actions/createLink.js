@@ -35,9 +35,8 @@ export const createLink = (_title, _url, _status, _mode, _exp, _des, _hash, _par
      axios
        .post(url, data, axiosConfig)
        .then(res => {
-           console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!", res)
-            dispatch({ type : 'CREATE_LINK_SUCCESS', payload: { 'text': language.tokens['YOUR_INFORMATION_SUCCESSFULLY_REGISTERED'], 
-            show : true, type: 'error' }
+            dispatch({ type : 'CREATE_LINK_SUCCESS', payload: { 'data': res.data.url ,
+                'alert':{'text': language.tokens['YOUR_TRACKING_LINK_HAS_BEEN_SUCCESSFULLY_CREATED'],show : true, type: 'error'} }
             })
         })
         .catch(err => {

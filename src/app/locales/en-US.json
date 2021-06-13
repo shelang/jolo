@@ -34,7 +34,7 @@
     "URL_EXAMPLE": "https://example.com",
     "ACTIVE" : "ACTIVE",
     "DEACTIVE" : "DEACTIVE",
-    "DOMAIN_PASSWORD": "Domain password",
+    "HASH_URL": "Hash URL",
     "THIS_FIELD_IS_OPTIONAL":"This field is optional",
     "REDIRECT_MODE": "Redirect Mode",
     "ENTER_DESCRIPTION":"Enter a Description",
@@ -42,9 +42,17 @@
     "FORWARD_PARAMETER": "Forward Parameter",
     "MAX_DESCRIPTION_CHAR_LIMIT": "Maximum Description Length is 255 Characters",
     "MAX_TITLE_CHAR_LIMIT": "Maximum Title Length is 150 Characters",
-    "MAX_DOMAIN_PASSWORD_CHAR_LIMIT": "Maximum Domain password Length is 20 Characters",
+    "MAX_HASH_URL_CHAR_LIMIT": "Maximum Hash URL Length is 20 Characters",
     "PLEASE_INPUT_DESCRIPTION": "Please input Description!",
     "PLEASE_SELECT_EXPIRE_DATE": "Please Select Expire Date!",
     "ENTER_TITLE_AND_URL": "Enter Title and URL",
-    "YOUR_INFORMATION_SUCCESSFULLY_REGISTERED": "Your information successfully registered"
+    "YOUR_TRACKING_LINK_HAS_BEEN_SUCCESSFULLY_CREATED": "Your tracking link has been successfully created",
+    "LINK_COPIED": "The Link Has Been Copied!",
+    "HOW_IT_WORKS": "How it works",
+    "HOW_IT_WORKS_DESCRIPTION": "Use this tracking link instead of the target link(the destination URL). Publish this link wherever you want websites, blogs, email, twitter, facebook, etc...",
+    "TEST_IT_NOW": "Test it now",
+    "TEST_IT_NOW_DESCRIPTION": "Click on the button below to make sure your tracking link is redirecting to the right destination URL",
+    "VIEW_REPORTS": "View reports",
+    "VIEW_REPORTS_DESCRIPTION": "Discover who clicked on this tracking link. Reports will be available only after you get at least one click",
+    "MAKE_A_TEST_CLICK": "Make a test click"
 }
