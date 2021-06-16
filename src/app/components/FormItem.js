@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Input, Button, Select, Switch } from 'antd'
+import '../styles/form_item.css'
 
 const { Option } = Select
 

@@ -2,3 +2,41 @@
     font-weight: bold;
     font-size: 17px;
 }
+.panel-container span.anticon-delete, 
+.panel-container span.anticon-edit,
+.panel-container span.anticon-fund-view {
+    font-size: 19px;
+}
+
+.panel-container span.anticon-delete{
+    color: red;
+}
+.panel-container span.anticon-edit{
+    color: mediumseagreen;
+}
+.panel-container .ant-space .ant-space-item{
+    margin-right: 10px;
+}
+.panel-container .ant-form-item{
+    margin-bottom: 0;
+}
+.panel-container .ant-btn{
+    background-color: #eee;
+    color: #1890ff;
+    border-color: #eee;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.panel-container .ant-btn:hover,
+.panel-container .ant-btn:active,
+.panel-container .ant-btn:focus{
+    border-color: #eee;   
+}
+.panel-container .ant-btn-sm{
+    height: 27px;
+    padding: 0px 7px;
+    font-size: 14px;
+    border-radius: 2px;
+    max-height: 27px;
+}
+

@@ -20,7 +20,13 @@ export const parseJwt = (_token) => {
 export const checkAuthTimeout = expireTime => {
     return dispatch => {
       setTimeout(() => {
-        dispatch(logout()) 
+        const _refresh = CookieService.get('refresh')
+        const _refresh_payload = parseJwt(_refresh)
+        if (_refresh_payload.exp > new Date()){
+            dispatch(getTokenAuth(_refresh))               
+        } else {
+            dispatch(logout())
+        } 
       }, expireTime * 1000)
     }
 }
@@ -42,10 +48,8 @@ export const getTokenAuth = refresh => {
         .post(url, data, axiosConfig)
         .then(res => {
             let _token_payload = parseJwt(res.data.token)
-            const expireDate = new Date(
-                ( _token_payload.iat * 1000 ) + ( _token_payload.exp * 1000) 
-            )
-            const options = { path: '/login', expires: expireDate}
+            const expireDate = new Date(_token_payload.exp * 1000)
+            const options = { path: '/', expires: expireDate}
 
             CookieService.set('token', res.data.token, options)
             CookieService.set('refresh', res.data.refresh, undefined)
@@ -71,11 +75,14 @@ export const checkAuthState = () => {
         dispatch(logout())
       } else {
         const expirationDate = new Date(CookieService.get('expireDate'))
+
         if (expirationDate < new Date()) {
-            let _refresh_payload = parseJwt(_refresh)
+            const _refresh_payload = parseJwt(_refresh)
             if (_refresh_payload.exp > new Date()){
-                dispatch(getTokenAuth(_refresh))
-            }
+                dispatch(getTokenAuth(_refresh))               
+            } else {
+                dispatch(logout())
+            }          
         } else {
             dispatch({ type : 'AUTH_SUCCESS',
                 payload: { 'token' : _token, 'refresh': _refresh}
@@ -114,15 +121,13 @@ export const auth = (_username, _password) => {
       .then(res => {
 
             let _token_payload = parseJwt(res.data.token)
-            const expireDate = new Date(
-                ( _token_payload.iat * 1000 ) + ( _token_payload.exp * 1000) 
-            )
-            const options = { path: '/login', expires: expireDate}
+            const expireDate = new Date(_token_payload.exp * 1000)
+            const options = { path: '/', expires: expireDate}
 
             CookieService.set('token', res.data.token, options)
             CookieService.set('refresh', res.data.refresh, undefined)
-            CookieService.set('expireDate', expireDate, undefined)    
-
+            CookieService.set('expireDate', expireDate, undefined)                
+              
             dispatch({ type : 'AUTH_SUCCESS', 
                 payload: { 'token' : res.data.token, 'refresh': res.data.refresh} 
             })

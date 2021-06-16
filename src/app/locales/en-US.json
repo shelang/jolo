@@ -54,5 +54,11 @@
     "TEST_IT_NOW_DESCRIPTION": "Click on the button below to make sure your tracking link is redirecting to the right destination URL",
     "VIEW_REPORTS": "View reports",
     "VIEW_REPORTS_DESCRIPTION": "Discover who clicked on this tracking link. Reports will be available only after you get at least one click",
-    "MAKE_A_TEST_CLICK": "Make a test click"
+    "MAKE_A_TEST_CLICK": "Make a test click",
+    "LINK_Id": "Link Id",
+    "LINK_HASH": "Link Hash",
+    "CREATE_AT": "Create At",
+    "ACTIONS": "Actions",
+    "VIEW": "view",
+    "SURE_TO_DELETE": "Sure to delete?"
 }

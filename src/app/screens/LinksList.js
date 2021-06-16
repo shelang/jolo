@@ -1,83 +1,101 @@
-import React, { useState } from 'react'
-import { Table } from 'antd'
+import React, { useState, useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Table, Popconfirm, Space } from 'antd'
+import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import PanelBox from '../components/PanelBox'
 import language from '../resources/js/languages_dict'
+import '../styles/links_list.css'
+import loading_spinner from '../resources/js/loading_spinner'
+import Loading from '../components/Loading'
+import * as actions from '../actions'
+import FormItem from '../components/FormItem'
 
 const LinksList = () => {
+    const token = useSelector(state => state.app.token)
+    const data_list = useSelector(state => state.links_list.data)
+    const loading = useSelector(state => state.links_list.loading)
+    const dispatch = useDispatch()
 
-    const [sorted_info, set_sorted_info] = useState(null)
-
-    const columns = [
-        {
-          title: 'Link Id',
-          dataIndex: 'linkid',
-          sorter: {
-            compare: (a, b) => a.chinese - b.chinese,
-            multiple: 3,
-          },
-        },
-        {
-          title: 'Link Hash',
-          dataIndex: 'linkhash',
-          sorter: {
-            compare: (a, b) => a.math - b.math,
-            multiple: 2,
-          },
-        },
-        {
-          title: 'Create At',
-          dataIndex: 'address',
-          sorter: {
-            compare: (a, b) => a.english - b.english,
-            multiple: 1,
-          },
-        },
-        {
-            title: 'Actions',
-            dataIndex: 'name',
-        }
-      ];
-      
-    const data = [
-        {
-          key: '1',
-          name: 'John Brown',
-          linkhash: "dfdfleip",
-          linkid: 32,
-          address: 'New York No. 1 Lake Park',
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          linkhash: "dfdsropo",
-          linkid: 42,
-          address: 'London No. 1 Lake Park',
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          linkhash: "vbhiuut",
-          linkid: 32,
-          address: 'Sidney No. 1 Lake Park',
-        },
-        {
-          key: '4',
-          name: 'Jim Red',
-          linkhash: "opefsDDF",
-          linkid: 32,
-          address: 'London No. 2 Lake Park',
-        },
-      ];
-
-    const handleChange = (pagination, filters, sorter) => {
-        // console.log('parameters', pagination, filters, sorter);
-        set_sorted_info(sorter)
+    const [pagination, set_pagination] = useState({})
+    const [columns] = useState([
+        { title: language.tokens['LINK_Id'], dataIndex: 'linkId' },
+        { title: language.tokens['LINK_HASH'], dataIndex: 'linkHash' },
+        { title: language.tokens['CREATE_AT'], dataIndex: 'createAt' },
+        { title: language.tokens['ACTIONS'], dataIndex: 'actions', 
+        render: (text, record) => (
+         <>
+            <Space>
+              <FormItem
+                // click={props.onSubmitForm}
+                itemType="button"
+                // buttonClassName="login-form-button"
+                htmlType="submit"
+              >
+                {language.tokens['VIEW']}
+              </FormItem>
+              <a><EditOutlined /></a>
+              <Popconfirm 
+                title={language.tokens['SURE_TO_DELETE']}
+                icon={<QuestionCircleOutlined style={{ color: 'red' }}/>} 
+                size="middle"
+                onConfirm={deleteItemHandler}
+                >  
+                <a><DeleteOutlined /></a>
+              </Popconfirm>
+            </Space>    
+         </>
+        ),   
+      }
+    ])
+    
+    const get_data = (params = {}) => {
+    if(data_list.length === 0 )
+        dispatch(actions.linksList({ params : { token, ...params } }))
     }
-    return(
-        <PanelBox title={language.tokens['LINKS_LIST_PAGE']} className='panel-container'>
-            <Table columns={columns} dataSource={data} onChange={handleChange} />
-        </PanelBox>
-    )
-}
+    
+    //load first page(0)
+    useEffect(() => {  
+      get_data({ 
+        page : 1, 
+        results : 10
+      })
+    }, [])
+
+   
+    const changePageHandler = (pagination) => {
+    const pager = pagination
+    pager.current = pagination.current
+    set_pagination(pager)
+      get_data({ 
+        page : pagination.current, 
+        results : pagination.pageSize 
+      })
+    }
+
+    const deleteItemHandler = () => {
+      console.log('111111111111111')
+    }
+   
+    let list_items
+    if(data_list && data_list !== undefined){
+      list_items =  Object.values(data_list).map((items, key) => {
+        return <Table 
+        columns={columns}
+        dataSource={(Object.values(items))}
+        onChange={changePageHandler}
+        bordered 
+        pagination
+        scroll={{ y: 300 }}
+        rowKey={record => record.linkId}
+        loading={loading && (<Loading color={loading_spinner['loading_spinner']['blue']}/>)}
+        />
+    })
+    } 
+      return(
+          <PanelBox title={language.tokens['LINKS_LIST_PAGE']} className='panel-container'>
+            {list_items}
+          </PanelBox>
+      )
+    }
 
 export default LinksList
