@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Typography, Row, Col, PageHeader, Divider, List } from 'antd'
+import { Typography, Row, Col, PageHeader, Divider } from 'antd'
 import { CheckOutlined, CopyOutlined, FormOutlined, QuestionCircleOutlined, RedoOutlined, HistoryOutlined } from '@ant-design/icons'
 import FormItem from '../components/FormItem'
 import language from '../resources/js/languages_dict'
@@ -48,10 +48,10 @@ const CreateStatus = (props) => {
            let row = []
             for(let j = 0; j < 1; j++){ 
                 row.push(<React.Fragment key={nums[i]}>
-                     <PageHeader 
-                            title={nums[i][0]} 
-                            avatar={{ icon: [nums[i][1]]}}
-                        />
+                            <PageHeader 
+                                title={nums[i][0]} 
+                                avatar={{ icon: [nums[i][1]]}}
+                            />
                             <Paragraph>
                                 {nums[i][2]}     
                             </Paragraph>
@@ -128,15 +128,15 @@ const CreateStatus = (props) => {
             </Row>
             <Row>
                 <Col span={24} className='alert'>
-                <span>
-                   {
-                     copied && alert.show ?
-                        <Text type='success'>
-                            {alert.text}
-                        </Text>
-                    :null
-                    } 
-                </span>
+                    <span>
+                    {
+                        copied && alert.show ?
+                            <Text type='success'>
+                                {alert.text}
+                            </Text>
+                        :null
+                        } 
+                    </span>
                 </Col>           
             </Row>
             <Divider/>

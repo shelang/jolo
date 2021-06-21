@@ -6,12 +6,8 @@ import { useDispatch } from 'react-redux'
 export const LogOut = (props) => {
     const dispatch = useDispatch()
 
-    const call_api = () => {
-        dispatch(actions.logout())
-    }
-
     useEffect(() => {
-      call_api()
+      dispatch(actions.logout())
     }, [])
 
   return <Redirect to="/login" />;

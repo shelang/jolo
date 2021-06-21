@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PanelBox from '../components/PanelBox'
 import { Form, Input, Row, Col, Select, DatePicker, Alert } from 'antd'
@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 
 const { Option } = Select
 const { TextArea } = Input
+// const { RangePicker } = DatePicker
 
 const CreateLink = () => {
     const [title, set_title] = useState("")
@@ -38,7 +39,7 @@ const CreateLink = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     
-    const text_input = useRef()
+    // const text_input = useRef()
     
     const clickSwitchHandler = () => {
         set_radio_button((prev) => (!prev))
@@ -119,6 +120,20 @@ const CreateLink = () => {
         }
 	}, [loading])
 
+    const disabledRange = (start, end, is_equal) => {    
+        const result = []
+            if(is_equal){
+                for (let i = start; i <= end; i++) {
+                    result.push(i)
+                }
+                return result
+            }
+            for (let i = start; i < end; i++) {
+                result.push(i)
+            }
+            return result
+    }
+
     return(
         
         <PanelBox title={language.tokens['CREATE_LINK_PAGE']} className='panel-box-container'>
@@ -197,9 +212,21 @@ const CreateLink = () => {
                                     set_date(new Date(date))
                                     set_expire_date(dateString)
                                 }}
-                                showTime 
+                                showTime
                                 showNow={false}
-                                disabledDate={(current) => { return current && current < moment().endOf('day') }}
+                                disabledDate={(current) => { return current && current < moment().startOf('day') }}
+                                disabledTime={(current) => {                                     
+                                    if(current !== null) {
+                                        let h = new Date(Date.now()).getHours()
+                                        let m = new Date(Date.now()).getMinutes()                                                                                                         
+                                        if(current < moment().endOf('day')){
+                                            return {
+                                                disabledHours: () => disabledRange(0, h, false),
+                                                disabledMinutes: () => disabledRange(0, m, true)
+                                            }
+                                        }   
+                                    }
+                                }}                           
                                 format="YYYY-MM-DD HH:mm:ss"
                                 style={{
                                     width: '100%',
@@ -212,7 +239,7 @@ const CreateLink = () => {
                             label={language.tokens['DESCRIPTION']}  
                         >
                             <TextArea 
-                                ref={text_input}
+                                // ref={text_input}
                                 maxLength={255}
                                 autoSize={{ minRows: 3, maxRows: 6 }}
                                 placeholder={language.tokens['ENTER_DESCRIPTION']}
@@ -226,6 +253,7 @@ const CreateLink = () => {
                     <Col span={8} className='form-item-col'>
                         <FormItem 
                             itemType="inputwithswitch"
+                            PropName="checked"
                             name={language.tokens['HASH_URL']}               
                             label={language.tokens['HASH_URL']}
                             inputValue={domain_password}
@@ -249,6 +277,7 @@ const CreateLink = () => {
                     <Col span={8}>
                         <FormItem
                             itemType='switch'
+                            PropName="checked"
                             label={language.tokens['FORWARD_PARAMETER']}
                             name={language.tokens['FORWARD_PARAMETER']} 
                             size='small'
@@ -262,12 +291,12 @@ const CreateLink = () => {
                         {
                             loading ?
                                 <FormItem                             
-                                itemType="button"
-                                buttonClassName="login-form-button"
-                                buttonType="primary"
-                                htmlType="submit"
-                                buttonSize= 'large'
-                            >
+                                    itemType="button"
+                                    buttonClassName="login-form-button"
+                                    buttonType="primary"
+                                    htmlType="submit"
+                                    buttonSize= 'large'
+                                >
                                 <Loading color={loading_spinner['loading_spinner']['white']}/>
                             </FormItem>
                             :

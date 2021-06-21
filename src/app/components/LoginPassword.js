@@ -5,7 +5,7 @@ import FormItem from './FormItem'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import loading_spinner from '../resources/js/loading_spinner'
 import Loading from './Loading'
-import notify from '../utils/notify'
+// import notify from '../utils/notify'
 import language from '../resources/js/languages_dict'
 import '../styles/login.css'
 

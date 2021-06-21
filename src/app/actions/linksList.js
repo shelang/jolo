@@ -1,19 +1,28 @@
 import axios from 'axios'
 
-export const setListItems = (listItems) => {
-    let currentData = []
-    for (let key in listItems) {
-        currentData.push({
-        ...listItems[key],
-        id: key
-      });
-    }
+export const removeItemStart = (id, token) => {
     return dispatch => {
-        dispatch({ type : 'SET_LIST_ITEMS' , payload: { 'data': currentData } }) 
+       
+        let axiosConfig = {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'                
+            }
+        }
+    axios
+      .delete(
+        `https://stg.snb.link/api/v1/links/${id}`, axiosConfig
+      )
+      .then(res => {
+            dispatch({ type : 'REMOVE_ITEM_SUCCESS' , payload: { linkId: id } }) 
+      })
+      .catch(err => {
+        console.log(err)
+      });
     }
 }
 
-export const linksList = (config) => {
+export const linksList = config => {
     return dispatch => {
         dispatch({ type : 'LINKS_LIST_REQUEST'})
         let params = config.params
@@ -28,8 +37,7 @@ export const linksList = (config) => {
             `https://stg.snb.link/api/v1/links?page=${params.page}&size=${params.results}`, axiosConfig
             )
         .then(res => {
-            dispatch(setListItems(res.data))
-          
+            dispatch({ type : 'SET_LIST_ITEMS' , payload: { 'data': res.data['links'] } })
         })
         .catch(err => {
             console.log(err)
@@ -37,3 +45,4 @@ export const linksList = (config) => {
     } 
 
 }
+

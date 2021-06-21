@@ -34,6 +34,7 @@ export const FormItem = (props) => {
                 formElement = <Form.Item
                     name={props.name}
                     label={props.label}
+                    valuePropName={props.PropName}
                     rules={[{
                         required: props.required,
                         message: props.message
@@ -55,7 +56,7 @@ export const FormItem = (props) => {
                 </Form.Item>
                 break;  
         case 'switch' :
-            formElement = <Form.Item label={props.label} name={props.name}>
+            formElement = <Form.Item label={props.label} name={props.name} valuePropName={props.PropName}>
                         <Switch size={props.size} onChange={props.change} />    
                 </Form.Item>
             break;                

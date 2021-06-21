@@ -1,4 +1,3 @@
-import React from 'react'
 import LinksList from '../screens/LinksList'
 import CreateLink from '../screens/CreateLink'
 import CreateStatus from '../screens/CreateStatus'
