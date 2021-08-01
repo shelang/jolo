@@ -1,5 +1,6 @@
 import axios from 'axios'
 import CookieService from '../services/CookieService'
+import config from './config'
 
 export const logout = () => {
     return dispatch => {
@@ -35,8 +36,7 @@ export const getTokenAuth = refresh => {
     return dispatch => {
         let data = ''
 
-        let url=
-            "https://stg.snb.link/api/v1/login/refresh"
+        let url= config.BASE_URL + "/api/v1/login/refresh"
         
         let axiosConfig = {
             headers: {
@@ -108,8 +108,7 @@ export const auth = (_username, _password) => {
             }
         )
 
-        let url=
-            "https://stg.snb.link/api/v1/login"
+        let url= config.BASE_URL + "/api/v1/login"
 
         let axiosConfig = {
             headers: {

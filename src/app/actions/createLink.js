@@ -1,6 +1,7 @@
 
 import axios from 'axios'
 import language from '../resources/js/languages_dict'
+import config from './config'
 
 export const createLink = (_title, _url, _status, _mode, _exp, _des, _hash, _param, token) => {
     return dispatch => {     
@@ -23,8 +24,7 @@ export const createLink = (_title, _url, _status, _mode, _exp, _des, _hash, _par
             }
         )
 
-        let url=
-            "https://stg.snb.link/api/v1/links"
+        let url = config.BASE_URL + "/api/v1/links"
         
         let axiosConfig = {
             headers: {

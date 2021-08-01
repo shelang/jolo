@@ -1,4 +1,5 @@
 import axios from 'axios'
+import config from './config'
 
 export const removeItemStart = (id, token) => {
     return dispatch => {
@@ -11,7 +12,7 @@ export const removeItemStart = (id, token) => {
         }
     axios
       .delete(
-        `https://stg.snb.link/api/v1/links/${id}`, axiosConfig
+        `${config.BASE_URL}/api/v1/links/${id}`, axiosConfig
       )
       .then(res => {
             dispatch({ type : 'REMOVE_ITEM_SUCCESS' , payload: { linkId: id } }) 
@@ -34,7 +35,7 @@ export const linksList = config => {
         } 
      axios
         .get(
-            `https://stg.snb.link/api/v1/links?page=${params.page}&size=${params.results}`, axiosConfig
+            `${config.BASE_URL}/api/v1/links?page=${params.page}&size=${params.results}`, axiosConfig
             )
         .then(res => {
             dispatch({ type : 'SET_LIST_ITEMS' , payload: { 'data': res.data['links'] } })
