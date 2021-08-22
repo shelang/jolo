@@ -1,0 +1,20 @@
+#root > .ant-layout {
+  height: 100vh;
+}
+
+.internal_content {
+  padding: 20px;
+  background-color: #fff;
+}
+
+.site-layout-background {
+  max-height: calc(100%);
+  overflow: hidden;
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
