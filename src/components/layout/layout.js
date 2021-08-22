@@ -24,7 +24,7 @@ function AppLayout(props) {
         </Layout>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        Jolo ©2021 Created by LinkComposer Team
+        LinkComposer ©2021 Created by LinkComposer Team
       </Footer>
     </Layout>
   );
