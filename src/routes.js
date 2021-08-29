@@ -3,7 +3,7 @@ import PrivateRoute from './utils/privateRoute';
 import AppLayout from './components/layout/layout';
 import LoginLayout from './components/layout/LoginLayout';
 import Welcome from './welcome';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { Spin } from 'antd';
 
 const Login = React.lazy(() => import('./containers/auth'));
@@ -20,6 +20,18 @@ function Routes() {
             <LoginLayout>
               <Login />
             </LoginLayout>
+          )}
+        />
+        <PrivateRoute
+          path='/'
+          exact
+          render={({ location }) => (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: location },
+              }}
+            />
           )}
         />
         <PrivateRoute

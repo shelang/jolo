@@ -7,7 +7,6 @@ import './layout.scss';
 const { Header, Content, Footer, Sider } = Layout;
 
 function AppLayout(props) {
-  console.log('hereeee');
   return (
     <Layout>
       <Header className='header'>
