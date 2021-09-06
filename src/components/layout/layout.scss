@@ -1,9 +1,9 @@
 #root > .ant-layout {
   height: 100vh;
+  overflow: hidden;
 }
 
 .internal_content {
-  padding: 20px;
   background-color: #fff;
   overflow: auto;
 }

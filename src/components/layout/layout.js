@@ -22,7 +22,15 @@ function AppLayout(props) {
           <Content className='internal_content'>{props.children}</Content>
         </Layout>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer
+        style={{
+          alignItems: 'center',
+          height: 50,
+          padding: 0,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         LinkComposer ©2021 Created by LinkComposer Team
       </Footer>
     </Layout>

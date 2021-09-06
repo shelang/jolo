@@ -8,6 +8,8 @@ import { Spin } from 'antd';
 
 const Login = React.lazy(() => import('./containers/auth'));
 const CreateLink = React.lazy(() => import('./containers/createLink'));
+const Links = React.lazy(() => import('./containers/links'));
+const LinkDetail = React.lazy(() => import('./containers/linkDetail'));
 
 function Routes() {
   return (
@@ -49,6 +51,24 @@ function Routes() {
           render={() => (
             <AppLayout>
               <CreateLink />
+            </AppLayout>
+          )}
+        />
+        <PrivateRoute
+          path='/dashboard/links'
+          exact
+          render={() => (
+            <AppLayout>
+              <Links />
+            </AppLayout>
+          )}
+        />
+        <PrivateRoute
+          path='/dashboard/links/:id'
+          exact
+          render={() => (
+            <AppLayout>
+              <LinkDetail />
             </AppLayout>
           )}
         />

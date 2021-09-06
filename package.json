@@ -40,9 +40,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "http-proxy-middleware": "^0.19.1",
-    "morgan": "^1.10.0"
-  },
-  "proxy": "https://n.snpp.link/api/v1/"
+  "proxy": "https://stg.snb.link/api/v1/"
 }

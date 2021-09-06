@@ -5,6 +5,18 @@ export const linkStatus = Object.freeze({
   DeActive: 'deactive',
 });
 
+export const os = Object.freeze({
+  Android: 'android',
+  Ios: 'ios',
+  Windows: 'windows',
+});
+
+export const devices = Object.freeze({
+  Moblie: 'moblie',
+  Desktop: 'desktop',
+  Tablet: 'tablet',
+});
+
 export const tooltips = Object.freeze({
   destinationUrl:
     'This is the link you want to track: the landing page where you want to send your visitors More info',

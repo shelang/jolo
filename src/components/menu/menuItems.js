@@ -9,6 +9,13 @@ const menuItems = [
     id: 1,
     permission: 'link:create',
   },
+  {
+    title: 'Links',
+    icon: <UserOutlined />,
+    url: 'dashboard/links',
+    id: 2,
+    permission: 'links:read',
+  },
 ];
 
 export default menuItems;

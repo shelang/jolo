@@ -3,7 +3,7 @@ import menuItems from './menuItems';
 import Can from '../can/can';
 import useCache from '../../hooks/cacheData';
 import { Menu } from 'antd';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, NavLink } from 'react-router-dom';
 import { LogoutOutlined } from '@ant-design/icons';
 
 function KitMenu() {
@@ -43,7 +43,7 @@ function KitMenu() {
                 icon={menuItem.icon}
                 {...props}
               >
-                <Link to={`/${menuItem.url}`}>{menuItem.title}</Link>
+                <NavLink to={`/${menuItem.url}`}>{menuItem.title}</NavLink>
               </Menu.Item>
             )}
             no={() => null}
