@@ -35,20 +35,22 @@ const Links = () => {
   ];
   return (
     <Row>
-      <Table
-        columns={columns}
-        dataSource={response ? response.links : []}
-        pagination={{ position: ['bottomCenter'], size: 'small' }}
-        style={{ width: '100%' }}
-        onRow={(record) => {
-          return {
-            onClick: (event) => {
-              event.preventDefault();
-              history.push(`./links/${record.linkId}`);
-            },
-          };
-        }}
-      />
+      <Spin spinning={isLoading}>
+        <Table
+          columns={columns}
+          dataSource={response ? response.links : []}
+          pagination={{ position: ['bottomCenter'], size: 'small' }}
+          style={{ width: '100%' }}
+          onRow={(record) => {
+            return {
+              onClick: (event) => {
+                event.preventDefault();
+                history.push(`./links/${record.linkId}`);
+              },
+            };
+          }}
+        />
+      </Spin>
     </Row>
   );
 };
