@@ -112,7 +112,7 @@ function CreateLink() {
       >
         <p>Here is Your Link, Enjoy</p>
         <Search
-          value={response && response.url}
+          value={response && response.redirectTo}
           onSearch={copyToClipboard}
           enterButton='Copy'
         />
@@ -140,6 +140,7 @@ function CreateLink() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onFieldsChange={onFieldsChange}
+        initialValues={{ index_status: 'active', index_mode: 301 }}
       >
         <Form.Item
           label='Friendly Name:'
