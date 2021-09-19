@@ -5,17 +5,9 @@ export const linkStatus = Object.freeze({
   DeActive: 'deactive',
 });
 
-export const os = Object.freeze({
-  Android: 'android',
-  Ios: 'ios',
-  Windows: 'windows',
-});
+export const os = ['Android', 'Ios', 'Windows'];
 
-export const devices = Object.freeze({
-  Moblie: 'moblie',
-  Desktop: 'desktop',
-  Tablet: 'tablet',
-});
+export const devices = ['Moblie', 'Desktop', 'Tablet'];
 
 export const tooltips = Object.freeze({
   destinationUrl:

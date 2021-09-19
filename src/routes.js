@@ -27,11 +27,10 @@ function Routes() {
         <PrivateRoute
           path='/'
           exact
-          render={({ location }) => (
+          render={() => (
             <Redirect
               to={{
-                pathname: '/login',
-                state: { from: location },
+                pathname: '/dashboard',
               }}
             />
           )}
@@ -66,9 +65,9 @@ function Routes() {
         <PrivateRoute
           path='/dashboard/links/:id'
           exact
-          render={() => (
+          render={(props) => (
             <AppLayout>
-              <LinkDetail />
+              <LinkDetail {...props} />
             </AppLayout>
           )}
         />

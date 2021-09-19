@@ -14,7 +14,9 @@ import {
   message,
   Divider,
   Card,
+  Space,
 } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   redirectModes,
   linkStatus,
@@ -26,52 +28,46 @@ import {
 const { Title } = Typography;
 const { TextArea, Search } = Input;
 
-const urlConfiguration = {
-  Device: devices,
-  'Operation System': os,
-};
-
 function CreateLink() {
   const [hash, setHash] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [branch, setBranch] = useState();
+  const [operationSystems, setOperationSystems] = useState(os);
+  const [targetDevices, setTargetDevices] = useState(devices);
   const [{ response, isLoading, error }, doFetch] = useFetch();
   const [form] = Form.useForm();
 
-  const onFinish = async ({ urlConfigs, ...values }) => {
-    const config = {};
-    if (urlConfigs) {
-      if (urlConfigs.branch === 'Device') {
-        config.devices = {
-          type: urlConfigs.type,
-          url: urlConfigs.url,
-        };
-      } else {
-        config.os = {
-          type: urlConfigs.type,
-          url: urlConfigs.url,
-        };
-      }
-    }
-
-    await doFetch({
-      url: 'links',
-      method: 'POST',
-      data: {
-        ...values,
-        ...config,
-      },
-    });
+  const onFinish = async (values) => {
+    console.log(values, 'values');
+    // await doFetch({
+    //   url: 'links',
+    //   method: 'POST',
+    //   data: {
+    //     ...values,
+    //     ...config,
+    //   },
+    // });
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
   const onFieldsChange = (changedFields) => {
-    changedFields.forEach((changedField) => {
-      if (changedField.name.includes('branch')) {
-        setBranch(changedField.value);
-      }
-    });
+    // changedFields.forEach((changedField) => {
+    //   if (
+    //     changedField.name.includes('devices') &&
+    //     typeof changedField.value === 'string'
+    //   ) {
+    //     console.log('here');
+    //     setTargetDevices(
+    //       targetDevices.filter(
+    //         (device) => device.toLowerCase() !== changedField.value
+    //       )
+    //     );
+    //   } else if (changedField.name.includes('os')) {
+    //     setOperationSystems(
+    //       operationSystems.filter((os) => os !== changedField.value)
+    //     );
+    //   }
+    // });
   };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(response.url);
@@ -250,36 +246,151 @@ function CreateLink() {
         >
           <Switch />
         </Form.Item>
-        <Form.Item label='URL Configuration' name='urlConfigs'>
-          <Input.Group compact>
-            <Form.Item name={['urlConfigs', 'branch']} noStyle>
-              <Select style={{ width: '25%' }}>
-                {Object.keys(urlConfiguration).map((key) => {
-                  return <Select.Option value={key}>{key}</Select.Option>;
-                })}
-              </Select>
-            </Form.Item>
-            <Form.Item name={['urlConfigs', 'type']} noStyle>
-              <Select style={{ width: '25%' }} disabled={!branch}>
-                {branch &&
-                  Object.keys(urlConfiguration[branch]).map((key) => {
-                    return (
-                      <Select.Option value={urlConfiguration[branch][key]}>
-                        {key}
-                      </Select.Option>
-                    );
-                  })}
-              </Select>
-            </Form.Item>
-            <Form.Item name={['urlConfigs', 'url']} noStyle>
-              <Input
-                style={{ width: '50%' }}
-                placeholder='URL'
-                disabled={!branch}
-              />
-            </Form.Item>
-          </Input.Group>
-        </Form.Item>
+        <Row>
+          <Col span={16}>
+            <Space direction='vertical' style={{ width: '100%' }}>
+              <Card>
+                <Title level={3}>Device Targeting:</Title>
+                <Form.List name='devices'>
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(({ key, name, fieldKey, ...restField }) => (
+                        <Space
+                          key={key}
+                          size={0}
+                          style={{ display: 'flex', marginBottom: 8 }}
+                          align='baseline'
+                        >
+                          <Form.Item
+                            {...restField}
+                            wrapperCol={{ span: 24 }}
+                            name={[name, 'type']}
+                            fieldKey={[fieldKey, 'type']}
+                            rules={[
+                              { required: true, message: 'Missing type' },
+                            ]}
+                          >
+                            <Select style={{ width: 200 }} placeholder='Device'>
+                              {targetDevices.map((targetDevice) => {
+                                return (
+                                  <Select.Option
+                                    value={targetDevice.toLowerCase()}
+                                  >
+                                    {targetDevice}
+                                  </Select.Option>
+                                );
+                              })}
+                            </Select>
+                          </Form.Item>
+                          <Form.Item
+                            {...restField}
+                            wrapperCol={{ span: 24 }}
+                            name={[name, 'url']}
+                            fieldKey={[fieldKey, 'url']}
+                            rules={[{ required: true, message: 'Missing URL' }]}
+                          >
+                            <Input placeholder='url' style={{ width: 300 }} />
+                          </Form.Item>
+                          <MinusCircleOutlined
+                            style={{ marginLeft: 10 }}
+                            onClick={() => remove(name)}
+                          />
+                        </Space>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type='dashed'
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Add Device
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
+              </Card>
+              <Card>
+                <Title level={3}>Operation System Targeting:</Title>
+                <Form.List name='os'>
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(
+                        ({
+                          key,
+                          name,
+                          fieldKey,
+                          labelCol,
+                          wrapperCol,
+                          ...restField
+                        }) => (
+                          <Space
+                            key={key}
+                            size={0}
+                            style={{ display: 'flex', marginBottom: 8 }}
+                            align='baseline'
+                          >
+                            <Form.Item
+                              {...restField}
+                              wrapperCol={{ span: 24 }}
+                              name={[name, 'type']}
+                              fieldKey={[fieldKey, 'type']}
+                              rules={[
+                                { required: true, message: 'Missing type' },
+                              ]}
+                            >
+                              <Select
+                                style={{ width: 200 }}
+                                placeholder='Operation System'
+                              >
+                                {operationSystems.map((operationSystem) => {
+                                  return (
+                                    <Select.Option
+                                      value={operationSystem.toLowerCase()}
+                                    >
+                                      {operationSystem}
+                                    </Select.Option>
+                                  );
+                                })}
+                              </Select>
+                            </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              wrapperCol={{ span: 24 }}
+                              name={[name, 'url']}
+                              fieldKey={[fieldKey, 'url']}
+                              rules={[
+                                { required: true, message: 'Missing URL' },
+                              ]}
+                            >
+                              <Input placeholder='url' style={{ width: 300 }} />
+                            </Form.Item>
+                            <MinusCircleOutlined
+                              style={{ marginLeft: 10 }}
+                              onClick={() => remove(name)}
+                            />
+                          </Space>
+                        )
+                      )}
+                      <Form.Item>
+                        <Button
+                          type='dashed'
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Add Operation System
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
+              </Card>
+            </Space>
+          </Col>
+        </Row>
+        <br />
         <Form.Item>
           <Button loading={isLoading} type='primary' htmlType='submit'>
             Submit

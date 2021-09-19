@@ -14,7 +14,13 @@ function PrivateRoute(props) {
       />
     );
   } else {
-    return <Redirect to='/login' />;
+    return (
+      <Redirect
+        to={{
+          pathname: '/login',
+        }}
+      />
+    );
   }
 }
 export default PrivateRoute;

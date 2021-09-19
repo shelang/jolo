@@ -16,6 +16,7 @@ const Links = () => {
       method: 'GET',
     });
   };
+
   const columns = [
     {
       title: 'Link ID',
