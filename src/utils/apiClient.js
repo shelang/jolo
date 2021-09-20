@@ -1,7 +1,7 @@
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? `/${path}` : path;
-  // return process.env.REACT_APP_BASE_URL + adjustedPath;
-  return adjustedPath;
+  return process.env.REACT_APP_BASE_URL + adjustedPath;
+  // return adjustedPath;
 }
 
 function checkStatus(response) {
