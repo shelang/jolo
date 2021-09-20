@@ -38,14 +38,13 @@ function CreateLink() {
 
   const onFinish = async (values) => {
     console.log(values, 'values');
-    // await doFetch({
-    //   url: 'links',
-    //   method: 'POST',
-    //   data: {
-    //     ...values,
-    //     ...config,
-    //   },
-    // });
+    await doFetch({
+      url: 'links',
+      method: 'POST',
+      data: {
+        ...values,
+      },
+    });
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
