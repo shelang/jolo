@@ -5,7 +5,7 @@ const menuItems = [
   {
     title: 'Create Link',
     icon: <UserOutlined />,
-    url: 'dashboard/create-link',
+    url: 'dashboard/create-link?isEditing=false',
     id: 1,
     permission: 'link:create',
   },

@@ -24,3 +24,8 @@ export const tooltips = Object.freeze({
   forwardParameters:
     'When this option is enabled, all the parameters present in the tracking link (the text after the question mark "?") will be passed to the destination URL.',
 });
+
+export const booleanEnum = Object.freeze({
+  true: true,
+  false: false,
+});

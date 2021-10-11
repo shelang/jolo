@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useFetch from '../../hooks/asyncAction';
+import readXlsxFile from 'read-excel-file';
+import { UploadOutlined } from '@ant-design/icons';
 import {
   Row,
   Col,
@@ -15,6 +17,7 @@ import {
   Divider,
   Card,
   Space,
+  Upload,
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
@@ -23,28 +26,57 @@ import {
   tooltips,
   os,
   devices,
+  booleanEnum,
 } from '../../utils/constants';
+import { toast } from 'react-toastify';
+import { useQuery } from '../../hooks/queryParams';
 
-const { Title } = Typography;
+const { Title, Link } = Typography;
 const { TextArea, Search } = Input;
+const keysTemplate = ['title', 'url'];
 
 function CreateLink() {
+  let query = useQuery();
   const [hash, setHash] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')]);
+  const [massCreateErrorCount, setMassCreateErrorCount] = useState(0);
+  const [fileList, setFileList] = useState([]);
+  const [normalizedLinks, setNormalizedLinks] = useState([]);
+  const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] = useState(
+    false
+  );
   const [operationSystems, setOperationSystems] = useState(os);
   const [targetDevices, setTargetDevices] = useState(devices);
   const [{ response, isLoading, error }, doFetch] = useFetch();
+  const [
+    { massCreateRes, massCreateIsLoading, massCreateError },
+    massCreate,
+  ] = useFetch({
+    onError: () => {
+      setMassCreateErrorCount(massCreateErrorCount + 1);
+    },
+  });
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    console.log(values, 'values');
-    await doFetch({
-      url: 'links',
-      method: 'POST',
-      data: {
-        ...values,
-      },
-    });
+    if (editMode) {
+      await doFetch({
+        url: 'links',
+        method: 'PUT',
+        data: {
+          ...values,
+        },
+      });
+    } else {
+      await doFetch({
+        url: 'links',
+        method: 'POST',
+        data: {
+          ...values,
+        },
+      });
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -76,11 +108,52 @@ function CreateLink() {
     setIsModalVisible(false);
     form.resetFields();
   };
+  const createNewLinks = () => {
+    normalizedLinks.forEach(async (normalizedLink) => {
+      await massCreate({
+        url: 'links',
+        method: 'POST',
+        data: {
+          ...normalizedLink,
+        },
+      });
+    });
+
+    if (massCreateErrorCount) {
+      toast.error('Creation Failed');
+    } else {
+      toast.success('Links Successfully Created');
+      setIsCreateLinkModalVisible(false);
+    }
+  };
 
   useEffect(() => {
-    console.log(response, 'response');
     response && setIsModalVisible(true);
   }, [response]);
+  useEffect(() => {
+    readXlsxFile(fileList[0]).then((rows) => {
+      // `rows` is an array of rows
+      // each row being an array of cells.
+      const normalizedRows = rows.reduce((total, row, index) => {
+        if (index === 0) {
+          return total;
+        } else {
+          total.push({});
+          keysTemplate.map((key, keyIndex) => {
+            if (row[keyIndex]) {
+              return (total[index - 1][key] = row[keyIndex]);
+            } else {
+              toast.error(`${key} Is Required`);
+            }
+          });
+          return total;
+        }
+      }, []);
+
+      console.log(normalizedRows, 'normalizedRows');
+      setNormalizedLinks(normalizedRows);
+    });
+  }, [fileList]);
 
   const labelCol = {
     lg: { span: 4 },
@@ -94,13 +167,30 @@ function CreateLink() {
     sm: { span: 24 },
     xs: { span: 24 },
   };
+  const uploadProps = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
+      return false;
+    },
+    fileList,
+  };
 
   return (
     <Card>
       <Modal
         title='Created Link Successfully'
         visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
+        onCancel={() => {
+          setIsModalVisible(false);
+          setEditMode(true);
+          query.set('isEditing', true);
+        }}
         onOk={createNewLink}
         cancelText='Edit'
         okText='Create New Link'
@@ -120,9 +210,26 @@ function CreateLink() {
           Test Link
         </Button>
       </Modal>
+      <Modal
+        title='Create Links From File'
+        visible={isCreateLinkModalVisible}
+        onCancel={() => setIsCreateLinkModalVisible(false)}
+        onOk={createNewLinks}
+        okText='Create Links'
+      >
+        <p>Please Add Your File</p>
+        <Upload {...uploadProps}>
+          <Button icon={<UploadOutlined />}>Select File</Button>
+        </Upload>
+      </Modal>
       <Row>
-        <Col span={24}>
+        <Col span={20}>
           <Title>Creating Link</Title>
+        </Col>
+        <Col span={4}>
+          <Link level={5} onClick={() => setIsCreateLinkModalVisible(true)}>
+            Creating Link From File
+          </Link>
         </Col>
       </Row>
       <Form
