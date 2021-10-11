@@ -19,3 +19,25 @@
   align-items: center;
   justify-content: flex-start;
 }
+
+@media all and (max-width: 768px) {
+  .logo {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    left: 75px;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    position: relative;
+    button {
+      margin-right: 20px;
+      margin-bottom: 0 !important;
+      position: absolute;
+      left: 15px;
+    }
+  }
+}

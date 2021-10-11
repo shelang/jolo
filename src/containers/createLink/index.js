@@ -18,6 +18,7 @@ import {
   Card,
   Space,
   Upload,
+  Tooltip,
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
@@ -30,6 +31,7 @@ import {
 } from '../../utils/constants';
 import { toast } from 'react-toastify';
 import { useQuery } from '../../hooks/queryParams';
+import './style.scss';
 
 const { Title, Link } = Typography;
 const { TextArea, Search } = Input;
@@ -38,7 +40,7 @@ const keysTemplate = ['title', 'url'];
 function CreateLink() {
   let query = useQuery();
   const [hash, setHash] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')]);
   const [massCreateErrorCount, setMassCreateErrorCount] = useState(0);
   const [fileList, setFileList] = useState([]);
@@ -101,7 +103,7 @@ function CreateLink() {
     // });
   };
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(response.url);
+    navigator.clipboard.writeText(response.redirectTo);
     message.success('Copied to Your Clipboard');
   };
   const createNewLink = () => {
@@ -223,10 +225,10 @@ function CreateLink() {
         </Upload>
       </Modal>
       <Row>
-        <Col span={20}>
+        <Col md={20} xs={24}>
           <Title>Creating Link</Title>
         </Col>
-        <Col span={4}>
+        <Col md={4} xs={24}>
           <Link level={5} onClick={() => setIsCreateLinkModalVisible(true)}>
             Creating Link From File
           </Link>
@@ -320,7 +322,7 @@ function CreateLink() {
             },
           ]}
         >
-          <DatePicker showTime showNow={false} />
+          <DatePicker showTime={{ format: 'HH:mm' }} showNow={false} />
         </Form.Item>
         <Form.Item
           label='Note:'
@@ -353,10 +355,19 @@ function CreateLink() {
           <Switch />
         </Form.Item>
         <Row>
-          <Col span={16}>
+          <Col md={16} xs={24}>
             <Space direction='vertical' style={{ width: '100%' }}>
               <Card>
-                <Title level={3}>Device Targeting:</Title>
+                <Title level={3}>
+                  Device Targeting:
+                  <Tooltip
+                    className={'customTooltip'}
+                    placement='top'
+                    title={tooltips.textTargeting}
+                  >
+                    <Button>?</Button>
+                  </Tooltip>
+                </Title>
                 <Form.List name='devices'>
                   {(fields, { add, remove }) => (
                     <>
@@ -418,7 +429,16 @@ function CreateLink() {
                 </Form.List>
               </Card>
               <Card>
-                <Title level={3}>Operation System Targeting:</Title>
+                <Title level={3}>
+                  Operation System Targeting:
+                  <Tooltip
+                    className={'customTooltip'}
+                    placement='top'
+                    title={tooltips.textTargeting}
+                  >
+                    <Button>?</Button>
+                  </Tooltip>
+                </Title>
                 <Form.List name='os'>
                   {(fields, { add, remove }) => (
                     <>

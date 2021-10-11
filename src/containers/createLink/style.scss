@@ -1,0 +1,19 @@
+.customTooltip {
+  color: rgba(0, 0, 0, 0.45) !important;
+  cursor: help;
+  -ms-writing-mode: lr-tb;
+  writing-mode: horizontal-tb;
+  -webkit-margin-start: 4px;
+  margin-inline-start: 4px;
+  padding: 0;
+  border: 1px solid #8c8c8c !important;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  position: relative;
+  bottom: 3px;
+}

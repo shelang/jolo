@@ -31,7 +31,6 @@ function KitMenu() {
       selectedKeys={[selectedKeys]}
       onClick={handleClick}
       style={{ maxHeight: '94vh', height: '94vh', overflow: 'auto' }}
-      inlineCollapsed={false}
     >
       {menuItems.map((menuItem, index) => {
         return (
