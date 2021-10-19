@@ -57,36 +57,7 @@ const Links = () => {
       <Spin spinning={isLoading}>
         <Table
           columns={columns}
-          dataSource={
-            response
-              ? response.links
-              : [
-                  { linkId: 1, linkHash: '12', createAt: '12' },
-                  { linkId: 2, linkHash: '12', createAt: '12' },
-                  { linkId: 3, linkHash: '12', createAt: '12' },
-                  { linkId: 4, linkHash: '12', createAt: '12' },
-                  { linkId: 5, linkHash: '12', createAt: '12' },
-                  { linkId: 6, linkHash: '12', createAt: '12' },
-                  { linkId: 7, linkHash: '12', createAt: '12' },
-                  { linkId: 8, linkHash: '12', createAt: '12' },
-                  { linkId: 9, linkHash: '12', createAt: '12' },
-                  { linkId: 10, linkHash: '12', createAt: '12' },
-                  { linkId: 11, linkHash: '12', createAt: '12' },
-                  { linkId: 12, linkHash: '12', createAt: '12' },
-                  { linkId: 13, linkHash: '12', createAt: '12' },
-                  { linkId: 14, linkHash: '12', createAt: '12' },
-                  { linkId: 15, linkHash: '12', createAt: '12' },
-                  { linkId: 16, linkHash: '12', createAt: '12' },
-                  { linkId: 17, linkHash: '12', createAt: '12' },
-                  { linkId: 18, linkHash: '12', createAt: '12' },
-                  { linkId: 19, linkHash: '12', createAt: '12' },
-                  { linkId: 20, linkHash: '12', createAt: '12' },
-                  { linkId: 21, linkHash: '12', createAt: '12' },
-                  { linkId: 22, linkHash: '12', createAt: '12' },
-                  { linkId: 23, linkHash: '12', createAt: '12' },
-                  { linkId: 24, linkHash: '12', createAt: '12' },
-                ]
-          }
+          dataSource={response ? response.links : []}
           pagination={{
             position: ['bottomCenter'],
             size: 'small',

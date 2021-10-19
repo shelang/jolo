@@ -31,3 +31,18 @@ export const booleanEnum = Object.freeze({
   true: true,
   false: false,
 });
+
+export const timeframes = Object.freeze({
+  0: 'Today',
+  1: 'Yesterday',
+  7: 'Last 7 days',
+  30: 'Last 30 days',
+  90: 'Last 90 days',
+  180: 'Last 180 days',
+  365: 'Last 12 months',
+  current: 'Current month',
+  prev: 'Previous month',
+  prevYear: 'Previous year',
+  beginning: 'From the beginning',
+  custom: 'Custom time frame',
+});
