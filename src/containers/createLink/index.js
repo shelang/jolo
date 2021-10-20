@@ -41,6 +41,7 @@ function CreateLink() {
   let query = useQuery();
   const [hash, setHash] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [massCreateResponses, setMassCreateResponses] = useState([]);
   const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')]);
   const [massCreateErrorCount, setMassCreateErrorCount] = useState(0);
   const [fileList, setFileList] = useState([]);
@@ -50,11 +51,7 @@ function CreateLink() {
   );
   const [operationSystems, setOperationSystems] = useState(os);
   const [targetDevices, setTargetDevices] = useState(devices);
-  const [{ response, isLoading, error }, doFetch] = useFetch();
-  const [
-    { massCreateRes, massCreateIsLoading, massCreateError },
-    massCreate,
-  ] = useFetch({
+  const [{ response, isLoading, error }, doFetch] = useFetch({
     onError: () => {
       setMassCreateErrorCount(massCreateErrorCount + 1);
     },
@@ -64,7 +61,7 @@ function CreateLink() {
   const onFinish = async (values) => {
     if (editMode) {
       await doFetch({
-        url: 'links',
+        url: `links/${response.id}`,
         method: 'PUT',
         data: {
           ...values,
@@ -112,13 +109,15 @@ function CreateLink() {
   };
   const createNewLinks = () => {
     normalizedLinks.forEach(async (normalizedLink) => {
-      await massCreate({
-        url: 'links',
-        method: 'POST',
-        data: {
-          ...normalizedLink,
-        },
-      });
+      try {
+        await doFetch({
+          url: 'links',
+          method: 'POST',
+          data: {
+            ...normalizedLink,
+          },
+        });
+      } catch (e) {}
     });
 
     if (massCreateErrorCount) {
@@ -130,6 +129,7 @@ function CreateLink() {
   };
 
   useEffect(() => {
+    response && setMassCreateResponses([...massCreateResponses, response]);
     response && setIsModalVisible(true);
   }, [response]);
   useEffect(() => {
@@ -186,31 +186,51 @@ function CreateLink() {
   return (
     <Card>
       <Modal
-        title='Created Link Successfully'
+        title='Created Link(s) Successfully'
         visible={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
-          setEditMode(true);
-          query.set('isEditing', true);
+          massCreateResponses.length > 1 && setEditMode(true);
+          massCreateResponses.length > 1 && query.set('isEditing', true);
         }}
         onOk={createNewLink}
-        cancelText='Edit'
+        cancelText={massCreateResponses.length > 1 ? 'Cancel' : 'Edit'}
         okText='Create New Link'
       >
-        <p>Here is Your Link, Enjoy</p>
-        <Search
-          value={response && response.redirectTo}
-          onSearch={copyToClipboard}
-          enterButton='Copy'
-        />
-        <Divider />
-        <Button
-          type='dashed'
-          block
-          onClick={() => response && window.open(response.url)}
-        >
-          Test Link
-        </Button>
+        <p>Here is Your Link(s), Enjoy</p>
+
+        <Row className='links'>
+          {massCreateResponses.map((res, index) => {
+            return (
+              <>
+                <Col span={24}>
+                  <Col span={17}>
+                    <Search
+                      value={res && res.redirectTo}
+                      onSearch={copyToClipboard}
+                      enterButton='Copy'
+                    />
+                    <span className='linksFrom'>Created from: {res.url}</span>
+                  </Col>
+                  <Col span={1}>
+                    <Divider type='vertical' />
+                  </Col>
+                  <Col span={6}>
+                    <Button
+                      type='dashed'
+                      block
+                      onClick={() => res && window.open(res.url)}
+                    >
+                      Test Link
+                    </Button>
+                  </Col>
+                </Col>
+                {massCreateResponses.length > 1 &&
+                  index !== massCreateResponses.length - 1 && <Divider />}
+              </>
+            );
+          })}
+        </Row>
       </Modal>
       <Modal
         title='Create Links From File'

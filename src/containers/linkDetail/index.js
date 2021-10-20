@@ -50,7 +50,6 @@ const LinkDetail = (props) => {
     setBucket(value);
   };
   const handleChangeTimeFrame = (value) => {
-    console.log(typeof value, value, 'value');
     setTimeFrame(value);
     let endDate = null;
     let startDate = null;
@@ -93,7 +92,7 @@ const LinkDetail = (props) => {
     },
     series: [
       {
-        data: response ? response.bucket : [],
+        data: response ? response.buckets : [],
       },
     ],
   };

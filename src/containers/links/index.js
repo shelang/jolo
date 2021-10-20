@@ -13,7 +13,7 @@ const Links = () => {
 
   const fetchLinks = async () => {
     await doFetch({
-      url: `links?page=${currentPage}`,
+      url: `links`,
       method: 'GET',
     });
   };
