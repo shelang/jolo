@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import useFetch from '../../hooks/asyncAction';
-import moment from 'moment';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+import React, { useEffect, useState } from "react";
+import useFetch from "../../hooks/asyncAction";
+import moment from "moment";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 import {
   DatePicker,
   Row,
@@ -12,9 +12,9 @@ import {
   Typography,
   Select,
   Space,
-} from 'antd';
-import { encodeQueryData } from '../../utils/queryParams';
-import { timeframes } from '../../utils/constants';
+} from "antd";
+import { encodeQueryData } from "../../utils/queryParams";
+import { timeframes } from "../../utils/constants";
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -24,7 +24,9 @@ const LinkDetail = (props) => {
   const [startDate, setStartDate] = useState(moment());
   const [endDate, setEndDate] = useState(moment());
   const [bucket, setBucket] = useState(null);
-  const [timeFrame, setTimeFrame] = useState('0');
+  const [timeFrame, setTimeFrame] = useState("0");
+  const [buckets, setBuckets] = useState([]);
+
   const [{ response, isLoading, error }, doFetch] = useFetch();
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const LinkDetail = (props) => {
     });
     await doFetch({
       url: `analytics/${props.match.params.id}?${queryParams}`,
-      method: 'GET',
+      method: "GET",
     });
   };
   const handleChangeDates = (dates, datesString) => {
@@ -55,29 +57,25 @@ const LinkDetail = (props) => {
     let startDate = null;
 
     switch (value) {
-      case 'current': {
+      case "current": {
         endDate = moment();
-        startDate = moment().startOf('month');
+        startDate = moment().startOf("month");
         break;
       }
-      case 'prev': {
-        endDate = moment().startOf('month');
-        startDate = moment()
-          .subtract(1, 'months')
-          .startOf('month');
+      case "prev": {
+        endDate = moment().startOf("month");
+        startDate = moment().subtract(1, "months").startOf("month");
         break;
       }
-      case 'prevYear': {
-        endDate = moment().startOf('year');
-        startDate = moment()
-          .subtract(1, 'years')
-          .startOf('year');
+      case "prevYear": {
+        endDate = moment().startOf("year");
+        startDate = moment().subtract(1, "years").startOf("year");
         break;
       }
 
       default: {
         endDate = moment();
-        startDate = moment().subtract(value, 'days');
+        startDate = moment().subtract(value, "days");
         break;
       }
     }
@@ -86,15 +84,48 @@ const LinkDetail = (props) => {
     setEndDate(endDate);
   };
 
+  useEffect(() => {
+    if (response && response.buckets) {
+      const normalizedResponse = response.buckets.reduce((total, acc) => {
+        const newFrom = acc.from.split("T")[0];
+        const newTo = acc.to.split("T")[0];
+
+        if (!total[`${newFrom} ${newTo}`]) {
+          total[`${newFrom} ${newTo}`] = [acc.count];
+        } else {
+          total[`${newFrom} ${newTo}`] = [
+            total[`${newFrom} ${newTo}`] + acc.count,
+          ];
+        }
+        return total;
+      }, {});
+
+      const newValues = Object.keys(normalizedResponse).reduce((total, acc) => {
+        total.push({
+          name: acc,
+          data: normalizedResponse[acc],
+        });
+        return total;
+      }, []);
+
+      setBuckets(newValues);
+    }
+  }, [response]);
+
   const options = {
-    title: {
-      text: 'Clicks',
+    chart: {
+      type: "column",
     },
-    series: [
-      {
-        data: response ? response.buckets : [],
+    title: {
+      text: "Clicks",
+    },
+
+    yAxis: {
+      title: {
+        text: "Click Counts",
       },
-    ],
+    },
+    series: buckets,
   };
 
   return (
@@ -106,7 +137,7 @@ const LinkDetail = (props) => {
               <RangePicker
                 value={[startDate, endDate]}
                 onChange={handleChangeDates}
-                disabled={timeFrame !== 'custom'}
+                disabled={timeFrame !== "custom"}
               />
               <Select
                 defaultValue={timeFrame}
@@ -123,9 +154,9 @@ const LinkDetail = (props) => {
               </Select>
               <Select defaultValue={bucket} onChange={handleChangeBucket}>
                 <Option value={null}>None</Option>
-                <Option value='hour'>Hourly</Option>
-                <Option value='daily'>Daily</Option>
-                <Option value='montly'>Montly</Option>
+                <Option value="hour">Hourly</Option>
+                <Option value="daily">Daily</Option>
+                <Option value="montly">Montly</Option>
               </Select>
             </Space>
           </Col>
@@ -135,7 +166,7 @@ const LinkDetail = (props) => {
           </Col>
           <br />
           <Col span={24}>
-            {response && response.bucket && (
+            {buckets.length && (
               <HighchartsReact highcharts={Highcharts} options={options} />
             )}
           </Col>
