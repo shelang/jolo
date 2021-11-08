@@ -7,13 +7,10 @@ const Links = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [{ response, isLoading, error }, doFetch] = useFetch();
-  useEffect(() => {
-    fetchLinks();
-  }, []);
 
   const fetchLinks = async () => {
     await doFetch({
-      url: `links`,
+      url: `links?page=${currentPage}`,
       method: "GET",
     });
   };
@@ -60,6 +57,10 @@ const Links = () => {
       ),
     },
   ];
+  useEffect(() => {
+    fetchLinks();
+  }, [currentPage]);
+
   return (
     <Row>
       <Spin spinning={isLoading}>
@@ -70,7 +71,7 @@ const Links = () => {
             position: ["bottomCenter"],
             size: "small",
             current: currentPage,
-            total: response ? response.links / 10 : 0,
+            total: currentPage + 4,
             onChange: (page) => {
               setCurrentPage(page);
             },
