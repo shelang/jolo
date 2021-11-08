@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import useFetch from '../../hooks/asyncAction';
-import readXlsxFile from 'read-excel-file';
-import { UploadOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from "react";
+import useFetch from "../../hooks/asyncAction";
+import readXlsxFile from "read-excel-file";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   Row,
   Col,
@@ -19,8 +19,8 @@ import {
   Space,
   Upload,
   Tooltip,
-} from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+} from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   redirectModes,
   linkStatus,
@@ -28,27 +28,27 @@ import {
   os,
   devices,
   booleanEnum,
-} from '../../utils/constants';
-import { toast } from 'react-toastify';
-import { useQuery } from '../../hooks/queryParams';
-import './style.scss';
+} from "../../utils/constants";
+import { toast } from "react-toastify";
+import { useQuery } from "../../hooks/queryParams";
+import "./style.scss";
 
 const { Title, Link } = Typography;
 const { TextArea, Search } = Input;
-const keysTemplate = ['title', 'url'];
+const keysTemplate = ["title", "url"];
 
 function CreateLink() {
   let query = useQuery();
   const [hash, setHash] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [massCreateResponses, setMassCreateResponses] = useState([]);
-  const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')]);
+  const [editMode, setEditMode] = useState(booleanEnum[query.get("isEditing")]);
+  const [linkId, setLinkId] = useState(booleanEnum[query.get("id")]);
   const [massCreateErrorCount, setMassCreateErrorCount] = useState(0);
   const [fileList, setFileList] = useState([]);
   const [normalizedLinks, setNormalizedLinks] = useState([]);
-  const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] = useState(
-    false
-  );
+  const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] =
+    useState(false);
   const [operationSystems, setOperationSystems] = useState(os);
   const [targetDevices, setTargetDevices] = useState(devices);
   const [{ response, isLoading, error }, doFetch] = useFetch({
@@ -56,21 +56,22 @@ function CreateLink() {
       setMassCreateErrorCount(massCreateErrorCount + 1);
     },
   });
+  const [linkData, fetchLinkData] = useFetch();
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     if (editMode) {
       await doFetch({
         url: `links/${response.id}`,
-        method: 'PUT',
+        method: "PUT",
         data: {
           ...values,
         },
       });
     } else {
       await doFetch({
-        url: 'links',
-        method: 'POST',
+        url: "links",
+        method: "POST",
         data: {
           ...values,
         },
@@ -78,7 +79,7 @@ function CreateLink() {
     }
   };
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
   const onFieldsChange = (changedFields) => {
     // changedFields.forEach((changedField) => {
@@ -101,7 +102,7 @@ function CreateLink() {
   };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(response.redirectTo);
-    message.success('Copied to Your Clipboard');
+    message.success("Copied to Your Clipboard");
   };
   const createNewLink = () => {
     setIsModalVisible(false);
@@ -111,8 +112,8 @@ function CreateLink() {
     normalizedLinks.forEach(async (normalizedLink) => {
       try {
         await doFetch({
-          url: 'links',
-          method: 'POST',
+          url: "links",
+          method: "POST",
           data: {
             ...normalizedLink,
           },
@@ -121,11 +122,17 @@ function CreateLink() {
     });
 
     if (massCreateErrorCount) {
-      toast.error('Creation Failed');
+      toast.error("Creation Failed");
     } else {
-      toast.success('Links Successfully Created');
+      toast.success("Links Successfully Created");
       setIsCreateLinkModalVisible(false);
     }
+  };
+  const onFetchLinkData = async () => {
+    await fetchLinkData({
+      url: `links/${linkId}`,
+      method: "GET",
+    });
   };
 
   useEffect(() => {
@@ -152,10 +159,15 @@ function CreateLink() {
         }
       }, []);
 
-      console.log(normalizedRows, 'normalizedRows');
+      console.log(normalizedRows, "normalizedRows");
       setNormalizedLinks(normalizedRows);
     });
   }, [fileList]);
+  useEffect(() => {
+    if (linkId) {
+      onFetchLinkData();
+    }
+  }, [linkId]);
 
   const labelCol = {
     lg: { span: 4 },
@@ -186,20 +198,20 @@ function CreateLink() {
   return (
     <Card>
       <Modal
-        title='Created Link(s) Successfully'
+        title="Created Link(s) Successfully"
         visible={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
           massCreateResponses.length > 1 && setEditMode(true);
-          massCreateResponses.length > 1 && query.set('isEditing', true);
+          massCreateResponses.length > 1 && query.set("isEditing", true);
         }}
         onOk={createNewLink}
-        cancelText={massCreateResponses.length > 1 ? 'Cancel' : 'Edit'}
-        okText='Create New Link'
+        cancelText={massCreateResponses.length > 1 ? "Cancel" : "Edit"}
+        okText="Create New Link"
       >
         <p>Here is Your Link(s), Enjoy</p>
 
-        <Row className='links'>
+        <Row className="links">
           {massCreateResponses.map((res, index) => {
             return (
               <>
@@ -208,16 +220,16 @@ function CreateLink() {
                     <Search
                       value={res && res.redirectTo}
                       onSearch={copyToClipboard}
-                      enterButton='Copy'
+                      enterButton="Copy"
                     />
-                    <span className='linksFrom'>Created from: {res.url}</span>
+                    <span className="linksFrom">Created from: {res.url}</span>
                   </Col>
                   <Col span={1}>
-                    <Divider type='vertical' />
+                    <Divider type="vertical" />
                   </Col>
                   <Col span={6}>
                     <Button
-                      type='dashed'
+                      type="dashed"
                       block
                       onClick={() => res && window.open(res.url)}
                     >
@@ -233,11 +245,11 @@ function CreateLink() {
         </Row>
       </Modal>
       <Modal
-        title='Create Links From File'
+        title="Create Links From File"
         visible={isCreateLinkModalVisible}
         onCancel={() => setIsCreateLinkModalVisible(false)}
         onOk={createNewLinks}
-        okText='Create Links'
+        okText="Create Links"
       >
         <p>Please Add Your File</p>
         <Upload {...uploadProps}>
@@ -257,48 +269,52 @@ function CreateLink() {
       <Form
         form={form}
         scrollToFirstError
-        labelAlign='left'
-        name='create link'
+        labelAlign="left"
+        name="create link"
         labelCol={labelCol}
         wrapperCol={wrapperCol}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onFieldsChange={onFieldsChange}
-        initialValues={{ index_status: 'active', index_mode: 301 }}
+        initialValues={
+          linkData.response
+            ? linkData.response
+            : { index_status: "active", index_mode: 301 }
+        }
       >
         <Form.Item
-          label='Friendly Name:'
-          name='title'
+          label="Friendly Name:"
+          name="title"
           tooltip={tooltips.friendlyName}
           rules={[
             {
               required: true,
-              message: 'Please input your Title!',
+              message: "Please input your Title!",
             },
           ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label='Destination URL:'
-          name='url'
+          label="Destination URL:"
+          name="url"
           tooltip={tooltips.destinationUrl}
           rules={[
             {
               required: true,
-              message: 'Please input your URL!',
+              message: "Please input your URL!",
             },
           ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label='Status'
-          name='index_status'
+          label="Status"
+          name="index_status"
           rules={[
             {
               required: false,
-              message: 'Please input your Status!',
+              message: "Please input your Status!",
             },
           ]}
         >
@@ -311,13 +327,13 @@ function CreateLink() {
           </Select>
         </Form.Item>
         <Form.Item
-          label='Redirect Mode:'
-          name='index_mode'
+          label="Redirect Mode:"
+          name="index_mode"
           tooltip={tooltips.redirectMode}
           rules={[
             {
               required: false,
-              message: 'Please input your Redirect Mode!',
+              message: "Please input your Redirect Mode!",
             },
           ]}
         >
@@ -332,82 +348,82 @@ function CreateLink() {
           </Select>
         </Form.Item>
         <Form.Item
-          label='Expiration Date:'
-          name='exp_date'
+          label="Expiration Date:"
+          name="exp_date"
           tooltip={tooltips.expirationDate}
           rules={[
             {
               required: false,
-              message: 'Please input your Expire Date!',
+              message: "Please input your Expire Date!",
             },
           ]}
         >
-          <DatePicker showTime={{ format: 'HH:mm' }} showNow={false} />
+          <DatePicker showTime={{ format: "HH:mm" }} showNow={false} />
         </Form.Item>
         <Form.Item
-          label='Note:'
-          name='des'
+          label="Note:"
+          name="des"
           tooltip={tooltips.note}
           rules={[
             {
               required: false,
-              message: 'Please input your Description!',
+              message: "Please input your Description!",
             },
           ]}
         >
           <TextArea maxLength={255} autoSize={{ minRows: 3, maxRows: 6 }} />
         </Form.Item>
-        <Form.Item label='Hash URL:' name='hash' tooltip={tooltips.hashUrl}>
-          <Row align='middle'>
+        <Form.Item label="Hash URL:" name="hash" tooltip={tooltips.hashUrl}>
+          <Row align="middle">
             <Col span={4}>
               <Switch value={hash} onChange={setHash} />
             </Col>
             <Col span={20}>
-              <Input placeholder='Hash URL' disabled={!hash} />{' '}
+              <Input placeholder="Hash URL" disabled={!hash} />{" "}
             </Col>
           </Row>
         </Form.Item>
         <Form.Item
-          label='Forward Parameters:'
-          name='param'
+          label="Forward Parameters:"
+          name="param"
           tooltip={tooltips.forwardParameters}
         >
           <Switch />
         </Form.Item>
         <Row>
           <Col md={16} xs={24}>
-            <Space direction='vertical' style={{ width: '100%' }}>
+            <Space direction="vertical" style={{ width: "100%" }}>
               <Card>
                 <Title level={3}>
                   Device Targeting:
                   <Tooltip
-                    className={'customTooltip'}
-                    placement='top'
+                    className={"customTooltip"}
+                    placement="top"
                     title={tooltips.textTargeting}
                   >
                     <Button>?</Button>
                   </Tooltip>
                 </Title>
-                <Form.List name='devices'>
+                <Form.List name="devices">
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map(({ key, name, fieldKey, ...restField }) => (
                         <Space
                           key={key}
                           size={0}
-                          style={{ display: 'flex', marginBottom: 8 }}
-                          align='baseline'
+                          style={{ display: "flex", marginBottom: 8 }}
+                          align="baseline"
                         >
                           <Form.Item
                             {...restField}
                             wrapperCol={{ span: 24 }}
-                            name={[name, 'type']}
-                            fieldKey={[fieldKey, 'type']}
+                            name={[name, "type"]}
+                            fieldKey={[fieldKey, "type"]}
                             rules={[
-                              { required: true, message: 'Missing type' },
+                              { required: true, message: "Missing type" },
                             ]}
                           >
-                            <Select style={{ width: 200 }} placeholder='Device'>
+                            <Select style={{ width: 200 }} placeholder="Device">
                               {targetDevices.map((targetDevice) => {
                                 return (
                                   <Select.Option
@@ -422,11 +438,11 @@ function CreateLink() {
                           <Form.Item
                             {...restField}
                             wrapperCol={{ span: 24 }}
-                            name={[name, 'url']}
-                            fieldKey={[fieldKey, 'url']}
-                            rules={[{ required: true, message: 'Missing URL' }]}
+                            name={[name, "url"]}
+                            fieldKey={[fieldKey, "url"]}
+                            rules={[{ required: true, message: "Missing URL" }]}
                           >
-                            <Input placeholder='url' style={{ width: 300 }} />
+                            <Input placeholder="url" style={{ width: 300 }} />
                           </Form.Item>
                           <MinusCircleOutlined
                             style={{ marginLeft: 10 }}
@@ -436,7 +452,7 @@ function CreateLink() {
                       ))}
                       <Form.Item>
                         <Button
-                          type='dashed'
+                          type="dashed"
                           onClick={() => add()}
                           block
                           icon={<PlusOutlined />}
@@ -452,14 +468,14 @@ function CreateLink() {
                 <Title level={3}>
                   Operation System Targeting:
                   <Tooltip
-                    className={'customTooltip'}
-                    placement='top'
+                    className={"customTooltip"}
+                    placement="top"
                     title={tooltips.textTargeting}
                   >
                     <Button>?</Button>
                   </Tooltip>
                 </Title>
-                <Form.List name='os'>
+                <Form.List name="os">
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map(
@@ -474,21 +490,21 @@ function CreateLink() {
                           <Space
                             key={key}
                             size={0}
-                            style={{ display: 'flex', marginBottom: 8 }}
-                            align='baseline'
+                            style={{ display: "flex", marginBottom: 8 }}
+                            align="baseline"
                           >
                             <Form.Item
                               {...restField}
                               wrapperCol={{ span: 24 }}
-                              name={[name, 'type']}
-                              fieldKey={[fieldKey, 'type']}
+                              name={[name, "type"]}
+                              fieldKey={[fieldKey, "type"]}
                               rules={[
-                                { required: true, message: 'Missing type' },
+                                { required: true, message: "Missing type" },
                               ]}
                             >
                               <Select
                                 style={{ width: 200 }}
-                                placeholder='Operation System'
+                                placeholder="Operation System"
                               >
                                 {operationSystems.map((operationSystem) => {
                                   return (
@@ -504,13 +520,13 @@ function CreateLink() {
                             <Form.Item
                               {...restField}
                               wrapperCol={{ span: 24 }}
-                              name={[name, 'url']}
-                              fieldKey={[fieldKey, 'url']}
+                              name={[name, "url"]}
+                              fieldKey={[fieldKey, "url"]}
                               rules={[
-                                { required: true, message: 'Missing URL' },
+                                { required: true, message: "Missing URL" },
                               ]}
                             >
-                              <Input placeholder='url' style={{ width: 300 }} />
+                              <Input placeholder="url" style={{ width: 300 }} />
                             </Form.Item>
                             <MinusCircleOutlined
                               style={{ marginLeft: 10 }}
@@ -521,7 +537,7 @@ function CreateLink() {
                       )}
                       <Form.Item>
                         <Button
-                          type='dashed'
+                          type="dashed"
                           onClick={() => add()}
                           block
                           icon={<PlusOutlined />}
@@ -538,7 +554,7 @@ function CreateLink() {
         </Row>
         <br />
         <Form.Item>
-          <Button loading={isLoading} type='primary' htmlType='submit'>
+          <Button loading={isLoading} type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

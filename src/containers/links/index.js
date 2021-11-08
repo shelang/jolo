@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import useFetch from '../../hooks/asyncAction';
-import { useHistory } from 'react-router-dom';
-import { Row, Table, Space, Spin, message } from 'antd';
+import React, { useEffect, useState } from "react";
+import useFetch from "../../hooks/asyncAction";
+import { useHistory } from "react-router-dom";
+import { Row, Table, Space, Spin, message } from "antd";
 
 const Links = () => {
   const history = useHistory();
@@ -14,39 +14,47 @@ const Links = () => {
   const fetchLinks = async () => {
     await doFetch({
       url: `links`,
-      method: 'GET',
+      method: "GET",
     });
   };
   const copyToClipboard = (value) => {
     navigator.clipboard.writeText(value);
-    message.success('Copied to Your Clipboard');
+    message.success("Copied to Your Clipboard");
   };
 
   const columns = [
     {
-      title: 'Link ID',
-      dataIndex: 'linkId',
-      key: 'linkId',
+      title: "Link ID",
+      dataIndex: "linkId",
+      key: "linkId",
     },
     {
-      title: 'Link Hash',
-      dataIndex: 'linkHash',
-      key: 'linkHash',
+      title: "Link Hash",
+      dataIndex: "linkHash",
+      key: "linkHash",
     },
     {
-      title: 'Created at',
-      dataIndex: 'createAt',
-      key: 'createAt',
+      title: "Created at",
+      dataIndex: "createAt",
+      key: "createAt",
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: "Action",
+      key: "action",
       render: (text, record) => (
-        <Space size='middle'>
+        <Space size="middle">
           <a onClick={(e) => history.push(`./links/${record.linkId}`)}>
             View Report
           </a>
-          {/* <a onClick={(e) => history.push(`./link/${record.linkId}`)}>Edit</a> */}
+          <a
+            onClick={(e) =>
+              history.push(
+                `./link/create-link?id=${record.linkId}&isEditing=true`
+              )
+            }
+          >
+            Edit
+          </a>
           <a onClick={(e) => copyToClipboard(record.linkHash)}>Copy</a>
         </Space>
       ),
@@ -59,15 +67,15 @@ const Links = () => {
           columns={columns}
           dataSource={response ? response.links : []}
           pagination={{
-            position: ['bottomCenter'],
-            size: 'small',
+            position: ["bottomCenter"],
+            size: "small",
             current: currentPage,
             total: response ? response.links / 10 : 0,
             onChange: (page) => {
               setCurrentPage(page);
             },
           }}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         />
       </Spin>
     </Row>
