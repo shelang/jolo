@@ -310,7 +310,7 @@ function CreateLink() {
         </Form.Item>
         <Form.Item
           label="Status"
-          name="index_status"
+          name="status"
           rules={[
             {
               required: false,
@@ -328,7 +328,7 @@ function CreateLink() {
         </Form.Item>
         <Form.Item
           label="Redirect Mode:"
-          name="index_mode"
+          name="redirectCode"
           tooltip={tooltips.redirectMode}
           rules={[
             {
@@ -349,7 +349,7 @@ function CreateLink() {
         </Form.Item>
         <Form.Item
           label="Expiration Date:"
-          name="exp_date"
+          name="expireAt"
           tooltip={tooltips.expirationDate}
           rules={[
             {
@@ -362,7 +362,7 @@ function CreateLink() {
         </Form.Item>
         <Form.Item
           label="Note:"
-          name="des"
+          name="description"
           tooltip={tooltips.note}
           rules={[
             {
@@ -385,7 +385,7 @@ function CreateLink() {
         </Form.Item>
         <Form.Item
           label="Forward Parameters:"
-          name="param"
+          name="forwardParameter"
           tooltip={tooltips.forwardParameters}
         >
           <Switch />
