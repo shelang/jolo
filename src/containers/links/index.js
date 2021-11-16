@@ -45,9 +45,7 @@ const Links = () => {
           </a>
           <a
             onClick={(e) =>
-              history.push(
-                `./link/create-link?id=${record.linkId}&isEditing=true`
-              )
+              history.push(`./create-link?id=${record.linkId}&isEditing=true`)
             }
           >
             Edit
