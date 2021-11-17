@@ -87,8 +87,8 @@ const LinkDetail = (props) => {
   useEffect(() => {
     if (response && response.buckets) {
       const normalizedResponse = response.buckets.reduce((total, acc) => {
-        const newFrom = acc.from.split("T")[0];
-        const newTo = acc.to.split("T")[0];
+        const newFrom = acc.from && acc.from.split("T")[0];
+        const newTo = acc.to && acc.to.split("T")[0];
 
         if (!total[`${newFrom} ${newTo}`]) {
           total[`${newFrom} ${newTo}`] = [acc.count];

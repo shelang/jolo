@@ -1,15 +1,16 @@
-import React, { Suspense } from 'react';
-import PrivateRoute from './utils/privateRoute';
-import AppLayout from './components/layout/layout';
-import LoginLayout from './components/layout/LoginLayout';
-import Welcome from './welcome';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import { Spin } from 'antd';
+import React, { Suspense } from "react";
+import PrivateRoute from "./utils/privateRoute";
+import AppLayout from "./components/layout/layout";
+import LoginLayout from "./components/layout/LoginLayout";
+import Welcome from "./welcome";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { Spin } from "antd";
 
-const Login = React.lazy(() => import('./containers/auth'));
-const CreateLink = React.lazy(() => import('./containers/createLink'));
-const Links = React.lazy(() => import('./containers/links'));
-const LinkDetail = React.lazy(() => import('./containers/linkDetail'));
+const Login = React.lazy(() => import("./containers/auth"));
+const CreateLink = React.lazy(() => import("./containers/createLink"));
+const Links = React.lazy(() => import("./containers/links"));
+const Scripts = React.lazy(() => import("./containers/scripts"));
+const LinkDetail = React.lazy(() => import("./containers/linkDetail"));
 
 function Routes() {
   return (
@@ -17,7 +18,7 @@ function Routes() {
       <Switch>
         <Route
           exact
-          path='/login'
+          path="/login"
           render={() => (
             <LoginLayout>
               <Login />
@@ -25,27 +26,27 @@ function Routes() {
           )}
         />
         <PrivateRoute
-          path='/'
+          path="/"
           exact
           render={() => (
             <Redirect
               to={{
-                pathname: '/dashboard',
+                pathname: "/dashboard",
               }}
             />
           )}
         />
         <PrivateRoute
-          path='/dashboard'
+          path="/dashboard"
           exact
           render={() => (
             <AppLayout>
-              <Welcome sectionName='Main Dashboard' />
+              <Welcome sectionName="Main Dashboard" />
             </AppLayout>
           )}
         />
         <PrivateRoute
-          path='/dashboard/create-link'
+          path="/dashboard/create-link"
           exact
           render={() => (
             <AppLayout>
@@ -54,7 +55,7 @@ function Routes() {
           )}
         />
         <PrivateRoute
-          path='/dashboard/links'
+          path="/dashboard/links"
           exact
           render={() => (
             <AppLayout>
@@ -63,11 +64,20 @@ function Routes() {
           )}
         />
         <PrivateRoute
-          path='/dashboard/links/:id'
+          path="/dashboard/links/:id"
           exact
           render={(props) => (
             <AppLayout>
               <LinkDetail {...props} />
+            </AppLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/dashboard/scripts"
+          exact
+          render={() => (
+            <AppLayout>
+              <Scripts />
             </AppLayout>
           )}
         />
