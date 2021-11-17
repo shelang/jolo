@@ -72,23 +72,23 @@ function Scripts() {
       dataIndex: "content",
       key: "content",
     },
-    {
-      title: "Action",
-      key: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <a
-            onClick={(e) =>
-              history.push(
-                `./create-script?id=${record.scriptId}&isEditing=true`
-              )
-            }
-          >
-            Edit
-          </a>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (text, record) => (
+    //     <Space size="middle">
+    //       <a
+    //         onClick={(e) =>
+    //           history.push(
+    //             `./create-script?id=${record.scriptId}&isEditing=true`
+    //           )
+    //         }
+    //       >
+    //         Edit
+    //       </a>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   return (

@@ -52,6 +52,7 @@ const marks = {
 function CreateLink() {
   let query = useQuery();
   const [hash, setHash] = useState(false);
+  const [iframe, setIframe] = useState(false);
   const [scriptContent, setScriptContent] = useState("");
   const [scriptName, setScriptName] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -79,7 +80,7 @@ function CreateLink() {
 
   const [form] = Form.useForm();
 
-  const onFinish = async (values) => {
+  const onFinish = async ({ iframe, ...values }) => {
     if (editMode) {
       const id = (response && response.id) || linkId;
       await doFetch({
@@ -87,6 +88,12 @@ function CreateLink() {
         method: "PUT",
         data: {
           ...values,
+          scriptId: selectedScript && selectedScript.value,
+          type: iframe
+            ? "IFRAME"
+            : selectedScript && selectedScript.value
+            ? "SCRIPT"
+            : "REDIRECT",
         },
       });
     } else {
@@ -95,7 +102,12 @@ function CreateLink() {
         method: "POST",
         data: {
           ...values,
-          scriptId: selectedScript.value,
+          type: iframe
+            ? "IFRAME"
+            : selectedScript && selectedScript.value
+            ? "SCRIPT"
+            : "REDIRECT",
+          scriptId: selectedScript && selectedScript.value,
         },
       });
     }
@@ -223,6 +235,10 @@ function CreateLink() {
     if (linkData.response) {
       if (linkData.response.scriptId) {
         onSearch("");
+        setSelectedScript({
+          value: linkData.response.scriptId,
+          label: linkData.response.scriptId,
+        });
       }
       const newValues = {
         ...linkData.response,
@@ -386,7 +402,7 @@ function CreateLink() {
           initialValues={
             linkData.response
               ? linkData.response
-              : { status: "ACTIVE", redirectCode: 301 }
+              : { status: "ACTIVE", redirectCode: 301, hashLength: 6 }
           }
         >
           <Form.Item
@@ -494,11 +510,11 @@ function CreateLink() {
                   <Input placeholder="Hash URL" />
                 ) : (
                   <Slider
+                    defaultValue={6}
                     min={5}
                     max={12}
                     marks={marks}
                     step={1}
-                    defaultValue={6}
                   />
                 )}
               </Col>
@@ -512,6 +528,7 @@ function CreateLink() {
           >
             <Switch />
           </Form.Item>
+
           <Row>
             <Col md={16} xs={24}>
               <Space direction="vertical" style={{ width: "100%" }}>
@@ -679,33 +696,48 @@ function CreateLink() {
                     )}
                   </Form.List>
                 </Card>
+
                 <Card>
-                  <Title level={3}>
-                    Retargeting codes
-                    <Tooltip
-                      className={"customTooltip"}
-                      placement="top"
-                      title={tooltips.textTargeting}
-                    >
-                      <Button>?</Button>
-                    </Tooltip>
-                  </Title>
-                  <AutoComplete
-                    dropdownMatchSelectWidth={252}
-                    style={{ width: 300 }}
-                    options={scripts}
-                    onSelect={onSelect}
-                    onSearch={onSearch}
-                    placeholder="Search Scripts"
-                    value={selectedScript ? selectedScript.label : undefined}
-                  />
-                  <Button
-                    type="primary"
-                    onClick={() => setScriptModalVisible(true)}
+                  <Form.Item
+                    label="URL Masking:"
+                    name="iframe"
+                    valuePropName="checked"
                   >
-                    add script
-                  </Button>
-                  <Divider />
+                    <Switch checked={iframe} onChange={setIframe} />
+                  </Form.Item>
+                  {!iframe && (
+                    <>
+                      <Title level={3}>
+                        Retargeting codes
+                        <Tooltip
+                          className={"customTooltip"}
+                          placement="top"
+                          title={tooltips.textTargeting}
+                        >
+                          <Button>?</Button>
+                        </Tooltip>
+                      </Title>
+                      <AutoComplete
+                        dropdownMatchSelectWidth={252}
+                        style={{ width: 300 }}
+                        options={scripts}
+                        onSelect={onSelect}
+                        onSearch={onSearch}
+                        placeholder="Search Scripts"
+                        value={
+                          selectedScript ? selectedScript.label : undefined
+                        }
+                      />
+                      <Divider />
+
+                      <Button
+                        type="primary"
+                        onClick={() => setScriptModalVisible(true)}
+                      >
+                        add script
+                      </Button>
+                    </>
+                  )}
                 </Card>
               </Space>
             </Col>
