@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/asyncAction";
 import { useHistory } from "react-router-dom";
-import { Row, Table, Space, Spin, message } from "antd";
+import { Row, Table, Space, Spin, message, Card } from "antd";
 
 const Links = () => {
   const history = useHistory();
@@ -60,7 +60,7 @@ const Links = () => {
   }, [currentPage]);
 
   return (
-    <Row>
+    <Card>
       <Spin spinning={isLoading}>
         <Table
           columns={columns}
@@ -69,7 +69,7 @@ const Links = () => {
             position: ["bottomCenter"],
             size: "small",
             current: currentPage,
-            total: currentPage + 4,
+            total: currentPage * 4 + 40,
             onChange: (page) => {
               setCurrentPage(page);
             },
@@ -77,7 +77,7 @@ const Links = () => {
           style={{ width: "100%" }}
         />
       </Spin>
-    </Row>
+    </Card>
   );
 };
 export default Links;
