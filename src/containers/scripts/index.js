@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/asyncAction";
-import { useHistory } from "react-router-dom";
-import { Input, Table, Space, Spin, Divider, Card, Form } from "antd";
+import { Input, Table, Spin, Divider, Card, Form } from "antd";
 import { Modal, Button } from "antd";
 
 const { TextArea } = Input;
 
 function Scripts() {
-  const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
-  const [{ response, isLoading, error }, doFetch] = useFetch();
+  const [{ response, isLoading }, doFetch] = useFetch();
 
   const fetchScripts = async () => {
     await doFetch({
