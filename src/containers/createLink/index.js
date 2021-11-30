@@ -58,6 +58,8 @@ function CreateLink() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [scriptModalVisible, setScriptModalVisible] = useState(false);
   const [massCreateResponses, setMassCreateResponses] = useState([]);
+  const [selectedDevices, setSelectedDevices] = useState({});
+  const [selectedOs, setSelectedOs] = useState({});
   const [scripts, setScripts] = useState([]);
   const [selectedScript, setSelectedScript] = useState();
   const [editMode, setEditMode] = useState(booleanEnum[query.get("isEditing")]);
@@ -116,23 +118,19 @@ function CreateLink() {
     console.log("Failed:", errorInfo);
   };
   const onFieldsChange = (changedFields) => {
-    // changedFields.forEach((changedField) => {
-    //   if (
-    //     changedField.name.includes('devices') &&
-    //     typeof changedField.value === 'string'
-    //   ) {
-    //     console.log('here');
-    //     setTargetDevices(
-    //       targetDevices.filter(
-    //         (device) => device.toLowerCase() !== changedField.value
-    //       )
-    //     );
-    //   } else if (changedField.name.includes('os')) {
-    //     setOperationSystems(
-    //       operationSystems.filter((os) => os !== changedField.value)
-    //     );
-    //   }
-    // });
+    console.log(changedFields, "saggg");
+    if (changedFields[0].name[0] + changedFields[0].name[2] === "devicestype") {
+      setSelectedDevices({
+        ...selectedDevices,
+        [changedFields[0].name[1]]: changedFields[0].value,
+      });
+    }
+    if (changedFields[0].name[0] + changedFields[0].name[2] === "ostype") {
+      setSelectedOs({
+        ...selectedOs,
+        [changedFields[0].name[1]]: changedFields[0].value,
+      });
+    }
   };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(response.redirectTo);
@@ -196,6 +194,22 @@ function CreateLink() {
     console.log("onSelect", data);
     setSelectedScript(scripts.filter((script) => script.value === data)[0]);
     console.log(scripts.filter((script) => script.value === data));
+  };
+  const deleteObjectKey = (obj, key) => {
+    return Object.keys(obj).reduce((total, acc) => {
+      if (Number(acc) !== key) {
+        total[acc] = obj[acc];
+      }
+      return total;
+    }, {});
+  };
+  const reorderObjectKeys = (obj) => {
+    return Object.keys(obj).reduce((total, acc, index) => {
+      if (index !== acc) {
+        total[index] = obj[acc];
+      }
+      return total;
+    }, {});
   };
 
   useEffect(() => {
@@ -288,6 +302,7 @@ function CreateLink() {
     },
     fileList,
   };
+
   return (
     <Card>
       <Modal
@@ -567,13 +582,21 @@ function CreateLink() {
                                 placeholder="Device"
                               >
                                 {targetDevices.map((targetDevice) => {
-                                  return (
-                                    <Select.Option
-                                      value={targetDevice.toLowerCase()}
-                                    >
-                                      {targetDevice}
-                                    </Select.Option>
-                                  );
+                                  if (
+                                    Object.values(selectedDevices).includes(
+                                      targetDevice.toLowerCase()
+                                    )
+                                  ) {
+                                    return null;
+                                  } else {
+                                    return (
+                                      <Select.Option
+                                        value={targetDevice.toLowerCase()}
+                                      >
+                                        {targetDevice}
+                                      </Select.Option>
+                                    );
+                                  }
                                 })}
                               </Select>
                             </Form.Item>
@@ -590,19 +613,27 @@ function CreateLink() {
                             </Form.Item>
                             <MinusCircleOutlined
                               style={{ marginLeft: 10 }}
-                              onClick={() => remove(name)}
+                              onClick={() => {
+                                const newSelectedDevices = reorderObjectKeys(
+                                  deleteObjectKey(selectedDevices, name)
+                                );
+                                setSelectedDevices(newSelectedDevices);
+                                remove(name);
+                              }}
                             />
                           </Space>
                         ))}
                         <Form.Item>
-                          <Button
-                            type="dashed"
-                            onClick={() => add()}
-                            block
-                            icon={<PlusOutlined />}
-                          >
-                            Add Device
-                          </Button>
+                          {fields.length < 2 && (
+                            <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                            >
+                              Add Device
+                            </Button>
+                          )}
                         </Form.Item>
                       </>
                     )}
@@ -651,13 +682,21 @@ function CreateLink() {
                                   placeholder="Operation System"
                                 >
                                   {operationSystems.map((operationSystem) => {
-                                    return (
-                                      <Select.Option
-                                        value={operationSystem.toLowerCase()}
-                                      >
-                                        {operationSystem}
-                                      </Select.Option>
-                                    );
+                                    if (
+                                      Object.values(selectedOs).includes(
+                                        operationSystem.toLowerCase()
+                                      )
+                                    ) {
+                                      return null;
+                                    } else {
+                                      return (
+                                        <Select.Option
+                                          value={operationSystem.toLowerCase()}
+                                        >
+                                          {operationSystem}
+                                        </Select.Option>
+                                      );
+                                    }
                                   })}
                                 </Select>
                               </Form.Item>
@@ -677,20 +716,28 @@ function CreateLink() {
                               </Form.Item>
                               <MinusCircleOutlined
                                 style={{ marginLeft: 10 }}
-                                onClick={() => remove(name)}
+                                onClick={() => {
+                                  const newSelectedOs = reorderObjectKeys(
+                                    deleteObjectKey(selectedOs, name)
+                                  );
+                                  setSelectedOs(newSelectedOs);
+                                  remove(name);
+                                }}
                               />
                             </Space>
                           )
                         )}
                         <Form.Item>
-                          <Button
-                            type="dashed"
-                            onClick={() => add()}
-                            block
-                            icon={<PlusOutlined />}
-                          >
-                            Add Operation System
-                          </Button>
+                          {fields.length < 2 && (
+                            <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                            >
+                              Add Operation System
+                            </Button>
+                          )}
                         </Form.Item>
                       </>
                     )}

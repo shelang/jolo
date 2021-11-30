@@ -14,7 +14,22 @@ const LinkDetail = React.lazy(() => import("./containers/linkDetail"));
 
 function Routes() {
   return (
-    <Suspense fallback={<Spin />}>
+    <Suspense
+      fallback={
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "100vh",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <Spin />
+        </div>
+      }
+    >
       <Switch>
         <Route
           exact
