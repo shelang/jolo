@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/asyncAction";
-import { useHistory } from "react-router-dom";
-import { Input, Table, Space, Spin, Divider, Card, Form } from "antd";
+import { Input, Table, Spin, Divider, Card, Form } from "antd";
 import { Modal, Button } from "antd";
 import { useQuery } from "../../hooks/queryParams";
 import { booleanEnum } from "../../utils/constants";
@@ -9,7 +8,7 @@ import { booleanEnum } from "../../utils/constants";
 const { TextArea } = Input;
 
 function Scripts() {
-  let query = useQuery();
+ let query = useQuery();
 
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +21,7 @@ function Scripts() {
 
   const [form] = Form.useForm();
 
-  const [{ response, isLoading, error }, doFetch] = useFetch();
+  const [{ response, isLoading }, doFetch] = useFetch();
 
   const fetchScripts = async () => {
     await doFetch({

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/asyncAction";
 import { useHistory } from "react-router-dom";
-import { Row, Table, Space, Spin, message, Card } from "antd";
+import { Table, Space, Spin, message, Card } from "antd";
 
 const Links = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
-  const [{ response, isLoading, error }, doFetch] = useFetch();
+  const [{ response, isLoading }, doFetch] = useFetch();
 
   const fetchLinks = async () => {
     await doFetch({
