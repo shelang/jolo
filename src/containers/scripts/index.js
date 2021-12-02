@@ -4,11 +4,12 @@ import { Input, Table, Spin, Divider, Card, Form } from "antd";
 import { Modal, Button } from "antd";
 import { useQuery } from "../../hooks/queryParams";
 import { booleanEnum } from "../../utils/constants";
+import { useHistory } from "react-router";
 
 const { TextArea } = Input;
 
 function Scripts() {
- let query = useQuery();
+  let query = useQuery();
 
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
