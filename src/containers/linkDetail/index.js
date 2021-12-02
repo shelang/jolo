@@ -155,7 +155,7 @@ const LinkDetail = (props) => {
                   Hourly
                 </Option>
                 <Option value="daily">Daily</Option>
-                <Option value="montly">Montly</Option>
+                <Option value="monthly">Monthly</Option>
               </Select>
             </Space>
           </Col>

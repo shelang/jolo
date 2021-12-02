@@ -10,6 +10,8 @@ const Login = React.lazy(() => import("./containers/auth"));
 const CreateLink = React.lazy(() => import("./containers/createLink"));
 const Links = React.lazy(() => import("./containers/links"));
 const Scripts = React.lazy(() => import("./containers/scripts"));
+const Webhook = React.lazy(() => import("./containers/webhook"));
+
 const LinkDetail = React.lazy(() => import("./containers/linkDetail"));
 
 function Routes() {
@@ -93,6 +95,15 @@ function Routes() {
           render={() => (
             <AppLayout>
               <Scripts />
+            </AppLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/dashboard/webhooks"
+          exact
+          render={() => (
+            <AppLayout>
+              <Webhook />
             </AppLayout>
           )}
         />

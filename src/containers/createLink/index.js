@@ -55,13 +55,21 @@ function CreateLink() {
   const [iframe, setIframe] = useState(false);
   const [scriptContent, setScriptContent] = useState("");
   const [scriptName, setScriptName] = useState("");
+  const [webhookName, setWebhookName] = useState("");
+  const [webhookUrl, setWebhookUrl] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [scriptModalVisible, setScriptModalVisible] = useState(false);
+  const [webhookModalVisible, setWebhookModalVisible] = useState(false);
+
   const [massCreateResponses, setMassCreateResponses] = useState([]);
   const [selectedDevices, setSelectedDevices] = useState({});
   const [selectedOs, setSelectedOs] = useState({});
   const [scripts, setScripts] = useState([]);
+  const [webhooks, setWebhooks] = useState([]);
+
   const [selectedScript, setSelectedScript] = useState();
+  const [selectedWebhook, setSelectedWebhook] = useState();
+
   const [editMode, setEditMode] = useState(booleanEnum[query.get("isEditing")]);
   const [linkId, setLinkId] = useState(query.get("id"));
   const [massCreateErrorCount, setMassCreateErrorCount] = useState(0);
@@ -78,7 +86,9 @@ function CreateLink() {
   });
   const [linkData, fetchLinkData] = useFetch();
   const [scriptData, fetchScripts] = useFetch();
+  const [webhookData, fetchWebhooks] = useFetch();
   const [createScriptData, createScripts] = useFetch();
+  const [createWebhookData, createWebhook] = useFetch();
 
   const [form] = Form.useForm();
 
@@ -110,6 +120,7 @@ function CreateLink() {
             ? "SCRIPT"
             : "REDIRECT",
           scriptId: selectedScript && selectedScript.value,
+          webhookId: selectedWebhook && selectedWebhook.value,
         },
       });
     }
@@ -172,6 +183,10 @@ function CreateLink() {
         url: `script/?name=${searchText}`,
         method: "GET",
       });
+      await fetchWebhooks({
+        url: `webhook/?name=${searchText}`,
+        method: "GET",
+      });
     } catch (e) {}
   };
   const createNewScript = async () => {
@@ -190,10 +205,25 @@ function CreateLink() {
     } finally {
     }
   };
+  const createNewWebhook = async () => {
+    try {
+      await createWebhook({
+        url: "webhook",
+        method: "POST",
+        data: {
+          name: webhookName,
+          url: webhookUrl,
+        },
+      });
+      setWebhookModalVisible(false);
+    } catch (e) {
+    } finally {
+    }
+  };
   const onSelect = (data) => {
     console.log("onSelect", data);
     setSelectedScript(scripts.filter((script) => script.value === data)[0]);
-    console.log(scripts.filter((script) => script.value === data));
+    setSelectedWebhook(webhooks.filter((webhook) => webhook.value === data)[0]);
   };
   const deleteObjectKey = (obj, key) => {
     return Object.keys(obj).reduce((total, acc) => {
@@ -274,6 +304,19 @@ function CreateLink() {
         []
       );
       setScripts(normalizedScripts);
+    }
+    if (webhookData.response) {
+      const normalizedScripts = webhookData.response.webhooks.reduce(
+        (total, acc) => {
+          total.push({
+            label: acc.name,
+            value: acc.id,
+          });
+          return total;
+        },
+        []
+      );
+      setWebhooks(normalizedScripts);
     }
   }, [scriptData.response]);
 
@@ -363,6 +406,35 @@ function CreateLink() {
         <Upload {...uploadProps}>
           <Button icon={<UploadOutlined />}>Select File</Button>
         </Upload>
+      </Modal>
+      <Modal
+        title="Create Webhook"
+        visible={webhookModalVisible}
+        onCancel={() => setWebhookModalVisible(false)}
+        footer={null}
+      >
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <Input
+            placeholder="Webhook Name"
+            style={{ width: "100%" }}
+            value={webhookName}
+            onChange={(e) => {
+              setWebhookName(e.target.value);
+            }}
+          />
+          <TextArea
+            placeholder="Webhook URL"
+            style={{ width: "100%" }}
+            rows={4}
+            value={webhookUrl}
+            onChange={(e) => {
+              setWebhookUrl(e.target.value);
+            }}
+          />
+          <Button loading={isLoading} type="primary" onClick={createNewWebhook}>
+            Submit
+          </Button>
+        </Space>
       </Modal>
       <Modal
         title="Create Script"
@@ -743,60 +815,94 @@ function CreateLink() {
                     )}
                   </Form.List>
                 </Card>
-
-                <Card>
-                  <Form.Item
-                    label="URL Masking:"
-                    name="iframe"
-                    valuePropName="checked"
-                    className="urlMasking"
-                  >
-                    <Tooltip
-                      className={"customTooltip"}
-                      placement="top"
-                      title={tooltips.urlMask}
-                    >
-                      <Button>?</Button>
-                    </Tooltip>
-                    <Switch checked={iframe} onChange={setIframe} />
-                  </Form.Item>
-                  {!iframe && (
-                    <>
-                      <Title level={3}>
-                        Retargeting codes
-                        <Tooltip
-                          className={"customTooltip"}
-                          placement="top"
-                          title={tooltips.textTargeting}
-                        >
-                          <Button>?</Button>
-                        </Tooltip>
-                      </Title>
-                      <AutoComplete
-                        dropdownMatchSelectWidth={252}
-                        style={{ width: 300 }}
-                        options={scripts}
-                        onSelect={onSelect}
-                        onSearch={onSearch}
-                        placeholder="Search Scripts"
-                        value={
-                          selectedScript ? selectedScript.label : undefined
-                        }
-                      />
-                      <Divider />
-
-                      <Button
-                        type="primary"
-                        onClick={() => setScriptModalVisible(true)}
-                      >
-                        add script
-                      </Button>
-                    </>
-                  )}
-                </Card>
               </Space>
             </Col>
           </Row>
+          <Card>
+            <Form.Item
+              label="URL Masking:"
+              name="iframe"
+              valuePropName="checked"
+              className="urlMasking"
+            >
+              <Tooltip
+                className={"customTooltip"}
+                placement="top"
+                title={tooltips.urlMask}
+              >
+                <Button>?</Button>
+              </Tooltip>
+              <Switch checked={iframe} onChange={setIframe} />
+            </Form.Item>
+            {!iframe && (
+              <>
+                <Title level={3}>
+                  Retargeting codes
+                  <Tooltip
+                    className={"customTooltip"}
+                    placement="top"
+                    title={tooltips.textTargeting}
+                  >
+                    <Button>?</Button>
+                  </Tooltip>
+                </Title>
+                <AutoComplete
+                  dropdownMatchSelectWidth={252}
+                  style={{ width: 300 }}
+                  options={scripts}
+                  onSelect={onSelect}
+                  onSearch={onSearch}
+                  placeholder="Search Scripts"
+                  value={selectedScript ? selectedScript.label : undefined}
+                />
+                <Divider />
+                <Space direction="vertical">
+                  <Button
+                    type="primary"
+                    onClick={() => setScriptModalVisible(true)}
+                  >
+                    add script
+                  </Button>
+                </Space>
+              </>
+            )}
+          </Card>
+
+          <Card>
+            {!iframe && (
+              <>
+                <Title level={3}>
+                  Retargeting codes
+                  <Tooltip
+                    className={"customTooltip"}
+                    placement="top"
+                    title={tooltips.textTargeting}
+                  >
+                    <Button>?</Button>
+                  </Tooltip>
+                </Title>
+                <AutoComplete
+                  dropdownMatchSelectWidth={252}
+                  style={{ width: 300 }}
+                  options={webhooks}
+                  onSelect={onSelect}
+                  onSearch={onSearch}
+                  placeholder="Search Webhook"
+                  value={selectedWebhook ? selectedWebhook.label : undefined}
+                />
+                <Divider />
+                <Space direction="vertical">
+                  <Button
+                    type="primary"
+                    onClick={() => setWebhookModalVisible(true)}
+                  >
+                    Add WebHook
+                  </Button>
+                </Space>
+              </>
+            )}
+          </Card>
+
           <br />
           <Form.Item>
             <Button loading={isLoading} type="primary" htmlType="submit">
