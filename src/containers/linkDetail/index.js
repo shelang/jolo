@@ -27,7 +27,7 @@ const LinkDetail = (props) => {
   const [timeFrame, setTimeFrame] = useState("0");
   const [buckets, setBuckets] = useState([]);
 
-  const [{ response, isLoading, error }, doFetch] = useFetch();
+  const [{ response, isLoading }, doFetch] = useFetch();
 
   useEffect(() => {
     fetchLinkDetail();
