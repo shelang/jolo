@@ -17,8 +17,6 @@ function Scripts() {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [linkId, setLinkId] = useState(query.get("id"));
   const [editMode, setEditMode] = useState(booleanEnum[query.get("isEditing")]);
-  // const [nameVal, setNameVal] = useState("asb");
-  // const [contentVal, setContentVal] = useState("khar");
 
   const [form] = Form.useForm();
 
