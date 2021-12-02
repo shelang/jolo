@@ -23,6 +23,14 @@ const menuItems = [
     id: 3,
     permission: "scripts:read",
   },
+  ,
+  {
+    title: "Webhooks",
+    icon: <CodeOutlined />,
+    url: "dashboard/webhooks",
+    id: 4,
+    permission: "webhooks:read",
+  },
 ];
 
 export default menuItems;

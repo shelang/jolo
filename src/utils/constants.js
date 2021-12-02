@@ -24,7 +24,9 @@ export const tooltips = Object.freeze({
   forwardParameters:
     'When this option is enabled, all the parameters present in the tracking link (the text after the question mark "?") will be passed to the destination URL.',
   textTargeting:
-    "Device filter has higher priority than OS, For example, if you write google.com for mobile devices and then write bing.com for android users, Linkcomposer redirects the user to the google.com",
+    "Retargeting codes allow to associate a script or pixels to your tracking link. It is possible to associate more codes to the same tracking link.",
+  urlMask:
+    "URL masking allows you to hide the destination URL after someone clicks on the tracking link (useful, for example, if you want to hide your affiliation code). Page title is optional and will be used as the web page title (). Encode destination URL, if selected, will “encrypt“ the destination URL in the source code, too, so that it will not be easy to discover the affiliate ID if any (will look something like: “http://…“).",
 });
 
 export const booleanEnum = Object.freeze({

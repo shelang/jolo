@@ -10,11 +10,28 @@ const Login = React.lazy(() => import("./containers/auth"));
 const CreateLink = React.lazy(() => import("./containers/createLink"));
 const Links = React.lazy(() => import("./containers/links"));
 const Scripts = React.lazy(() => import("./containers/scripts"));
+const Webhook = React.lazy(() => import("./containers/webhook"));
+
 const LinkDetail = React.lazy(() => import("./containers/linkDetail"));
 
 function Routes() {
   return (
-    <Suspense fallback={<Spin />}>
+    <Suspense
+      fallback={
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "100vh",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <Spin />
+        </div>
+      }
+    >
       <Switch>
         <Route
           exact
@@ -78,6 +95,15 @@ function Routes() {
           render={() => (
             <AppLayout>
               <Scripts />
+            </AppLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/dashboard/webhooks"
+          exact
+          render={() => (
+            <AppLayout>
+              <Webhook />
             </AppLayout>
           )}
         />

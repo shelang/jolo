@@ -88,14 +88,11 @@ const LinkDetail = (props) => {
     if (response && response.buckets) {
       const normalizedResponse = response.buckets.reduce((total, acc) => {
         const newFrom = acc.from && acc.from.split("T")[0];
-        const newTo = acc.to && acc.to.split("T")[0];
 
-        if (!total[`${newFrom} ${newTo}`]) {
-          total[`${newFrom} ${newTo}`] = [acc.count];
+        if (!total[`${newFrom} `]) {
+          total[`${newFrom} `] = [acc.count];
         } else {
-          total[`${newFrom} ${newTo}`] = [
-            total[`${newFrom} ${newTo}`] + acc.count,
-          ];
+          total[`${newFrom}`] = [total[`${newFrom} `] + acc.count];
         }
         return total;
       }, {});
@@ -154,9 +151,11 @@ const LinkDetail = (props) => {
               </Select>
               <Select defaultValue={bucket} onChange={handleChangeBucket}>
                 <Option value={null}>None</Option>
-                <Option value="hour">Hourly</Option>
+                <Option disabled={timeFrame === "0"} value="hour">
+                  Hourly
+                </Option>
                 <Option value="daily">Daily</Option>
-                <Option value="montly">Montly</Option>
+                <Option value="monthly">Monthly</Option>
               </Select>
             </Space>
           </Col>
