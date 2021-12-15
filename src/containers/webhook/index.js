@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Input, Table, Spin, Divider, Card, Form } from "antd";
 import { Modal, Button } from "antd";
 import { useQuery } from "../../hooks/queryParams";
+const { Search } = Input;
 
 function Webhook() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,6 +84,9 @@ function Webhook() {
       setInitialValue({});
     }
   }, [response]);
+  const onSearch = () => {
+    fetchWebhookList();
+  };
   const columns = [
     {
       title: "webhook ID",
@@ -110,13 +114,19 @@ function Webhook() {
     },
   ];
 
-  console.log(initialValue, "initialValue");
-
   return (
     <Card>
       <Button type="primary" onClick={showModal}>
         add webhook
       </Button>
+      <Divider />
+      <Search
+        placeholder="Search..."
+        allowClear
+        enterButton="Search"
+        size="large"
+        onSearch={(value) => onSearch(value)}
+      />
       <Divider />
       <Modal
         title={isEditingMode ? "Edit webhook" : "Create webhook"}

@@ -106,6 +106,8 @@ function CreateLink() {
             : selectedScript && selectedScript.value
             ? "SCRIPT"
             : "REDIRECT",
+          scriptId: selectedScript && selectedScript.value,
+          webhookId: selectedWebhook && selectedWebhook.value,
         },
       });
     } else {
@@ -129,7 +131,6 @@ function CreateLink() {
     console.log("Failed:", errorInfo);
   };
   const onFieldsChange = (changedFields) => {
-    console.log(changedFields, "saggg");
     if (changedFields[0].name[0] + changedFields[0].name[2] === "devicestype") {
       setSelectedDevices({
         ...selectedDevices,
@@ -177,17 +178,46 @@ function CreateLink() {
       method: "GET",
     });
   };
-  const onSearch = async (searchText) => {
+  const searchScript = async (searchText, initialId) => {
+    let query = "";
+    if (searchText) {
+      query = `name=${searchText}`;
+    } else {
+      query = `id=${initialId}`;
+    }
     try {
       await fetchScripts({
-        url: `script/?name=${searchText}`,
-        method: "GET",
-      });
-      await fetchWebhooks({
-        url: `webhook/?name=${searchText}`,
+        url: `script/?${query}`,
         method: "GET",
       });
     } catch (e) {}
+  };
+  const searchWebhook = async (searchText, initialId) => {
+    let query = "";
+    if (searchText) {
+      query = `name=${searchText}`;
+    } else {
+      query = `id=${initialId}`;
+    }
+    try {
+      await fetchWebhooks({
+        url: `webhook/?${query}`,
+        method: "GET",
+      });
+    } catch (e) {}
+  };
+  const onSearch = async (searchText, type) => {
+    switch (type) {
+      case "script": {
+        searchScript(searchText);
+      }
+      case "webhook": {
+        searchWebhook(searchText);
+      }
+      default: {
+        return;
+      }
+    }
   };
   const createNewScript = async () => {
     try {
@@ -243,8 +273,14 @@ function CreateLink() {
   };
 
   useEffect(() => {
-    response && setMassCreateResponses([...massCreateResponses, response]);
-    response && setIsModalVisible(true);
+    if (response) {
+      if (editMode) {
+        setMassCreateResponses([response]);
+      } else {
+        setMassCreateResponses([...massCreateResponses, response]);
+      }
+      setIsModalVisible(true);
+    }
   }, [response]);
   useEffect(() => {
     readXlsxFile(fileList[0]).then((rows) => {
@@ -278,12 +314,12 @@ function CreateLink() {
   useEffect(() => {
     if (linkData.response) {
       if (linkData.response.scriptId) {
-        onSearch("");
-        setSelectedScript({
-          value: linkData.response.scriptId,
-          label: linkData.response.scriptId,
-        });
+        searchScript(null, linkData.response.scriptId);
       }
+      if (linkData.response.webhookId) {
+        searchWebhook(null, linkData.response.webhookId);
+      }
+
       const newValues = {
         ...linkData.response,
         status: linkData.response === 0 ? "INACTIVE" : "ACTIVE",
@@ -346,6 +382,7 @@ function CreateLink() {
     fileList,
   };
 
+  console.log(editMode, "editMode");
   return (
     <Card>
       <Modal
@@ -353,8 +390,10 @@ function CreateLink() {
         visible={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
-          massCreateResponses.length > 1 && setEditMode(true);
-          massCreateResponses.length > 1 && query.set("isEditing", true);
+          if (massCreateResponses.length === 1) {
+            setEditMode(true);
+            // query.set("isEditing", true);
+          }
         }}
         onOk={createNewLink}
         cancelText={massCreateResponses.length > 1 ? "Cancel" : "Edit"}
@@ -432,7 +471,7 @@ function CreateLink() {
             }}
           />
           <Button loading={isLoading} type="primary" onClick={createNewWebhook}>
-            Submit
+            {editMode ? "Update" : "Submit"}
           </Button>
         </Space>
       </Modal>
@@ -461,7 +500,7 @@ function CreateLink() {
             }}
           />
           <Button loading={isLoading} type="primary" onClick={createNewScript}>
-            Submit
+            {editMode ? "Update" : "Submit"}
           </Button>
         </Space>
       </Modal>
@@ -851,7 +890,7 @@ function CreateLink() {
                   style={{ width: 300 }}
                   options={scripts}
                   onSelect={onSelect}
-                  onSearch={onSearch}
+                  onSearch={(value) => onSearch(value, "script")}
                   placeholder="Search Scripts"
                   value={selectedScript ? selectedScript.label : undefined}
                 />
@@ -886,7 +925,7 @@ function CreateLink() {
                   style={{ width: 300 }}
                   options={webhooks}
                   onSelect={onSelect}
-                  onSearch={onSearch}
+                  onSearch={(value) => onSearch(value, "webhook")}
                   placeholder="Search Webhook"
                   value={selectedWebhook ? selectedWebhook.label : undefined}
                 />
@@ -906,7 +945,7 @@ function CreateLink() {
           <br />
           <Form.Item>
             <Button loading={isLoading} type="primary" htmlType="submit">
-              Submit
+              {editMode ? "Update" : "Submit"}
             </Button>
           </Form.Item>
         </Form>

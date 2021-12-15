@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/asyncAction";
-import { Input, Table, Spin, Divider, Card, Form } from "antd";
+import { Input, Table, Spin, Divider, Card, Form, Space } from "antd";
 import { Modal, Button } from "antd";
 import { useQuery } from "../../hooks/queryParams";
 import { booleanEnum } from "../../utils/constants";
 import { useHistory } from "react-router";
 
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 
 function Scripts() {
   let query = useQuery();
@@ -91,7 +91,9 @@ function Scripts() {
   useEffect(() => {
     fetchScripts();
   }, [currentPage]);
-
+  const onSearch = () => {
+    fetchScripts();
+  };
   const columns = [
     {
       title: "Script ID",
@@ -124,6 +126,14 @@ function Scripts() {
       <Button type="primary" onClick={showModal}>
         add script
       </Button>
+      <Divider />
+      <Search
+        placeholder="Search..."
+        allowClear
+        enterButton="Search"
+        size="large"
+        onSearch={(value) => onSearch(value)}
+      />
       <Divider />
       <Modal
         title="Edit Script"

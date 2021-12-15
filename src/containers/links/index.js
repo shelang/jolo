@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/asyncAction";
 import { useHistory } from "react-router-dom";
-import { Table, Space, Spin, message, Card } from "antd";
+import { Table, Space, Spin, message, Card, Input } from "antd";
+const { Search } = Input;
 
 const Links = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedLink, setSelectedLink] = useState("");
   const [{ response, isLoading }, doFetch] = useFetch();
 
-  const fetchLinks = async () => {
+  const fetchLinks = async (searchText) => {
+    let query = "";
+    if (searchText) {
+      query = `search=${searchText}&page=${currentPage}`;
+    } else {
+      query = `page=${currentPage}`;
+    }
     await doFetch({
-      url: `links?page=${currentPage}`,
+      url: `links?${query}`,
       method: "GET",
     });
   };
@@ -18,6 +26,17 @@ const Links = () => {
     navigator.clipboard.writeText(value);
     message.success("Copied to Your Clipboard");
   };
+
+  const onSearch = async (value) => {
+    fetchLinks(value);
+  };
+
+  useEffect(() => {
+    fetchLinks();
+  }, [currentPage]);
+  useEffect(() => {
+    fetchLinks();
+  }, [selectedLink]);
 
   const columns = [
     {
@@ -55,12 +74,16 @@ const Links = () => {
       ),
     },
   ];
-  useEffect(() => {
-    fetchLinks();
-  }, [currentPage]);
-
   return (
     <Card>
+      <Search
+        placeholder="Search..."
+        allowClear
+        enterButton="Search"
+        size="large"
+        onSearch={(value) => onSearch(value)}
+      />
+
       <Spin spinning={isLoading}>
         <Table
           columns={columns}
