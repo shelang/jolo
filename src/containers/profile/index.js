@@ -24,7 +24,7 @@ const Profile = () => {
 		} catch (e) {}
 	};
 	const copyToClipboard = () => {
-		navigator.clipboard.writeText(response.redirectTo);
+		navigator.clipboard.writeText(response.token);
 		message.success("Copied to Your Clipboard");
 	};
 
