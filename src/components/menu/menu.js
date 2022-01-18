@@ -32,10 +32,10 @@ function KitMenu() {
 			onClick={handleClick}
 			style={{ maxHeight: "94vh", height: "94vh", overflow: "auto" }}
 		>
-			{menuItems.map((menuItem, index) => {
+			{menuItems.map((menuItem) => {
 				return (
 					<Can
-						key={index + 1}
+						key={menuItem.id.toString()}
 						depth={1}
 						yes={(props) => (
 							<Menu.Item
