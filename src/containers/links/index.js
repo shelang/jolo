@@ -14,7 +14,7 @@ const Links = () => {
 
 	const fetchLinks = async () => {
 		await doFetch({
-			url: `links?page=${currentPage}&linkHash=${searchValue}`,
+			url: `links?page=${currentPage}&q=${searchValue}`,
 			method: "GET",
 		});
 	};
