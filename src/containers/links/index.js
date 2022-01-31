@@ -76,8 +76,8 @@ const Links = () => {
 	return (
 		<Card>
 			<Spin spinning={isLoading}>
-				{/* <Search onSearch={searchByName} enterButton="Search" />
-				<Divider /> */}
+				<Search onSearch={searchByName} enterButton="Search" />
+				<Divider />
 
 				<Table
 					columns={columns}
