@@ -2,6 +2,7 @@ FROM node:14-alpine AS build
 
 WORKDIR /build-stage
 
+RUN apk add python2 make g++
 RUN npm i -g npm
 COPY package.json package-lock.json ./
 RUN npm install --production
@@ -9,7 +10,7 @@ RUN npm install --production
 COPY src src
 COPY public public
 
-ARG REACT_APP_BASE_URL=""
+ARG REACT_APP_BASE_URL="/api/v1"
 
 RUN npm run build
 
