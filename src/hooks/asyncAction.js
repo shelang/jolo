@@ -34,13 +34,10 @@ function useFetch(action) {
   async function performAction(options) {
     try {
       dispatch({ type: "FETCH_INIT" });
-
       const res = await ApiClient(options.url, options);
-
       action && action.onSuccess && action.onSuccess(res);
       dispatch({ type: "FETCH_SUCCESS", payload: res });
     } catch (e) {
-      // TODO: handle errors
       action && action.onError && action.onError(e);
       dispatch({ type: "FETCH_FAILURE", payload: e });
     }

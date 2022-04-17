@@ -1,12 +1,16 @@
+import { refreshToken } from "./refreshToken";
+
 function formatUrl(path) {
   const adjustedPath = path[0] !== "/" ? `/${path}` : path;
   return process.env.REACT_APP_BASE_URL + adjustedPath;
-  // return adjustedPath;
+  // return adjustedPath
 }
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return parseJSON(response);
+  } else if (response.status === 401) {
+    refreshToken();
   }
   return response.json().then((json) => Promise.reject(json));
 }
@@ -23,9 +27,10 @@ async function parseJSON(response) {
   return response;
 }
 
-function ApiClient(path, options) {
+async function ApiClient(path, options) {
   const url = formatUrl(path);
   const fetchOptions = options;
+
   fetchOptions.headers = fetchOptions.headers || {};
 
   if (fetchOptions.type === "formdata") {
