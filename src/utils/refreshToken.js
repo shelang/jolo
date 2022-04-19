@@ -1,18 +1,24 @@
-import ApiClient from "./apiClient";
+import ApiClient from './apiClient';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 
 export const refreshToken = async () => {
-  const user = JSON.parse(window.localStorage.getItem("user"));
-  window.localStorage.setItem(
-    "user",
-    JSON.stringify({ ...user, token: user.refresh })
-  );
+  const cookies = parseCookies();
+  const user = JSON.parse(cookies.user);
+
+  setCookie(null, 'user', JSON.stringify({ ...user, token: user.refresh }), {
+    maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
+  });
+
   try {
-    const res = await ApiClient("login/refresh", {
-      method: "POST",
+    const res = await ApiClient('login/refresh', {
+      method: 'POST',
     });
-    localStorage.setItem("user", JSON.stringify(res));
+
+    setCookie(null, 'user', JSON.stringify(res), {
+      maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
+    });
   } catch (err) {
-    window.localStorage.removeItem("user");
-    window.location.replace("/login");
+    destroyCookie(null, 'user');
+    window.location.replace('/login');
   }
 };
