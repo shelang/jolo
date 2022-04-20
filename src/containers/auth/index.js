@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import useFetch from '../../hooks/asyncAction';
-import useCache from '../../hooks/cacheData';
-import { useHistory } from 'react-router-dom';
-import { Form, Input, Button, Space, Row, Col, Typography } from 'antd';
-import './auth.scss';
+import React, { useEffect } from "react";
+import useFetch from "../../hooks/asyncAction";
+import useCache from "../../hooks/cacheData";
+import { useHistory } from "react-router-dom";
+import { Form, Input, Button, Space, Row, Col, Typography } from "antd";
+import "./auth.scss";
 
 const { Title } = Typography;
 const layout = {
@@ -17,20 +17,21 @@ function Login() {
 
   const onFinish = async (values) => {
     await doFetch({
-      url: 'login',
-      method: 'POST',
+      url: "login",
+      method: "POST",
       data: values,
     });
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   useEffect(() => {
+    console.log(response);
     if (response) {
-      setLocalStorage('user', response);
-      history.push('./dashboard');
+      setLocalStorage("user", response);
+      history.push("./dashboard");
     }
   }, [response]);
 
@@ -39,39 +40,39 @@ function Login() {
   }, [error]);
 
   return (
-    <div className='auth-container'>
+    <div className="auth-container">
       <Row>
         <Col span={24}>
           <Title level={2}>Login</Title>
         </Col>
-        <Col span={24} className='login-form'>
+        <Col span={24} className="login-form">
           <Form
             {...layout}
-            name='basic'
+            name="basic"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              name='username'
+              name="username"
               rules={[
-                { required: true, message: 'Please input your username!' },
+                { required: true, message: "Please input your username!" },
               ]}
             >
-              <Input placeholder='Username' />
+              <Input placeholder="Username" />
             </Form.Item>
 
             <Form.Item
-              name='password'
+              name="password"
               rules={[
-                { required: true, message: 'Please input your password!' },
+                { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password placeholder='Password' />
+              <Input.Password placeholder="Password" />
             </Form.Item>
 
             <Form.Item>
-              <Space size='middle'>
-                <Button type='primary' htmlType='submit' loading={isLoading}>
+              <Space size="middle">
+                <Button type="primary" htmlType="submit" loading={isLoading}>
                   Log in
                 </Button>
               </Space>
