@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import useFetch from "../../hooks/asyncAction";
-import useCache from "../../hooks/cacheData";
-import { useHistory } from "react-router-dom";
-import { Form, Input, Button, Space, Row, Col, Typography } from "antd";
-import "./auth.scss";
+import React, { useEffect } from 'react';
+import useFetch from '../../hooks/asyncAction';
+import useCache from '../../hooks/cacheData';
+import { useHistory } from 'react-router-dom';
+import { Form, Input, Button, Space, Row, Col, Typography } from 'antd';
+import './auth.scss';
+import { setCookie } from 'nookies';
 
 const { Title } = Typography;
 const layout = {
@@ -12,26 +13,26 @@ const layout = {
 
 function Login() {
   const [{ response, isLoading, error }, doFetch] = useFetch();
-  const [setLocalStorage] = useCache();
   let history = useHistory();
 
   const onFinish = async (values) => {
     await doFetch({
-      url: "login",
-      method: "POST",
+      url: 'login',
+      method: 'POST',
       data: values,
     });
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   useEffect(() => {
-    console.log(response);
     if (response) {
-      setLocalStorage("user", response);
-      history.push("./dashboard");
+      setCookie(null, 'user', JSON.stringify(response), {
+        maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
+      });
+      history.push('./dashboard');
     }
   }, [response]);
 
@@ -55,7 +56,7 @@ function Login() {
             <Form.Item
               name="username"
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: 'Please input your username!' },
               ]}
             >
               <Input placeholder="Username" />
@@ -64,7 +65,7 @@ function Login() {
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: "Please input your password!" },
+                { required: true, message: 'Please input your password!' },
               ]}
             >
               <Input.Password placeholder="Password" />

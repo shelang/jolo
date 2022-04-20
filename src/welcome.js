@@ -11,7 +11,7 @@ function Welcome(props) {
         justifyContent: 'center',
         flexDirection: 'column',
         backgroundColor: '#FFF',
-        padding: 16
+        padding: 16,
       }}
     >
       <h1>Welcome</h1>

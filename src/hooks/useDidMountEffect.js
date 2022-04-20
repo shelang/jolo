@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 //Make React useEffect hook not run on initial render
 const useDidMountEffect = (func, deps) => {
