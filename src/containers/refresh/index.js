@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import useFetch from '../../hooks/asyncAction';
 import { Spin } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { parseCookies, setCookie } from 'nookies';
 
 const RefreshToken = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch();
@@ -9,11 +10,11 @@ const RefreshToken = () => {
   const history = useHistory();
 
   const refreshToken = () => {
-    const user = JSON.parse(window.localStorage.getItem('user'));
-    window.localStorage.setItem(
-      'user',
-      JSON.stringify({ ...user, token: user.refresh })
-    );
+    const cookies = parseCookies();
+    const user = JSON.parse(cookies.user);
+    setCookie(null, 'user', JSON.stringify({ ...user, token: user.refresh }), {
+      maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
+    });
 
     doFetch({
       url: 'login/refresh',
@@ -27,7 +28,9 @@ const RefreshToken = () => {
 
   useEffect(() => {
     if (response) {
-      localStorage.setItem('user', JSON.stringify(response));
+      setCookie(null, 'user', JSON.stringify(response), {
+        maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
+      });
       history.goBack();
     }
   }, [response]);

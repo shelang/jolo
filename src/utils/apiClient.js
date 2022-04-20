@@ -1,5 +1,4 @@
-import { refreshToken } from './refreshToken';
-import nookies, { parseCookies } from 'nookies';
+import { parseCookies } from 'nookies';
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? `/${path}` : path;
   return process.env.REACT_APP_BASE_URL + adjustedPath;

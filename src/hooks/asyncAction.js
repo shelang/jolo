@@ -1,4 +1,5 @@
 import { useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import ApiClient from '../utils/apiClient';
 
 const dataFetchReducer = (state, action) => {
@@ -30,6 +31,7 @@ function useFetch(action) {
     error: null,
     response: null,
   });
+  const history = useHistory();
 
   async function performAction(options) {
     try {
@@ -38,6 +40,9 @@ function useFetch(action) {
       action && action.onSuccess && action.onSuccess(res);
       dispatch({ type: 'FETCH_SUCCESS', payload: res });
     } catch (e) {
+      if (e.status === 401) {
+        history.push('/refresh');
+      }
       action && action.onError && action.onError(e);
       dispatch({ type: 'FETCH_FAILURE', payload: e });
     }
