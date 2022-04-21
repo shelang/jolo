@@ -13,7 +13,6 @@ const Scripts = React.lazy(() => import('./containers/scripts'));
 const Webhook = React.lazy(() => import('./containers/webhook'));
 const Profile = React.lazy(() => import('./containers/profile'));
 const RefreshToken = React.lazy(() => import('./containers/refresh'));
-
 const LinkDetail = React.lazy(() => import('./containers/linkDetail'));
 
 function Routes() {

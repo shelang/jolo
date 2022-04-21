@@ -1,0 +1,15 @@
+.accept-cookies-container {
+  width: 100%;
+  position: fixed;
+  bottom: -160px;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #f4f4f4;
+  padding: 16.5px 10rem;
+  box-shadow: 0 -1px 10px 0 #acabab4d;
+  overflow: hidden;
+  transition: all 1s;
+  &.hide {
+    bottom: 0;
+  }
+}
