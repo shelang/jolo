@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import useFetch from "../../hooks/asyncAction";
-import moment from "moment";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import React, { useEffect, useState } from 'react';
+import useFetch from '../../hooks/asyncAction';
+import moment from 'moment';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import {
   DatePicker,
   Row,
@@ -12,9 +12,9 @@ import {
   Typography,
   Select,
   Space,
-} from "antd";
-import { encodeQueryData } from "../../utils/queryParams";
-import { timeframes } from "../../utils/constants";
+} from 'antd';
+import { encodeQueryData } from '../../utils/queryParams';
+import { timeframes } from '../../utils/constants';
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -24,7 +24,7 @@ const LinkDetail = (props) => {
   const [startDate, setStartDate] = useState(moment());
   const [endDate, setEndDate] = useState(moment());
   const [bucket, setBucket] = useState(null);
-  const [timeFrame, setTimeFrame] = useState("0");
+  const [timeFrame, setTimeFrame] = useState('0');
   const [buckets, setBuckets] = useState([]);
 
   const [{ response, isLoading }, doFetch] = useFetch();
@@ -35,13 +35,13 @@ const LinkDetail = (props) => {
 
   const fetchLinkDetail = async () => {
     const queryParams = encodeQueryData({
-      from: startDate.utc().format(),
+      from: startDate.utc().startOf('day').format(),
       to: endDate.utc().format(),
       bucket,
     });
     await doFetch({
       url: `analytics/${props.match.params.id}?${queryParams}`,
-      method: "GET",
+      method: 'GET',
     });
   };
   const handleChangeDates = (dates, datesString) => {
@@ -57,25 +57,28 @@ const LinkDetail = (props) => {
     let startDate = null;
 
     switch (value) {
-      case "current": {
+      case 'current': {
         endDate = moment();
-        startDate = moment().startOf("month");
+        startDate = moment().startOf('month');
+        console.log('fire', startDate);
+
         break;
       }
-      case "prev": {
-        endDate = moment().startOf("month");
-        startDate = moment().subtract(1, "months").startOf("month");
+      case 'prev': {
+        endDate = moment().startOf('month');
+        startDate = moment().subtract(1, 'months').startOf('month');
         break;
       }
-      case "prevYear": {
-        endDate = moment().startOf("year");
-        startDate = moment().subtract(1, "years").startOf("year");
+      case 'prevYear': {
+        endDate = moment().startOf('year');
+        startDate = moment().subtract(1, 'years').startOf('year');
         break;
       }
 
       default: {
         endDate = moment();
-        startDate = moment().subtract(value, "days");
+        startDate = moment().subtract(value, 'days');
+        console.log('fire', startDate);
         break;
       }
     }
@@ -87,7 +90,7 @@ const LinkDetail = (props) => {
   useEffect(() => {
     if (response && response.buckets) {
       const normalizedResponse = response.buckets.reduce((total, acc) => {
-        const newFrom = acc.from && acc.from.split("T")[0];
+        const newFrom = acc.from && acc.from.split('T')[0];
 
         if (!total[`${newFrom} `]) {
           total[`${newFrom} `] = [acc.count];
@@ -111,15 +114,15 @@ const LinkDetail = (props) => {
 
   const options = {
     chart: {
-      type: "column",
+      type: 'column',
     },
     title: {
-      text: "Clicks",
+      text: 'Clicks',
     },
 
     yAxis: {
       title: {
-        text: "Click Counts",
+        text: 'Click Counts',
       },
     },
     series: buckets,
@@ -134,7 +137,7 @@ const LinkDetail = (props) => {
               <RangePicker
                 value={[startDate, endDate]}
                 onChange={handleChangeDates}
-                disabled={timeFrame !== "custom"}
+                disabled={timeFrame !== 'custom'}
               />
               <Select
                 defaultValue={timeFrame}
@@ -151,7 +154,7 @@ const LinkDetail = (props) => {
               </Select>
               <Select defaultValue={bucket} onChange={handleChangeBucket}>
                 <Option value={null}>None</Option>
-                <Option disabled={timeFrame === "0"} value="hour">
+                <Option disabled={timeFrame === '0'} value="hour">
                   Hourly
                 </Option>
                 <Option value="daily">Daily</Option>
