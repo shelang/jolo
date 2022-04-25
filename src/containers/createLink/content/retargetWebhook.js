@@ -1,10 +1,29 @@
-import { AutoComplete, Button, Tooltip, Typography } from 'antd'
+import { AutoComplete, Button, Form, Select, Tooltip, Typography } from 'antd'
 import React from 'react'
+import useFetch from '../../../hooks/asyncAction'
 import { tooltips } from '../../../utils/constants'
 
 const RetargetWebhook = ({ selectedWebhook, onSearch, onSelect, webhooks }) => {
   const { Title } = Typography
 
+  const [webhookData, fetchWebhooks] = useFetch()
+
+  const handleSearch = async (searchText) => {
+    console.log(searchText)
+    try {
+      await fetchWebhooks({
+        url: `webhook/?name=${searchText}`,
+        method: 'GET',
+      })
+    } catch (e) {}
+  }
+
+  console.log(webhooks)
+  const options = webhooks.map((webhook) => (
+    <Select.Option key={webhook.value} value={webhook.value}>
+      {webhook.label}
+    </Select.Option>
+  ))
   return (
     <>
       <Title level={3}>
@@ -16,6 +35,7 @@ const RetargetWebhook = ({ selectedWebhook, onSearch, onSelect, webhooks }) => {
           <Button>?</Button>
         </Tooltip>
       </Title>
+      {/* 
       <AutoComplete
         dropdownMatchSelectWidth={252}
         style={{ width: 300 }}
@@ -24,7 +44,15 @@ const RetargetWebhook = ({ selectedWebhook, onSearch, onSelect, webhooks }) => {
         onSearch={onSearch}
         placeholder="Search Webhook"
         value={selectedWebhook ? selectedWebhook.label : undefined}
-      />
+      /> */}
+      <Form.Item name="WebhookId">
+        <Select showSearch onSearch={handleSearch}>
+          {/* {webhooks.map((webhook) => (
+            <Select.Option value={webhook.value}>{webhook.label}</Select.Option>
+          ))} */}
+          {options}
+        </Select>
+      </Form.Item>
     </>
   )
 }

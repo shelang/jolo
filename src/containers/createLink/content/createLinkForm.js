@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../../hooks/asyncAction'
+import { labelCol, wrapperCol, marks } from '../utils/constants'
 import {
   Row,
   Col,
@@ -23,54 +24,45 @@ import TargetDevicesField from './targetDevicesField'
 import OsTargetField from './osTargetField'
 import RetargetScript from './retargetScript'
 import RetargetWebhook from './retargetWebhook'
-const marks = {
-  5: '5',
-  6: '6',
-  7: '7',
-  8: '8',
-  9: '9',
-  10: '10',
-  11: '11',
-  12: '12',
-}
-const labelCol = {
-  lg: { span: 4 },
-  md: { span: 12 },
-  sm: { span: 24 },
-  xs: { span: 24 },
-}
-const wrapperCol = {
-  lg: { span: 12 },
-  md: { span: 12 },
-  sm: { span: 24 },
-  xs: { span: 24 },
-}
+import AddWebhook from './addWebhook'
 
 const CreateLinkForm = ({
   onFinish,
   onFinishFailed,
   isLoading,
-  setWebhookModalVisible,
-  selectedWebhook,
   linkData,
   setIframe,
   iframe,
   setScriptModalVisible,
   setSelectedScript,
-  setSelectedWebhook,
   selectedScript,
 }) => {
   const [hash, setHash] = useState(false)
   const [selectedOs, setSelectedOs] = useState({})
   const [selectedDevices, setSelectedDevices] = useState({})
+  const [selectedWebhook, setSelectedWebhook] = useState()
+
   const [scripts, setScripts] = useState([])
-  const [webhooks, setWebhooks] = useState([])
   const [scriptData, fetchScripts] = useFetch()
-  const [webhookData, fetchWebhooks] = useFetch()
+  // const [webhookData, fetchWebhooks] = useFetch()
 
   const [form] = Form.useForm()
-  const { Title, Link } = Typography
+
   const { TextArea, Search } = Input
+
+  const onSearch = async (searchText) => {
+    try {
+      await fetchScripts({
+        url: `script/?name=${searchText}`,
+        method: 'GET',
+      })
+    } catch (e) {}
+  }
+
+  const onSelect = (data) => {
+    console.log('onSelect', data)
+    setSelectedScript(scripts.filter((script) => script.value === data)[0])
+  }
 
   useEffect(() => {
     if (linkData.response) {
@@ -103,19 +95,6 @@ const CreateLinkForm = ({
       )
       setScripts(normalizedScripts)
     }
-    if (webhookData.response) {
-      const normalizedScripts = webhookData.response.webhooks.reduce(
-        (total, acc) => {
-          total.push({
-            label: acc.name,
-            value: acc.id,
-          })
-          return total
-        },
-        [],
-      )
-      setWebhooks(normalizedScripts)
-    }
   }, [scriptData.response])
 
   const onFieldsChange = (changedFields) => {
@@ -132,24 +111,6 @@ const CreateLinkForm = ({
         [changedFields[0].name[1]]: changedFields[0].value,
       })
     }
-  }
-  const onSearch = async (searchText) => {
-    try {
-      await fetchScripts({
-        url: `script/?name=${searchText}`,
-        method: 'GET',
-      })
-      await fetchWebhooks({
-        url: `webhook/?name=${searchText}`,
-        method: 'GET',
-      })
-    } catch (e) {}
-  }
-
-  const onSelect = (data) => {
-    console.log('onSelect', data)
-    setSelectedScript(scripts.filter((script) => script.value === data)[0])
-    setSelectedWebhook(webhooks.filter((webhook) => webhook.value === data)[0])
   }
 
   return (
@@ -325,33 +286,14 @@ const CreateLinkForm = ({
           )}
         </Card>
 
-        <Card>
-          {!iframe && (
-            <>
-              {/* <RetargetingWebhook
-                webhooks={webhooks}
-                selectedWebhook={selectedWebhook}
-                onSelect={onSelect}
-                onSearch={onSearch}
-              /> */}
-
-              <RetargetWebhook
-                webhooks={webhooks}
-                selectedWebhook={selectedWebhook}
-                onSelect={onSelect}
-                onSearch={onSearch}
-              />
-              <Divider />
-              <Space direction="vertical">
-                <Button
-                  type="primary"
-                  onClick={() => setWebhookModalVisible(true)}>
-                  Add WebHook
-                </Button>
-              </Space>
-            </>
-          )}
-        </Card>
+        {!iframe && (
+          <Form.Item>
+            <AddWebhook
+              selectedWebhook={selectedWebhook}
+              setSelectedWebhook={setSelectedWebhook}
+            />
+          </Form.Item>
+        )}
 
         <br />
         <Form.Item>

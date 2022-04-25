@@ -11,7 +11,7 @@ import {
   Input,
 } from 'antd'
 import { os, tooltips } from '../../../utils/constants'
-import { deleteObjectKey, reorderObjectKeys } from '../../../utils/objectUtils'
+import { deleteObjectKey, reorderObjectKeys } from '../utils/utils'
 
 const { Title } = Typography
 

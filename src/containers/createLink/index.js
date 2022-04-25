@@ -13,14 +13,13 @@ import './style.scss'
 
 function CreateLink() {
   let query = useQuery()
+
   const [iframe, setIframe] = useState(false)
 
-  const [scriptModalVisible, setScriptModalVisible] = useState(false)
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
   const [massCreateResponses, setMassCreateResponses] = useState([])
 
   const [selectedScript, setSelectedScript] = useState()
-  const [selectedWebhook, setSelectedWebhook] = useState()
 
   const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')])
   const [linkId, setLinkId] = useState(query.get('id'))
@@ -100,17 +99,12 @@ function CreateLink() {
         setIsCreateLinkModalVisible={setIsCreateLinkModalVisible}
         isCreateLinkModalVisible={isCreateLinkModalVisible}
       />
-      <CreateWebHookModal
-        isLoading={isLoading}
-        webhookModalVisible={webhookModalVisible}
-        setWebhookModalVisible={setWebhookModalVisible}
-      />
 
-      <CreateScriptModal
+      {/* <CreateScriptModal
         isLoading={isLoading}
         setScriptModalVisible={setScriptModalVisible}
         scriptModalVisible={scriptModalVisible}
-      />
+      /> */}
 
       <CreateLinkFromFile
         setIsCreateLinkModalVisible={setIsCreateLinkModalVisible}
@@ -119,15 +113,12 @@ function CreateLink() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         isLoading={isLoading}
-        setWebhookModalVisible={setWebhookModalVisible} //change place
-        selectedWebhook={selectedWebhook}
         linkData={linkData}
-        iframe={iframe}
-        setIframe={setIframe}
-        setSelectedScript={setSelectedScript}
-        setScriptModalVisible={setScriptModalVisible}
-        selectedScript={selectedScript}
-        setSelectedWebhook={setSelectedWebhook}
+        iframe={iframe} //in
+        setIframe={setIframe} //in
+        setSelectedScript={setSelectedScript} //in
+        selectedScript={selectedScript} //in
+        //dakhel
       />
     </Card>
   )

@@ -11,7 +11,7 @@ import {
   Input,
 } from 'antd'
 import { devices, tooltips } from '../../../utils/constants'
-import { deleteObjectKey, reorderObjectKeys } from '../../../utils/objectUtils'
+import { deleteObjectKey, reorderObjectKeys } from '../utils/utils'
 
 const TargetDevicesField = ({ setSelectedDevices, selectedDevices }) => {
   const [targetDevices, setTargetDevices] = useState(devices)

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Input, Modal, Space } from 'antd'
 import useFetch from '../../../hooks/asyncAction'
 
 const CreateWebHookModal = ({
+  setAddedWebhook,
   setWebhookModalVisible,
   webhookModalVisible,
   isLoading,
@@ -28,7 +29,14 @@ const CreateWebHookModal = ({
     }
   }
 
+  useEffect(() => {
+    if (createWebhookData.response) {
+      setAddedWebhook(createWebhookData.response)
+    }
+  }, [createWebhookData])
+
   const { TextArea } = Input
+
   return (
     <Modal
       title="Create Webhook"
