@@ -15,11 +15,7 @@ function CreateLink() {
   let query = useQuery()
 
   const [iframe, setIframe] = useState(false)
-
-  const [webhookModalVisible, setWebhookModalVisible] = useState(false)
   const [massCreateResponses, setMassCreateResponses] = useState([])
-
-  const [selectedScript, setSelectedScript] = useState()
 
   const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')])
   const [linkId, setLinkId] = useState(query.get('id'))
@@ -100,12 +96,6 @@ function CreateLink() {
         isCreateLinkModalVisible={isCreateLinkModalVisible}
       />
 
-      {/* <CreateScriptModal
-        isLoading={isLoading}
-        setScriptModalVisible={setScriptModalVisible}
-        scriptModalVisible={scriptModalVisible}
-      /> */}
-
       <CreateLinkFromFile
         setIsCreateLinkModalVisible={setIsCreateLinkModalVisible}
       />
@@ -116,8 +106,6 @@ function CreateLink() {
         linkData={linkData}
         iframe={iframe} //in
         setIframe={setIframe} //in
-        setSelectedScript={setSelectedScript} //in
-        selectedScript={selectedScript} //in
         //dakhel
       />
     </Card>

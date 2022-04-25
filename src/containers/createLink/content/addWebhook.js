@@ -4,7 +4,7 @@ import useFetch from '../../../hooks/asyncAction'
 import CreateWebHookModal from './createWebHookModal'
 import RetargetWebhook from './retargetWebhook'
 
-const AddWebhook = ({ selectedWebhook }) => {
+const AddWebhook = () => {
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
 
   const [webhooks, setWebhooks] = useState([])
@@ -29,36 +29,20 @@ const AddWebhook = ({ selectedWebhook }) => {
     }
   }, [webhookData.response])
 
-  useEffect(() => {
-    const getWebhookAdded = async () => {
-      await fetchWebhooks({
-        url: `webhook`,
-        method: 'GET',
-      })
-      setWebhooks(webhookData)
-    }
-    getWebhookAdded()
-  }, [selectedWebhook])
-
   const handleSearch = async (searchText) => {
     try {
       await fetchWebhooks({
         url: `webhook/?name=${searchText}`,
         method: 'GET',
       })
-      setWebhooks()
     } catch (e) {}
   }
 
   return (
     <>
       <Card>
-        <RetargetWebhook
-          webhooks={webhooks}
-          setWebhooks={setWebhooks}
-          handleSearch={handleSearch}
-          selectedWebhook={selectedWebhook}
-        />
+        <RetargetWebhook webhooks={webhooks} handleSearch={handleSearch} />
+
         <Divider />
 
         <Space direction="vertical">
@@ -69,7 +53,6 @@ const AddWebhook = ({ selectedWebhook }) => {
       </Card>
 
       <CreateWebHookModal
-        webhookData={webhookData}
         isLoading={isLoading}
         webhookModalVisible={webhookModalVisible}
         setWebhookModalVisible={setWebhookModalVisible}

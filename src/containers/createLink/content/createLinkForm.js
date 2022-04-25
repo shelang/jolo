@@ -25,6 +25,7 @@ import OsTargetField from './osTargetField'
 import RetargetScript from './retargetScript'
 import RetargetWebhook from './retargetWebhook'
 import AddWebhook from './addWebhook'
+import AddScript from './addScript'
 
 const CreateLinkForm = ({
   onFinish,
@@ -40,62 +41,25 @@ const CreateLinkForm = ({
   const [hash, setHash] = useState(false)
   const [selectedOs, setSelectedOs] = useState({})
   const [selectedDevices, setSelectedDevices] = useState({})
-  const [selectedWebhook, setSelectedWebhook] = useState()
-
-  const [scripts, setScripts] = useState([])
-  const [scriptData, fetchScripts] = useFetch()
-  // const [webhookData, fetchWebhooks] = useFetch()
-
   const [form] = Form.useForm()
+  const { TextArea } = Input
 
-  const { TextArea, Search } = Input
-
-  const onSearch = async (searchText) => {
-    try {
-      await fetchScripts({
-        url: `script/?name=${searchText}`,
-        method: 'GET',
-      })
-    } catch (e) {}
-  }
-
-  const onSelect = (data) => {
-    console.log('onSelect', data)
-    setSelectedScript(scripts.filter((script) => script.value === data)[0])
-  }
-
-  useEffect(() => {
-    if (linkData.response) {
-      if (linkData.response.scriptId) {
-        onSearch('')
-        setSelectedScript({
-          value: linkData.response.scriptId,
-          label: linkData.response.scriptId,
-        })
-      }
-      const newValues = {
-        ...linkData.response,
-        status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
-      }
-      form.setFieldsValue(newValues)
-    }
-  }, [linkData.response])
-
-  useEffect(() => {
-    if (scriptData.response) {
-      const normalizedScripts = scriptData.response.scripts.reduce(
-        (total, acc) => {
-          total.push({
-            label: acc.name,
-            value: acc.id,
-          })
-          return total
-        },
-        [],
-      )
-      setScripts(normalizedScripts)
-    }
-  }, [scriptData.response])
+  // useEffect(() => {
+  //   if (linkData.response) {
+  //     if (linkData.response.scriptId) {
+  //       onSearch('')
+  //       setSelectedScript({
+  //         value: linkData.response.scriptId,
+  //         label: linkData.response.scriptId,
+  //       })
+  //     }
+  //     const newValues = {
+  //       ...linkData.response,
+  //       status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
+  //     }
+  //     form.setFieldsValue(newValues)
+  //   }
+  // }, [linkData.response])
 
   const onFieldsChange = (changedFields) => {
     console.log(changedFields, 'saggg')
@@ -266,34 +230,11 @@ const CreateLinkForm = ({
             </Tooltip>
             <Switch checked={iframe} onChange={setIframe} />
           </Form.Item>
-          {!iframe && (
-            <>
-              <RetargetScript
-                selectedScript={selectedScript}
-                scripts={scripts}
-                onSelect={onSelect}
-                onSearch={onSearch}
-              />
-              <Divider />
-              <Space direction="vertical">
-                <Button
-                  type="primary"
-                  onClick={() => setScriptModalVisible(true)}>
-                  add script
-                </Button>
-              </Space>
-            </>
-          )}
         </Card>
 
-        {!iframe && (
-          <Form.Item>
-            <AddWebhook
-              selectedWebhook={selectedWebhook}
-              setSelectedWebhook={setSelectedWebhook}
-            />
-          </Form.Item>
-        )}
+        {!iframe && <AddScript />}
+
+        {!iframe && <AddWebhook />}
 
         <br />
         <Form.Item>
