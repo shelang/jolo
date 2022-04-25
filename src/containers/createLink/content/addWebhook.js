@@ -4,11 +4,10 @@ import useFetch from '../../../hooks/asyncAction'
 import CreateWebHookModal from './createWebHookModal'
 import RetargetWebhook from './retargetWebhook'
 
-const AddWebhook = ({ setSelectedWebhook, selectedWebhook }) => {
+const AddWebhook = ({ selectedWebhook }) => {
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
 
   const [webhooks, setWebhooks] = useState([])
-  const [addedWebHook, setAddedWebhook] = useState(null)
 
   const [{ response, isLoading, error }, doFetch] = useFetch()
 
@@ -30,31 +29,6 @@ const AddWebhook = ({ setSelectedWebhook, selectedWebhook }) => {
     }
   }, [webhookData.response])
 
-  //get lateset added webhook and select it
-  useEffect(() => {
-    const getWebhookAdded = async () => {
-      if (addedWebHook) {
-        await fetchWebhooks({
-          url: `webhook/?name=${addedWebHook.name}`,
-          method: 'GET',
-        })
-        setSelectedWebhook(
-          webhooks.filter((webhook) => webhook.value === addedWebHook.id)[0],
-        )
-      }
-    }
-    getWebhookAdded()
-  }, [addedWebHook])
-
-  const onSearch = async (searchText) => {
-    try {
-      await fetchWebhooks({
-        url: `webhook/?name=${searchText}`,
-        method: 'GET',
-      })
-    } catch (e) {}
-  }
-
   useEffect(() => {
     const getWebhookAdded = async () => {
       await fetchWebhooks({
@@ -66,14 +40,7 @@ const AddWebhook = ({ setSelectedWebhook, selectedWebhook }) => {
     getWebhookAdded()
   }, [selectedWebhook])
 
-  // const onSelect = (data) => {
-  //   // setSelectedScript(scripts.filter((script) => script.value === data)[0])
-  //   console.log(data)
-  //   setSelectedWebhook(webhooks.filter((webhook) => webhook.value === data)[0])
-  // }
-
   const handleSearch = async (searchText) => {
-    console.log(searchText)
     try {
       await fetchWebhooks({
         url: `webhook/?name=${searchText}`,
@@ -102,7 +69,6 @@ const AddWebhook = ({ setSelectedWebhook, selectedWebhook }) => {
       </Card>
 
       <CreateWebHookModal
-        setAddedWebhook={setAddedWebhook}
         webhookData={webhookData}
         isLoading={isLoading}
         webhookModalVisible={webhookModalVisible}
