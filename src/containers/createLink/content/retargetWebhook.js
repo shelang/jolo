@@ -22,7 +22,12 @@ const RetargetWebhook = ({ handleSearch, webhooks }) => {
         </Tooltip>
       </Title>
       <Form.Item name="WebhookId">
-        <Select showSearch onSearch={handleSearch} filterOption={false}>
+        <Select
+          placeholder="Search Webhooks"
+          showSearch
+          onSearch={handleSearch}
+          notFoundContent={null}
+          filterOption={false}>
           {options}
         </Select>
       </Form.Item>

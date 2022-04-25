@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Select, Tooltip, Typography } from 'antd'
+import { Button, Form, Select, Spin, Tooltip, Typography } from 'antd'
 import { tooltips } from '../../../utils/constants'
 
 const RetargetScript = ({ scripts, handleSearch }) => {
@@ -23,7 +23,12 @@ const RetargetScript = ({ scripts, handleSearch }) => {
         </Tooltip>
       </Title>
       <Form.Item name="ScriptId">
-        <Select showSearch onSearch={handleSearch} filterOption={false}>
+        <Select
+          showSearch
+          placeholder="Search Scripts"
+          onSearch={handleSearch}
+          filterOption={false}
+          notFoundContent={null}>
           {options}
         </Select>
       </Form.Item>
