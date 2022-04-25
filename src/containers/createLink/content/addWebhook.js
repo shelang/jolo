@@ -6,6 +6,7 @@ import RetargetWebhook from './retargetWebhook'
 
 const AddWebhook = ({ setSelectedWebhook, selectedWebhook }) => {
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
+
   const [webhooks, setWebhooks] = useState([])
   const [addedWebHook, setAddedWebhook] = useState(null)
 
@@ -71,13 +72,25 @@ const AddWebhook = ({ setSelectedWebhook, selectedWebhook }) => {
   //   setSelectedWebhook(webhooks.filter((webhook) => webhook.value === data)[0])
   // }
 
+  const handleSearch = async (searchText) => {
+    console.log(searchText)
+    try {
+      await fetchWebhooks({
+        url: `webhook/?name=${searchText}`,
+        method: 'GET',
+      })
+      setWebhooks()
+    } catch (e) {}
+  }
+
   return (
     <>
       <Card>
         <RetargetWebhook
           webhooks={webhooks}
+          setWebhooks={setWebhooks}
+          handleSearch={handleSearch}
           selectedWebhook={selectedWebhook}
-          onSelect={onSelect}
         />
         <Divider />
 

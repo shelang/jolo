@@ -3,22 +3,16 @@ import React from 'react'
 import useFetch from '../../../hooks/asyncAction'
 import { tooltips } from '../../../utils/constants'
 
-const RetargetWebhook = ({ selectedWebhook, onSearch, onSelect, webhooks }) => {
+const RetargetWebhook = ({
+  selectedWebhook,
+  handleSearch,
+  webhooks,
+  setWebhook,
+}) => {
   const { Title } = Typography
 
-  const [webhookData, fetchWebhooks] = useFetch()
-
-  const handleSearch = async (searchText) => {
-    console.log(searchText)
-    try {
-      await fetchWebhooks({
-        url: `webhook/?name=${searchText}`,
-        method: 'GET',
-      })
-    } catch (e) {}
-  }
-
   console.log(webhooks)
+
   const options = webhooks.map((webhook) => (
     <Select.Option key={webhook.value} value={webhook.value}>
       {webhook.label}
@@ -46,7 +40,7 @@ const RetargetWebhook = ({ selectedWebhook, onSearch, onSelect, webhooks }) => {
         value={selectedWebhook ? selectedWebhook.label : undefined}
       /> */}
       <Form.Item name="WebhookId">
-        <Select showSearch onSearch={handleSearch}>
+        <Select showSearch onSearch={handleSearch} filterOption={false}>
           {/* {webhooks.map((webhook) => (
             <Select.Option value={webhook.value}>{webhook.label}</Select.Option>
           ))} */}
