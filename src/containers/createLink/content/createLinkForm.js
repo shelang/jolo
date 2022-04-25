@@ -1,48 +1,49 @@
 import React, { useEffect, useState } from 'react'
-import useFetch from '../../../hooks/asyncAction'
 import { labelCol, wrapperCol, marks } from '../utils/constants'
 import {
   Row,
   Col,
-  Typography,
   Form,
   Input,
   Button,
   Select,
   DatePicker,
   Switch,
-  Divider,
   Card,
   Space,
   Tooltip,
   Spin,
-  AutoComplete,
   Slider,
 } from 'antd'
 import { redirectModes, linkStatus, tooltips } from '../../../utils/constants'
 import TargetDevicesField from './targetDevicesField'
 import OsTargetField from './osTargetField'
-import RetargetScript from './retargetScript'
-import RetargetWebhook from './retargetWebhook'
 import AddWebhook from './addWebhook'
 import AddScript from './addScript'
 
 const CreateLinkForm = ({
-  onFinish,
   onFinishFailed,
   isLoading,
   linkData,
-  setIframe,
-  iframe,
-  setScriptModalVisible,
-  setSelectedScript,
-  selectedScript,
+  onFinishForm,
 }) => {
   const [hash, setHash] = useState(false)
+  const [iframe, setIframe] = useState(false)
   const [selectedOs, setSelectedOs] = useState({})
   const [selectedDevices, setSelectedDevices] = useState({})
   const [form] = Form.useForm()
   const { TextArea } = Input
+
+  const onFinish = async (data) => {
+    const { scriptId, iframe } = data
+    console.log(data)
+    const newData = {
+      ...data,
+      type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
+      scriptId: scriptId && scriptId,
+    }
+    onFinishForm(newData)
+  }
 
   // useEffect(() => {
   //   if (linkData.response) {
@@ -62,7 +63,7 @@ const CreateLinkForm = ({
   // }, [linkData.response])
 
   const onFieldsChange = (changedFields) => {
-    console.log(changedFields, 'saggg')
+    console.log(changedFields, 'field changing')
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
       setSelectedDevices({
         ...selectedDevices,

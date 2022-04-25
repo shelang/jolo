@@ -4,17 +4,13 @@ import { Card } from 'antd'
 import { booleanEnum } from '../../utils/constants'
 import { useQuery } from '../../hooks/queryParams'
 import CreateLinkForm from './content/createLinkForm'
-import CreateScriptModal from './content/createScriptModal'
 import CreateLinkFromFile from './content/createLinkFromFile'
 import CreateLinkFromFileModal from './content/createLinkFromFileModal'
-import CreateWebHookModal from './content/createWebHookModal'
 import OnSuccessModal from './content/onSuccessModal'
 import './style.scss'
 
 function CreateLink() {
   let query = useQuery()
-
-  const [iframe, setIframe] = useState(false)
   const [massCreateResponses, setMassCreateResponses] = useState([])
 
   const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')])
@@ -23,6 +19,8 @@ function CreateLink() {
   const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] =
     useState(false)
 
+  const [formData, setFormData] = useState([])
+
   const [{ response, isLoading, error }, doFetch] = useFetch({
     onError: () => {
       setMassCreateErrorCount(massCreateErrorCount + 1)
@@ -30,20 +28,29 @@ function CreateLink() {
   })
   const [linkData, fetchLinkData] = useFetch()
 
-  const onFinish = async ({ iframe, ...values }) => {
+  const onFinishForm = async (data) => {
+    const { webhookId } = data
+    const id = (response && response.id) || linkId
+
+    await doFetch({
+      url: editMode ? `links/${id}` : `links`,
+      method: editMode ? 'PUT' : 'POST',
+      data: editMode ? data : { ...data, webhookId: webhookId && webhookId },
+    })
+
     // if (editMode) {
     //   const id = (response && response.id) || linkId
     //   await doFetch({
     //     url: `links/${id}`,
     //     method: 'PUT',
     //     data: {
-    //       ...values,
-    //       scriptId: selectedScript && selectedScript.value,
+    //       ...data,
     //       type: iframe
-    //         ? 'IFRAME'
-    //         : selectedScript && selectedScript.value
-    //         ? 'SCRIPT'
-    //         : 'REDIRECT',
+    //       ? 'IFRAME'
+    //       : scriptId && scriptId
+    //       ? 'SCRIPT'
+    //       : 'REDIRECT',
+    //       scriptId: scriptId && scriptId,
     //     },
     //   })
     // } else {
@@ -51,19 +58,21 @@ function CreateLink() {
     //     url: 'links',
     //     method: 'POST',
     //     data: {
-    //       ...values,
+    //       ...data,
     //       type: iframe
     //         ? 'IFRAME'
-    //         : selectedScript && selectedScript.value
+    //         : scriptId && scriptId
     //         ? 'SCRIPT'
     //         : 'REDIRECT',
-    //       scriptId: selectedScript && selectedScript.value,
-    //       webhookId: selectedWebhook && selectedWebhook.value,
+    //       scriptId: scriptId && scriptId,
+    //       webhookId: WebhookId && WebhookId,
     //     },
     //   })
     // }
-    console.log(iframe, values)
   }
+
+  console.log('response', response)
+
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
@@ -100,13 +109,11 @@ function CreateLink() {
         setIsCreateLinkModalVisible={setIsCreateLinkModalVisible}
       />
       <CreateLinkForm
-        onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         isLoading={isLoading}
         linkData={linkData}
-        iframe={iframe} //in
-        setIframe={setIframe} //in
-        //dakhel
+        setFormData={setFormData}
+        onFinishForm={onFinishForm}
       />
     </Card>
   )
