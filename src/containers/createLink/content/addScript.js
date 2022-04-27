@@ -4,12 +4,9 @@ import useFetch from '../../../hooks/asyncAction'
 import CreateScriptModal from './createScriptModal'
 import RetargetScript from './retargetScript'
 
-const AddScript = ({ linkData }) => {
+const AddScript = () => {
   const [scriptModalVisible, setScriptModalVisible] = useState(false)
   const [scripts, setScripts] = useState([])
-
-  const [{ response, isLoading, error }, doFetch] = useFetch()
-
   const [scriptData, fetchScripts] = useFetch()
 
   useEffect(() => {
@@ -40,7 +37,11 @@ const AddScript = ({ linkData }) => {
   return (
     <>
       <Card>
-        <RetargetScript scripts={scripts} handleSearch={handleSearch} />
+        <RetargetScript
+          isLoading={scriptData.isLoading}
+          scripts={scripts}
+          handleSearch={handleSearch}
+        />
         <Divider />
         <Space direction="vertical">
           <Button type="primary" onClick={() => setScriptModalVisible(true)}>
@@ -49,7 +50,6 @@ const AddScript = ({ linkData }) => {
         </Space>
       </Card>
       <CreateScriptModal
-        isLoading={isLoading}
         setScriptModalVisible={setScriptModalVisible}
         scriptModalVisible={scriptModalVisible}
       />

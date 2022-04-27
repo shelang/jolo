@@ -9,7 +9,6 @@ import {
   Select,
   DatePicker,
   Switch,
-  Card,
   Space,
   Tooltip,
   Spin,
@@ -20,44 +19,45 @@ import TargetDevicesField from './targetDevicesField'
 import OsTargetField from './osTargetField'
 import AddWebhook from './addWebhook'
 import AddScript from './addScript'
-import useFetch from '../../../hooks/asyncAction'
+import Collapsible from '../../../components/collapse/collapsible'
+
+const { TextArea } = Input
 
 const CreateLinkForm = ({
   onFinishFailed,
-  linkId,
   linkData,
   onFinishForm,
   form,
+  isLoading,
 }) => {
   const [hash, setHash] = useState(false)
   const [iframe, setIframe] = useState(false)
+  const [isAdvancedMode, setIsAdvancedMode] = useState(false)
   const [selectedOs, setSelectedOs] = useState({})
 
   const [selectedDevices, setSelectedDevices] = useState({})
-  const { TextArea } = Input
-
-  const [{ response, isLoading, error }, doFetch] = useFetch()
 
   const onFinish = (data) => {
-    const { scriptId, iframe, webhookId } = data
-    const formData = {
-      ...data,
-      type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
-      scriptId: scriptId && scriptId,
-      webhookId: webhookId && webhookId,
-    }
-    onFinishForm(formData)
+    onFinishForm(checkFormData(data))
   }
 
-  useEffect(() => {
-    if (linkData.response) {
-      const newValues = {
-        ...linkData.response,
-        status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
+  const checkFormData = (data) => {
+    const { scriptId, iframe, url } = data
+    if (isAdvancedMode) {
+      const formData = {
+        ...data,
+        type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
       }
-      form.setFieldsValue(newValues)
+      return formData
+    } else {
+      const formData = {
+        url: url,
+        title: 'random',
+        type: 'REDIRECT',
+      }
+      return formData
     }
-  }, [linkData.response])
+  }
 
   const onFieldsChange = (changedFields) => {
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
@@ -74,6 +74,20 @@ const CreateLinkForm = ({
     }
   }
 
+  useEffect(() => {
+    const { response } = linkData
+    if (response) {
+      const newValues = {
+        ...response,
+        status: response === 0 ? 'INACTIVE' : 'ACTIVE',
+      }
+      if (response.title !== 'random') {
+        setIsAdvancedMode(true)
+      }
+      form.setFieldsValue(newValues)
+    }
+  }, [linkData.response])
+
   return (
     <Spin spinning={linkData.isLoading}>
       <Form
@@ -89,20 +103,12 @@ const CreateLinkForm = ({
         initialValues={
           linkData.response
             ? linkData.response
-            : { status: 'ACTIVE', redirectCode: 301, hashLength: 6 }
+            : {
+                status: 'ACTIVE',
+                redirectCode: 301,
+                hashLength: 6,
+              }
         }>
-        <Form.Item
-          label="Friendly Name:"
-          name="title"
-          tooltip={tooltips.friendlyName}
-          rules={[
-            {
-              required: true,
-              message: 'Please input your Title!',
-            },
-          ]}>
-          <Input />
-        </Form.Item>
         <Form.Item
           label="Destination URL:"
           name="url"
@@ -115,106 +121,138 @@ const CreateLinkForm = ({
           ]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          label="Status"
-          name="status"
-          rules={[
-            {
-              required: false,
-              message: 'Please input your Status!',
-            },
-          ]}>
-          <Select>
-            {Object.keys(linkStatus).map((key) => {
-              return (
-                <Select.Option value={linkStatus[key]}>{key}</Select.Option>
-              )
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Redirect Mode:"
-          name="redirectCode"
-          tooltip={tooltips.redirectMode}
-          rules={[
-            {
-              required: false,
-              message: 'Please input your Redirect Mode!',
-            },
-          ]}>
-          <Select>
-            {redirectModes.map((redirectMode) => {
-              return (
-                <Select.Option value={redirectMode}>
-                  {redirectMode}
-                </Select.Option>
-              )
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Expiration Date:"
-          name="expireAt"
-          tooltip={tooltips.expirationDate}
-          rules={[
-            {
-              required: false,
-              message: 'Please input your Expire Date!',
-            },
-          ]}>
-          <DatePicker showTime={{ format: 'HH:mm' }} showNow={false} />
-        </Form.Item>
-        <Form.Item
-          label="Note:"
-          name="description"
-          tooltip={tooltips.note}
-          rules={[
-            {
-              required: false,
-              message: 'Please input your Description!',
-            },
-          ]}>
-          <TextArea maxLength={255} autoSize={{ minRows: 3, maxRows: 6 }} />
-        </Form.Item>
-
-        <Form.Item label={hash ? 'Hash Url' : 'Hash Length'}>
-          <Switch checked={hash} onChange={setHash} />
-        </Form.Item>
-        <Form.Item
-          name={hash ? 'hash' : 'hashLength'}
-          tooltip={tooltips.hashUrl}>
-          {hash ? (
-            <Input placeholder="Hash Url" />
-          ) : (
-            <Slider defaultValue={6} min={5} max={12} marks={marks} step={1} />
-          )}
-        </Form.Item>
-
-        <Form.Item
-          label="Forward Parameters:"
-          name="forwardParameter"
-          tooltip={tooltips.forwardParameters}
-          valuePropName="checked">
-          <Switch />
-        </Form.Item>
-
-        <Row>
-          <Col md={16} xs={24}>
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <TargetDevicesField
-                selectedDevices={selectedDevices}
-                setSelectedDevices={setSelectedDevices}
-              />
-
-              <OsTargetField
-                setSelectedOs={setSelectedOs}
-                selectedOs={selectedOs}
-              />
-            </Space>
-          </Col>
-        </Row>
-        <Card>
+        {!isAdvancedMode && (
+          <Form.Item>
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        )}
+        <Collapsible
+          isOpen={isAdvancedMode}
+          setIsOpen={setIsAdvancedMode}
+          title="Advanced Setting">
+          {/* <Collapse bordered activeKey={isAdvancedMode ? '1' : '0'}> */}
+          {/* <Panel header="Addvanced Setting" key="1"> */}
           <Form.Item
+            label="Friendly Name:"
+            name="title"
+            tooltip={tooltips.friendlyName}
+            rules={[
+              {
+                required: isAdvancedMode ? true : false,
+                message: 'Please input your Title!',
+              },
+            ]}>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Status"
+            name="status"
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Status!',
+              },
+            ]}>
+            <Select>
+              {Object.keys(linkStatus).map((key) => {
+                return (
+                  <Select.Option value={linkStatus[key]}>{key}</Select.Option>
+                )
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Redirect Mode:"
+            name="redirectCode"
+            tooltip={tooltips.redirectMode}
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Redirect Mode!',
+              },
+            ]}>
+            <Select>
+              {redirectModes.map((redirectMode) => {
+                return (
+                  <Select.Option value={redirectMode}>
+                    {redirectMode}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Expiration Date:"
+            name="expireAt"
+            tooltip={tooltips.expirationDate}
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Expire Date!',
+              },
+            ]}>
+            <DatePicker showTime={{ format: 'HH:mm' }} showNow={false} />
+          </Form.Item>
+          <Form.Item
+            label="Note:"
+            name="description"
+            tooltip={tooltips.note}
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Description!',
+              },
+            ]}>
+            <TextArea maxLength={255} autoSize={{ minRows: 3, maxRows: 6 }} />
+          </Form.Item>
+
+          <Form.Item label={hash ? 'Hash Url' : 'Hash Length'}>
+            <Switch checked={hash} onChange={setHash} />
+          </Form.Item>
+          <Form.Item
+            name={hash ? 'hash' : 'hashLength'}
+            tooltip={tooltips.hashUrl}>
+            {hash ? (
+              <Input placeholder="Hash Url" />
+            ) : (
+              <Slider
+                defaultValue={6}
+                min={5}
+                max={12}
+                marks={marks}
+                step={1}
+              />
+            )}
+          </Form.Item>
+
+          <Form.Item
+            label="Forward Parameters:"
+            name="forwardParameter"
+            tooltip={tooltips.forwardParameters}
+            valuePropName="checked">
+            <Switch />
+          </Form.Item>
+
+          <Row>
+            <Col md={16} xs={24}>
+              <Space direction="vertical" style={{ width: '100%' }}>
+                <TargetDevicesField
+                  selectedDevices={selectedDevices}
+                  setSelectedDevices={setSelectedDevices}
+                />
+
+                <OsTargetField
+                  setSelectedOs={setSelectedOs}
+                  selectedOs={selectedOs}
+                />
+              </Space>
+            </Col>
+          </Row>
+
+          <Form.Item
+            style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}
             label="URL Masking:"
             name="iframe"
             valuePropName="checked"
@@ -227,22 +265,26 @@ const CreateLinkForm = ({
             </Tooltip>
             <Switch checked={iframe} onChange={setIframe} />
           </Form.Item>
-        </Card>
 
-        {!iframe && (
-          <>
-            <AddScript linkData={linkData.response} />
-            <AddWebhook />
-          </>
-        )}
+          {!iframe && (
+            <Row>
+              <Col md={16} xs={24}>
+                <AddScript />
+              </Col>
+              <Col md={16} xs={24}>
+                <AddWebhook />
+              </Col>
+            </Row>
+          )}
 
-        <br />
+          <br />
 
-        <Form.Item>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+          <Form.Item>
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Collapsible>
       </Form>
     </Spin>
   )

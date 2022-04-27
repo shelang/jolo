@@ -2,7 +2,7 @@ import { Button, Form, Select, Tooltip, Typography } from 'antd'
 import React from 'react'
 import { tooltips } from '../../../utils/constants'
 
-const RetargetWebhook = ({ handleSearch, webhooks }) => {
+const RetargetWebhook = ({ handleSearch, webhooks, isLoading }) => {
   const { Title } = Typography
 
   const options = webhooks.map((webhook) => (
@@ -24,6 +24,8 @@ const RetargetWebhook = ({ handleSearch, webhooks }) => {
       <Form.Item name="webhookId">
         <Select
           placeholder="Search Webhooks"
+          loading={isLoading}
+          allowClear
           showSearch
           onSearch={handleSearch}
           notFoundContent={null}

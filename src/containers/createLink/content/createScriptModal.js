@@ -2,16 +2,12 @@ import React, { useState } from 'react'
 import { Button, Input, Modal, Space } from 'antd'
 import useFetch from '../../../hooks/asyncAction'
 
-const CreateScriptModal = ({
-  isLoading,
-  scriptModalVisible,
-  setScriptModalVisible,
-}) => {
+const CreateScriptModal = ({ scriptModalVisible, setScriptModalVisible }) => {
   const [scriptContent, setScriptContent] = useState('')
   const [scriptName, setScriptName] = useState('')
 
   const { TextArea } = Input
-  const [createScriptData, createScripts] = useFetch()
+  const [{ isLoading }, createScripts] = useFetch()
 
   const createNewScript = async () => {
     try {

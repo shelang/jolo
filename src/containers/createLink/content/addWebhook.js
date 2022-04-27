@@ -9,8 +9,6 @@ const AddWebhook = () => {
 
   const [webhooks, setWebhooks] = useState([])
 
-  const [{ response, isLoading, error }, doFetch] = useFetch()
-
   const [webhookData, fetchWebhooks] = useFetch()
 
   useEffect(() => {
@@ -40,8 +38,12 @@ const AddWebhook = () => {
 
   return (
     <>
-      <Card>
-        <RetargetWebhook webhooks={webhooks} handleSearch={handleSearch} />
+      <Card style={{ marginTop: '1rem' }}>
+        <RetargetWebhook
+          isLoading={webhookData.isLoading}
+          webhooks={webhooks}
+          handleSearch={handleSearch}
+        />
 
         <Divider />
 
@@ -53,7 +55,6 @@ const AddWebhook = () => {
       </Card>
 
       <CreateWebHookModal
-        isLoading={isLoading}
         webhookModalVisible={webhookModalVisible}
         setWebhookModalVisible={setWebhookModalVisible}
       />

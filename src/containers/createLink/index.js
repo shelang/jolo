@@ -79,7 +79,6 @@ function CreateLink() {
         onFinishFailed={onFinishFailed}
         isLoading={isLoading}
         linkData={linkData}
-        linkId={linkId}
         onFinishForm={onFinishForm}
       />
     </Card>

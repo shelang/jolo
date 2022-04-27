@@ -9,9 +9,17 @@ import {
   Divider,
   Input,
   Tooltip,
+  Button,
 } from 'antd'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
-import { AreaChartOutlined, CopyFilled, EditFilled } from '@ant-design/icons'
+import {
+  AreaChartOutlined,
+  CopyFilled,
+  CopyOutlined,
+  EditFilled,
+  FormOutlined,
+  PieChartOutlined,
+} from '@ant-design/icons'
 import { tooltips } from '../../utils/constants'
 import { Link } from 'react-router-dom'
 
@@ -60,24 +68,18 @@ const Links = () => {
         <Space size="middle">
           <Link to={`links/${record.linkId}`}>
             <Tooltip placement="bottom" title={tooltips.viewReportAction}>
-              <AreaChartOutlined style={{ fontSize: '1.3rem' }} />
+              <Button shape="circle" size="lg" icon={<PieChartOutlined />} />
             </Tooltip>
           </Link>
 
           <Link to={`./create-link?id=${record.linkId}&isEditing=true`}>
             <Tooltip placement="bottom" title={tooltips.editItemAction}>
-              <EditFilled style={{ fontSize: '1.3rem' }} />
+              <Button shape="circle" icon={<FormOutlined />} />
             </Tooltip>
           </Link>
           <div onClick={(e) => copyToClipboard(record.linkHash)}>
             <Tooltip placement="bottom" title={tooltips.copyItemAction}>
-              <CopyFilled
-                style={{
-                  fontSize: '1.3rem',
-                  cursor: 'pointer',
-                  color: '#1890ff',
-                }}
-              />
+              <Button shape="circle" icon={<CopyOutlined />} />
             </Tooltip>
           </div>
         </Space>

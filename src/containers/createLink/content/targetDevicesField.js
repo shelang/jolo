@@ -18,7 +18,7 @@ const TargetDevicesField = ({ setSelectedDevices, selectedDevices }) => {
 
   const { Title } = Typography
   return (
-    <Card>
+    <Card bordered>
       <Title level={3}>
         Device Targeting:
         <Tooltip

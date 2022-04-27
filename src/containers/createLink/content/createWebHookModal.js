@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { Button, Input, Modal, Space } from 'antd'
 import useFetch from '../../../hooks/asyncAction'
 
+const { TextArea } = Input
+
 const CreateWebHookModal = ({
   setWebhookModalVisible,
   webhookModalVisible,
-  isLoading,
 }) => {
-  const [createWebhookData, createWebhook] = useFetch()
+  const [{ isLoading }, createWebhook] = useFetch()
 
   const [webhookName, setWebhookName] = useState('')
   const [webhookUrl, setWebhookUrl] = useState('')
@@ -27,8 +28,6 @@ const CreateWebHookModal = ({
     } finally {
     }
   }
-
-  const { TextArea } = Input
 
   return (
     <Modal

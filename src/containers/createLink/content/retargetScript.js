@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Form, Select, Spin, Tooltip, Typography } from 'antd'
 import { tooltips } from '../../../utils/constants'
 
-const RetargetScript = ({ scripts, handleSearch }) => {
+const RetargetScript = ({ scripts, handleSearch, isLoading }) => {
   const { Title } = Typography
 
   const options = scripts.map((script) => (
@@ -25,6 +25,8 @@ const RetargetScript = ({ scripts, handleSearch }) => {
       <Form.Item name="scriptId">
         <Select
           showSearch
+          loading={isLoading}
+          allowClear
           placeholder="Search Scripts"
           onSearch={handleSearch}
           filterOption={false}
