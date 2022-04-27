@@ -40,13 +40,21 @@ const CreateLinkForm = ({
 
   const onFinish = (data) => {
     const { scriptId, iframe } = data
-    const formData = {
-      ...data,
-      hash: linkData.response.hash,
-      type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
+    let formData = {}
+    if (linkData && linkData.response && linkData.response.hash) {
+      formData = {
+        ...data,
+        hash: linkData.response.hash,
+        type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
+      }
+    } else {
+      formData = {
+        ...data,
+        type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
+      }
     }
 
-    onFinishForm(formData)
+    onFinishForm({ formData })
   }
   const onFieldsChange = (changedFields) => {
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
