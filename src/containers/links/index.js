@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/asyncAction'
-import { useHistory } from 'react-router-dom'
 import {
   Table,
   Space,
@@ -14,11 +13,11 @@ import {
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 import { AreaChartOutlined, CopyFilled, EditFilled } from '@ant-design/icons'
 import { tooltips } from '../../utils/constants'
+import { Link } from 'react-router-dom'
 
 const { Search } = Input
 
 const Links = () => {
-  const history = useHistory()
   const [currentPage, setCurrentPage] = useState(1)
   const [searchValue, setSearchValue] = useState('')
 
@@ -59,24 +58,28 @@ const Links = () => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a onClick={(e) => history.push(`./links/${record.linkId}`)}>
+          <Link to={`links/${record.linkId}`}>
             <Tooltip placement="bottom" title={tooltips.viewReportAction}>
               <AreaChartOutlined style={{ fontSize: '1.3rem' }} />
             </Tooltip>
-          </a>
-          <a
-            onClick={(e) =>
-              history.push(`./create-link?id=${record.linkId}&isEditing=true`)
-            }>
+          </Link>
+
+          <Link to={`./create-link?id=${record.linkId}&isEditing=true`}>
             <Tooltip placement="bottom" title={tooltips.editItemAction}>
               <EditFilled style={{ fontSize: '1.3rem' }} />
             </Tooltip>
-          </a>
-          <a onClick={(e) => copyToClipboard(record.linkHash)}>
+          </Link>
+          <div onClick={(e) => copyToClipboard(record.linkHash)}>
             <Tooltip placement="bottom" title={tooltips.copyItemAction}>
-              <CopyFilled style={{ fontSize: '1.3rem' }} />
+              <CopyFilled
+                style={{
+                  fontSize: '1.3rem',
+                  cursor: 'pointer',
+                  color: '#1890ff',
+                }}
+              />
             </Tooltip>
-          </a>
+          </div>
         </Space>
       ),
     },

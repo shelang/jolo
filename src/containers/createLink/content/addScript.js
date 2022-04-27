@@ -4,7 +4,7 @@ import useFetch from '../../../hooks/asyncAction'
 import CreateScriptModal from './createScriptModal'
 import RetargetScript from './retargetScript'
 
-const AddScript = () => {
+const AddScript = ({ linkData }) => {
   const [scriptModalVisible, setScriptModalVisible] = useState(false)
   const [scripts, setScripts] = useState([])
 

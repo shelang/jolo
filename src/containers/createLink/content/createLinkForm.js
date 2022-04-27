@@ -20,50 +20,46 @@ import TargetDevicesField from './targetDevicesField'
 import OsTargetField from './osTargetField'
 import AddWebhook from './addWebhook'
 import AddScript from './addScript'
+import useFetch from '../../../hooks/asyncAction'
 
 const CreateLinkForm = ({
   onFinishFailed,
-  isLoading,
+  linkId,
   linkData,
   onFinishForm,
+  form,
 }) => {
   const [hash, setHash] = useState(false)
   const [iframe, setIframe] = useState(false)
   const [selectedOs, setSelectedOs] = useState({})
+
   const [selectedDevices, setSelectedDevices] = useState({})
-  const [form] = Form.useForm()
   const { TextArea } = Input
 
-  const onFinish = async (data) => {
-    const { scriptId, iframe } = data
-    console.log(data)
-    const newData = {
+  const [{ response, isLoading, error }, doFetch] = useFetch()
+
+  const onFinish = (data) => {
+    const { scriptId, iframe, webhookId } = data
+    const formData = {
       ...data,
       type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
       scriptId: scriptId && scriptId,
+      webhookId: webhookId && webhookId,
     }
-    onFinishForm(newData)
+    onFinishForm(formData)
   }
 
-  // useEffect(() => {
-  //   if (linkData.response) {
-  //     if (linkData.response.scriptId) {
-  //       onSearch('')
-  //       setSelectedScript({
-  //         value: linkData.response.scriptId,
-  //         label: linkData.response.scriptId,
-  //       })
-  //     }
-  //     const newValues = {
-  //       ...linkData.response,
-  //       status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
-  //     }
-  //     form.setFieldsValue(newValues)
-  //   }
-  // }, [linkData.response])
+  useEffect(() => {
+    if (linkData.response) {
+      const newValues = {
+        ...linkData.response,
+        status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
+      }
+      form.setFieldsValue(newValues)
+    }
+  }, [linkData.response])
 
   const onFieldsChange = (changedFields) => {
-    console.log(changedFields, 'field changing')
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
       setSelectedDevices({
         ...selectedDevices,
@@ -233,11 +229,15 @@ const CreateLinkForm = ({
           </Form.Item>
         </Card>
 
-        {!iframe && <AddScript />}
-
-        {!iframe && <AddWebhook />}
+        {!iframe && (
+          <>
+            <AddScript linkData={linkData.response} />
+            <AddWebhook />
+          </>
+        )}
 
         <br />
+
         <Form.Item>
           <Button loading={isLoading} type="primary" htmlType="submit">
             Submit

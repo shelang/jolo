@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Divider, Modal, Row, Input, Form, message } from 'antd'
+import { Button, Col, Divider, Modal, Row, Input, message } from 'antd'
+import { useQuery } from '../../../hooks/queryParams'
 
 const { Search } = Input
 
 const OnSuccessModal = ({
   response,
+  form,
   setEditMode,
-  query,
   massCreateResponses,
   setMassCreateResponses,
 }) => {
-  const [form] = Form.useForm()
   const [isModalVisible, setIsModalVisible] = useState(false)
+  let query = useQuery()
 
   const createNewLink = () => {
     setIsModalVisible(false)

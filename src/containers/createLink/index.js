@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/asyncAction'
-import { Card } from 'antd'
+import { Card, Form } from 'antd'
 import { booleanEnum } from '../../utils/constants'
 import { useQuery } from '../../hooks/queryParams'
 import CreateLinkForm from './content/createLinkForm'
@@ -11,6 +11,8 @@ import './style.scss'
 
 function CreateLink() {
   let query = useQuery()
+  const [form] = Form.useForm()
+
   const [massCreateResponses, setMassCreateResponses] = useState([])
 
   const [editMode, setEditMode] = useState(booleanEnum[query.get('isEditing')])
@@ -19,59 +21,22 @@ function CreateLink() {
   const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] =
     useState(false)
 
-  const [formData, setFormData] = useState([])
+  const [linkData, fetchLinkData] = useFetch()
 
   const [{ response, isLoading, error }, doFetch] = useFetch({
     onError: () => {
       setMassCreateErrorCount(massCreateErrorCount + 1)
     },
   })
-  const [linkData, fetchLinkData] = useFetch()
 
   const onFinishForm = async (data) => {
-    const { webhookId } = data
     const id = (response && response.id) || linkId
-
     await doFetch({
       url: editMode ? `links/${id}` : `links`,
       method: editMode ? 'PUT' : 'POST',
-      data: editMode ? data : { ...data, webhookId: webhookId && webhookId },
+      data: data,
     })
-
-    // if (editMode) {
-    //   const id = (response && response.id) || linkId
-    //   await doFetch({
-    //     url: `links/${id}`,
-    //     method: 'PUT',
-    //     data: {
-    //       ...data,
-    //       type: iframe
-    //       ? 'IFRAME'
-    //       : scriptId && scriptId
-    //       ? 'SCRIPT'
-    //       : 'REDIRECT',
-    //       scriptId: scriptId && scriptId,
-    //     },
-    //   })
-    // } else {
-    //   await doFetch({
-    //     url: 'links',
-    //     method: 'POST',
-    //     data: {
-    //       ...data,
-    //       type: iframe
-    //         ? 'IFRAME'
-    //         : scriptId && scriptId
-    //         ? 'SCRIPT'
-    //         : 'REDIRECT',
-    //       scriptId: scriptId && scriptId,
-    //       webhookId: WebhookId && WebhookId,
-    //     },
-    //   })
-    // }
   }
-
-  console.log('response', response)
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
@@ -85,7 +50,7 @@ function CreateLink() {
   }
 
   useEffect(() => {
-    if (linkId) {
+    if ((response && response.id) || linkId) {
       onFetchLinkData()
     }
   }, [linkId])
@@ -93,9 +58,10 @@ function CreateLink() {
   return (
     <Card>
       <OnSuccessModal
-        response={response} //response ?
-        setEditMode={setEditMode}
+        response={response}
         query={query}
+        form={form}
+        setEditMode={setEditMode}
         massCreateResponses={massCreateResponses}
         setMassCreateResponses={setMassCreateResponses}
       />
@@ -109,10 +75,11 @@ function CreateLink() {
         setIsCreateLinkModalVisible={setIsCreateLinkModalVisible}
       />
       <CreateLinkForm
+        form={form}
         onFinishFailed={onFinishFailed}
         isLoading={isLoading}
         linkData={linkData}
-        setFormData={setFormData}
+        linkId={linkId}
         onFinishForm={onFinishForm}
       />
     </Card>

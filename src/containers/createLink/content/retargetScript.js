@@ -22,7 +22,7 @@ const RetargetScript = ({ scripts, handleSearch }) => {
           <Button>?</Button>
         </Tooltip>
       </Title>
-      <Form.Item name="ScriptId">
+      <Form.Item name="scriptId">
         <Select
           showSearch
           placeholder="Search Scripts"
