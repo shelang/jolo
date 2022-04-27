@@ -34,7 +34,7 @@ function CreateLink() {
     await doFetch({
       url: editMode ? `links/${id}` : `links`,
       method: editMode ? 'PUT' : 'POST',
-      data: data,
+      data: { ...data, id: Number(id) },
     })
   }
 

@@ -39,26 +39,15 @@ const CreateLinkForm = ({
   const [{ response, isLoading, error }, doFetch] = useFetch()
 
   const onFinish = (data) => {
-    const { scriptId, iframe, webhookId } = data
+    const { scriptId, iframe } = data
     const formData = {
       ...data,
+      hash: linkData.response.hash,
       type: iframe ? 'IFRAME' : scriptId && scriptId ? 'SCRIPT' : 'REDIRECT',
-      scriptId: scriptId && scriptId,
-      webhookId: webhookId && webhookId,
     }
+
     onFinishForm(formData)
   }
-
-  useEffect(() => {
-    if (linkData.response) {
-      const newValues = {
-        ...linkData.response,
-        status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
-      }
-      form.setFieldsValue(newValues)
-    }
-  }, [linkData.response])
-
   const onFieldsChange = (changedFields) => {
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
       setSelectedDevices({
@@ -73,6 +62,16 @@ const CreateLinkForm = ({
       })
     }
   }
+
+  useEffect(() => {
+    if (linkData.response) {
+      const newValues = {
+        ...linkData.response,
+        status: linkData.response === 0 ? 'INACTIVE' : 'ACTIVE',
+      }
+      form.setFieldsValue(newValues)
+    }
+  }, [linkData.response])
 
   return (
     <Spin spinning={linkData.isLoading}>
