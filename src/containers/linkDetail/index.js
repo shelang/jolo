@@ -45,6 +45,10 @@ const LinkDetail = (props) => {
     })
   }
 
+  const handleBucketIsDisable = () => {
+    return response && response.count > 0 ? false : true
+  }
+
   const handleChangeDates = (dates, datesString) => {
     setStartDate(dates[0])
     setEndDate(dates[1])
@@ -149,14 +153,16 @@ const LinkDetail = (props) => {
                   )
                 })}
               </Select>
-              {response && response.count > 0 && (
-                <Select defaultValue={bucket} onChange={handleChangeBucket}>
-                  <Option value={null}>None</Option>
-                  <Option value="hour">Hourly</Option>
-                  <Option value="daily">Daily</Option>
-                  <Option value="monthly">Monthly</Option>
-                </Select>
-              )}
+
+              <Select
+                disabled={handleBucketIsDisable()}
+                defaultValue={bucket}
+                onChange={handleChangeBucket}>
+                <Option value={null}>None</Option>
+                <Option value="hour">Hourly</Option>
+                <Option value="daily">Daily</Option>
+                <Option value="monthly">Monthly</Option>
+              </Select>
             </Space>
           </Col>
           <br />
