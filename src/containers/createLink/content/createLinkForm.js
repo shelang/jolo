@@ -133,7 +133,7 @@ const CreateLinkForm = ({
         <Collapsible
           isOpen={isAdvancedMode}
           setIsOpen={setIsAdvancedMode}
-          title="Advanced Setting">
+          title="Advance Setting">
           <Form.Item
             label="Friendly Name:"
             name="title"
