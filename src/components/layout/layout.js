@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import KitMenu from '../menu/menu';
-import Logo from '../../assets/logo-light-New.png';
-import { Button, Layout } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { isMobile } from 'react-device-detect';
-import './layout.scss';
-import AcceptCookies from '../../containers/acceptCookies';
+import React, { useState } from 'react'
+import KitMenu from '../menu/menu'
+import Logo from '../../assets/logo-light-New.png'
+import { Button, Layout } from 'antd'
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import { isMobile } from 'react-device-detect'
+import AcceptCookies from '../../containers/acceptCookies'
+import './layout.scss'
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout
 
 function AppLayout(props) {
-  const [collapsed, setCollapsed] = useState(isMobile);
+  const [collapsed, setCollapsed] = useState(isMobile)
   return (
     <Layout>
       <Header className="header">
@@ -18,8 +18,7 @@ function AppLayout(props) {
           <Button
             type="primary"
             onClick={() => setCollapsed(!collapsed)}
-            style={{ marginBottom: 16 }}
-          >
+            style={{ marginBottom: 16 }}>
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </Button>
         ) : null}
@@ -34,8 +33,7 @@ function AppLayout(props) {
             collapsible
             collapsed={collapsed}
             className="site-layout-background"
-            width={200}
-          >
+            width={200}>
             <KitMenu />
           </Sider>
           <Content className="internal_content">{props.children}</Content>
@@ -48,12 +46,11 @@ function AppLayout(props) {
           padding: 0,
           display: 'flex',
           justifyContent: 'center',
-        }}
-      >
+        }}>
         LinkComposer ©2021 Created by LinkComposer Team
       </Footer>
       <AcceptCookies />
     </Layout>
-  );
+  )
 }
-export default AppLayout;
+export default AppLayout
