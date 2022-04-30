@@ -56,7 +56,7 @@ function CreateLink() {
   }, [linkId])
 
   return (
-    <Card>
+    <Card style={{ border: 'none' }}>
       <OnSuccessModal
         response={response}
         query={query}

@@ -11,30 +11,27 @@ const Collapsible = ({ title, children, isOpen, setIsOpen }) => {
     setIsOpen((prev) => !prev)
   }
 
-  //get height to animate the collapse
+  // get height to animate the collapse
   useEffect(() => {
-    if (isOpen) setHeight(ref.current?.getBoundingClientRect().height)
+    if (isOpen) setHeight(ref.current?.getBoundingClientRect().height + 50)
     else setHeight(0)
   }, [isOpen])
 
   return (
     <div>
+      <div style={{ height }} className="my-collapse">
+        <div ref={ref}>{children}</div>
+      </div>
+
       <div onClick={handleFilterOpening}>
         <Button
           style={{ paddingLeft: 0 }}
           type="link"
           icon={!isOpen ? <DownOutlined /> : <UpOutlined />}
           size={'lg'}>
-          {title}
+          {`${isOpen ? 'Close' : 'Open'} ${title}`}
         </Button>
       </div>
-      {isOpen && (
-        <div style={{ height }} className="my-collapse">
-          <div style={{ padding: '2rem' }} ref={ref}>
-            {children}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

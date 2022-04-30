@@ -43,6 +43,9 @@ const CreateLinkForm = ({
 
   const checkFormData = (data) => {
     const { scriptId, iframe, url } = data
+
+    const randomString = Math.random().toString(36).substring(2, 10)
+
     if (isAdvancedMode) {
       const formData = {
         ...data,
@@ -52,7 +55,7 @@ const CreateLinkForm = ({
     } else {
       const formData = {
         url: url,
-        title: 'random',
+        title: randomString,
         type: 'REDIRECT',
       }
       return formData
@@ -81,9 +84,8 @@ const CreateLinkForm = ({
         ...response,
         status: response === 0 ? 'INACTIVE' : 'ACTIVE',
       }
-      if (response.title !== 'random') {
-        setIsAdvancedMode(true)
-      }
+      setIsAdvancedMode(true)
+
       form.setFieldsValue(newValues)
     }
   }, [linkData.response])
@@ -132,8 +134,6 @@ const CreateLinkForm = ({
           isOpen={isAdvancedMode}
           setIsOpen={setIsAdvancedMode}
           title="Advanced Setting">
-          {/* <Collapse bordered activeKey={isAdvancedMode ? '1' : '0'}> */}
-          {/* <Panel header="Addvanced Setting" key="1"> */}
           <Form.Item
             label="Friendly Name:"
             name="title"
