@@ -14,7 +14,7 @@ ARG PUBLIC_URL=""
 
 RUN npm run build
 
-FROM nginx:1.21-alpine
+FROM nginx:1.22.0-alpine
 
 WORKDIR /jolo
 
