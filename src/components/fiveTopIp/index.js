@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import useFetch from '../../hooks/asyncAction'
 import { Spin, Card, List } from 'antd'
+import useFetch from '../../hooks/asyncAction'
 
 const FiveTopIp = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -10,19 +10,14 @@ const FiveTopIp = () => {
       method: 'GET',
     })
   }
-  let data = []
   useEffect(() => {
     fetchLinks()
-    if (response) {
-      console.log(response.data.slice(0, 5))
-      data = response.data.slice(0, 5)
-    }
   }, [])
   return (
     <Card title="Five Top Ips" style={{ width: 250 }}>
       <Spin spinning={isLoading}>
         <List
-          dataSource={response ? response.data.slice(0, 5): data}
+          dataSource={response ? response.data.slice(0, 5) : []}
           renderItem={(item) => <List.Item>{item.key}</List.Item>}
         />
       </Spin>
