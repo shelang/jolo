@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import PrivateRoute from './utils/privateRoute';
 import AppLayout from './components/layout/layout';
 import LoginLayout from './components/layout/LoginLayout';
-import Welcome from './welcome';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Spin } from 'antd';
 
@@ -14,6 +13,7 @@ const Webhook = React.lazy(() => import('./containers/webhook'));
 const Profile = React.lazy(() => import('./containers/profile'));
 const RefreshToken = React.lazy(() => import('./containers/refresh'));
 const LinkDetail = React.lazy(() => import('./containers/linkDetail'));
+const Dashboard = React.lazy(() => import('./containers/dashboard'));
 
 function Routes() {
   return (
@@ -68,7 +68,7 @@ function Routes() {
           exact
           render={() => (
             <AppLayout>
-              <Welcome sectionName="Main Dashboard" />
+              <Dashboard />
             </AppLayout>
           )}
         />
