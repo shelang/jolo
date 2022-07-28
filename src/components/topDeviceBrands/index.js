@@ -21,11 +21,13 @@ const TopDeviceBrands = () => {
   }, [])
 
   const options = {
+    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
+
     chart: {
       type: 'pie',
       options3d: {
         enabled: true,
-        alpha: 45
+        alpha: 45,
       },
       plotBackgroundColor: null,
       plotBorderWidth: null,
@@ -50,30 +52,35 @@ const TopDeviceBrands = () => {
           alignTo: 'connectors',
           format: '<b>{point.name}</b>: {point.percentage:.1f} %',
           style: {
-            color: 'black',
+            color: '#a5a5a5',
+            fontFamily: 'Verdana',
+            fill: '#a5a5a5',
+            letterSpacing: '1px',
           },
         },
         showInLegend: false,
       },
     },
-   series: [{
-    innerSize: '30%',
-    data: response
-    ? response.data.map((item) => {
-        return { name: item.key, y: Number(item.value) }
-      })
-    : [],
-}]
+    series: [
+      {
+        innerSize: '30%',
+        data: response
+          ? response.data.map((item) => {
+              return { name: item.key, y: Number(item.value) }
+            })
+          : [],
+      },
+    ],
   }
-  
+
   return (
     <div style={{ height: '100%' }}>
       <Title level={5} style={{ marginBottom: 4 }}>
         Top Device Brands
       </Title>
-      <Card style={{ width: '100%', borderRadius: 4 }}>
+      <Card style={{ width: '100%', borderRadius: 8 }}>
         <Spin spinning={isLoading}>
-        <PieChart highcharts={Highcharts} options={options} />
+          <PieChart highcharts={Highcharts} options={options} />
         </Spin>
       </Card>
     </div>

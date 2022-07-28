@@ -21,6 +21,8 @@ const TopDevices = () => {
   }, [])
 
   const options = {
+    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
+
     chart: {
       type: 'pie',
       plotBackgroundColor: null,
@@ -46,7 +48,10 @@ const TopDevices = () => {
           alignTo: 'connectors',
           format: '<b>{point.name}</b>: {point.percentage:.1f} %',
           style: {
-            color: 'black',
+            color: '#a5a5a5',
+            fontFamily: 'Verdana',
+            fill: '#a5a5a5',
+            letterSpacing: '1px',
           },
         },
         showInLegend: false,
@@ -69,7 +74,7 @@ const TopDevices = () => {
       <Title level={5} style={{ marginBottom: 4 }}>
         Top Devices
       </Title>
-      <Card style={{ width: '100%', borderRadius: 4 }}>
+      <Card style={{ width: '100%', borderRadius: 8 }}>
         <Spin spinning={isLoading}>
           <PieChart highcharts={Highcharts} options={options} />
         </Spin>

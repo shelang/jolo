@@ -21,6 +21,7 @@ const AgentNames = () => {
   }, [])
 
   const options = {
+    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
     chart: {
       type: 'pie',
       plotBackgroundColor: null,
@@ -46,7 +47,10 @@ const AgentNames = () => {
           alignTo: 'connectors',
           format: '<b>{point.name}</b>: {point.percentage:.1f} %',
           style: {
-            color: 'black',
+            color: '#a5a5a5',
+            fontFamily: 'Verdana',
+            fill: '#a5a5a5',
+            letterSpacing: '1px',
           },
         },
         showInLegend: false,
@@ -54,6 +58,8 @@ const AgentNames = () => {
     },
     series: [
       {
+        allowPointSelect: true,
+
         name: '',
         color: '#006600',
         lineWidth: 1,
@@ -78,12 +84,11 @@ const AgentNames = () => {
   }
 
   return (
-    <div style={{ height: '100%' }}>
+    <div>
       <Title level={5} style={{ marginBottom: 4 }}>
         Top Agent Names
       </Title>
-      <Card
-        style={{ width: '100%', borderRadius: 4, padding: 2, height: '100%' }}>
+      <Card style={{ width: '100%', borderRadius: 8, padding: 2 }}>
         <Spin spinning={isLoading}>
           <PieChart highcharts={Highcharts} options={options} />
         </Spin>

@@ -24,6 +24,8 @@ const TopDeviceNames = () => {
   }, [])
 
   const options = {
+    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
+
     chart: {
       type: 'column',
     },
@@ -50,7 +52,7 @@ const TopDeviceNames = () => {
       },
     },
     tooltip: {
-        headerFormat: '',
+      headerFormat: '',
       pointFormat:
         '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b>',
     },
@@ -60,6 +62,12 @@ const TopDeviceNames = () => {
         dataLabels: {
           enabled: true,
           format: '{point.y}',
+          style: {
+            color: '#a5a5a5',
+            fontFamily: 'Verdana',
+            fill: '#a5a5a5',
+            letterSpacing: '1px',
+          },
         },
       },
     },
@@ -81,13 +89,13 @@ const TopDeviceNames = () => {
         : [],
     },
   }
-  
+
   return (
     <div style={{ height: '100%' }}>
       <Title level={5} style={{ marginBottom: 4 }}>
         Top Device Names
       </Title>
-      <Card style={{ width: '100%', borderRadius: 4 }}>
+      <Card style={{ width: '100%', borderRadius: 8 }}>
         <Spin spinning={isLoading}>
           <BarChart highcharts={Highcharts} options={options} />
         </Spin>

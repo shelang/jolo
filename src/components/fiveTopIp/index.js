@@ -19,11 +19,11 @@ const FiveTopIp = () => {
   }, [])
 
   return (
-    <div style={{height:"100%"}}>
+    <div>
       <Title level={5} style={{ marginBottom: 4 }}>
         Five Top Ips
       </Title>
-      <Card style={{ width: '100%', borderRadius: 4,height:"100%" }}>
+      <Card style={{ width: '100%', borderRadius: 8 }}>
         <Spin spinning={isLoading}>
           <List
             dataSource={response ? response.data.slice(0, 5) : []}

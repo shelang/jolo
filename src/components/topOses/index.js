@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
-import PieChart from 'highcharts-react-official'
+import HighchartsReact from 'highcharts-react-official'
 import { Spin, Card, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
+
+require('highcharts/modules/exporting')(Highcharts)
+require('highcharts/highcharts-more')(Highcharts)
 
 const { Title } = Typography
 
@@ -20,64 +23,62 @@ const TopOses = () => {
     fetchLinks()
   }, [])
 
+  const series = response
+    ? response.data.map((item) => {
+        return {
+          name: item.key,
+          data: [{ value: Number(item.value) }],
+        }
+      })
+    : []
+
   const options = {
+    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
+
     chart: {
-      plotBackgroundColor: null,
-      plotBorderWidth: 0,
-      plotShadow: false,
+      type: 'packedbubble',
+      height: '100%',
+    },
+
+    tooltip: {
+      headerFormat: '',
+      pointFormat:
+        '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b>',
     },
     title: {
-      text: 'Top Oses',
-      align: 'center',
-      verticalAlign: 'middle',
-      y: 60,
+      text: '',
     },
     credits: {
       enabled: false,
     },
-    tooltip: {
-      pointFormat: '<b>{point.percentage:.1f}%</b>',
-    },
-    accessibility: {
-      point: {
-        valueSuffix: '%',
-      },
-    },
+
     plotOptions: {
-      pie: {
+      packedbubble: {
+        minSize: '30%',
+        maxSize: '80%',
+        layoutAlgorithm: {
+          gravitationalConstant: 0.02,
+          splitSeries: false,
+          seriesInteraction: true,
+          dragBetweenSeries: true,
+        },
         dataLabels: {
           enabled: true,
-          distance: -50,
+          format: '{series.name}',
+
           style: {
-            fontWeight: 'bold',
-            color: 'white',
+            color: '#a5a5a5',
+            fontFamily: 'Verdana',
+            fill: '#a5a5a5',
+            letterSpacing: '1px',
           },
         },
-        startAngle: -90,
-        endAngle: 90,
-        center: ['50%', '75%'],
-        size: '110%',
       },
     },
     legend: {
-      name: 'd',
+      enabled: false,
     },
-    series: [
-      {
-        type: 'pie',
-        innerSize: '50%',
-        data: response
-          ? response.data.map((item) => {
-              return { name: item.key, y: Number(item.value) }
-            })
-          : [],
-        showInLegend: true,
-        dataLabels: {
-          enabled: true,
-          distance: -25,
-        },
-      },
-    ],
+    series: series,
   }
 
   return (
@@ -85,9 +86,13 @@ const TopOses = () => {
       <Title level={5} style={{ marginBottom: 4 }}>
         Top Operation Systems
       </Title>
-      <Card style={{ width: '100%', borderRadius: 4 }}>
+      <Card style={{ width: '100%', borderRadius: 8 }}>
         <Spin spinning={isLoading}>
-          <PieChart highcharts={Highcharts} options={options} />
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={options}
+            constructorType={'chart'}
+          />
         </Spin>
       </Card>
     </div>

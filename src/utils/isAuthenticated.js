@@ -1,9 +1,13 @@
-import { parseCookies } from 'nookies';
+import { parseCookies } from 'nookies'
 
 function isAuthenticated() {
-  const cookies = parseCookies();
-  const user = JSON.parse(cookies.user);
+  const cookies = parseCookies()
+  if (cookies.user) {
+    const user = JSON.parse(cookies.user)
 
-  return user && user.token;
+    return user && user.token
+  } else {
+    return
+  }
 }
-export default isAuthenticated;
+export default isAuthenticated
