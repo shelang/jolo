@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react'
 import useFetch from '../../hooks/asyncAction'
-import DashboardCard from '../dashboardCard'
+import Highcharts from 'highcharts/highstock'
+import ColumnChart from 'highcharts-react-official'
+import AppCard from '../appCard'
+import { Spin } from 'antd'
 
 const TopDeviceNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -87,9 +90,13 @@ const TopDeviceNames = () => {
   }
 
   return (
-    <DashboardCard
-      props={{ title: 'Top Device Names', isLoading, options, error }}
-    />
+    <AppCard title="Top Device Names">
+      <Spin spinning={isLoading}>
+        {error
+          ? 'There is something wrong, please try again later'
+          : null || <ColumnChart highcharts={Highcharts} options={options} />}
+      </Spin>
+    </AppCard>
   )
 }
 

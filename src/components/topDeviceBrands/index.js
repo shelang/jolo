@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react'
 import useFetch from '../../hooks/asyncAction'
-import DashboardCard from '../dashboardCard'
+import Highcharts from 'highcharts/highstock'
+import PieChart from 'highcharts-react-official'
+import AppCard from '../appCard'
+import { Spin } from 'antd'
 
 const TopDeviceBrands = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -18,7 +21,6 @@ const TopDeviceBrands = () => {
 
   const options = {
     colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
-
     chart: {
       type: 'pie',
       options3d: {
@@ -70,9 +72,13 @@ const TopDeviceBrands = () => {
   }
 
   return (
-    <DashboardCard
-      props={{ title: 'Top Device Brands', isLoading, options, error }}
-    />
+    <AppCard title="Top Device Brands">
+      <Spin spinning={isLoading}>
+        {error
+          ? 'There is something wrong, please try again later'
+          : null || <PieChart highcharts={Highcharts} options={options} />}
+      </Spin>
+    </AppCard>
   )
 }
 

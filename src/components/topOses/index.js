@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
 import useFetch from '../../hooks/asyncAction'
-import DashboardCard from '../dashboardCard'
+import Chart from 'highcharts-react-official'
+import AppCard from '../appCard'
+import { Spin } from 'antd'
 
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
@@ -79,9 +81,13 @@ const TopOses = () => {
   }
 
   return (
-    <DashboardCard
-      props={{ title: 'Top Operation Systems', isLoading, options, error }}
-    />
+    <AppCard title="Top Operation Systems">
+      <Spin spinning={isLoading}>
+        {error
+          ? 'There is something wrong, please try again later'
+          : null || <Chart highcharts={Highcharts} options={options} />}
+      </Spin>
+    </AppCard>
   )
 }
 
