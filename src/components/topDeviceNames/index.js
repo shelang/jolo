@@ -4,6 +4,7 @@ import Highcharts from 'highcharts/highstock'
 import ColumnChart from 'highcharts-react-official'
 import AppCard from '../appCard'
 import { Spin } from 'antd'
+import ChartConfig from './config'
 
 const TopDeviceNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -17,84 +18,19 @@ const TopDeviceNames = () => {
 
   useEffect(() => {
     fetchLinks()
-    if (response) {
-      console.log(response.data)
-    }
   }, [])
-
-  const options = {
-    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
-
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: '',
-    },
-    xAxis: {
-      categories: response
-        ? response.data.map((item) => {
-            return item.key
-          })
-        : [],
-      title: {
-        text: null,
-      },
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: '',
-      },
-      labels: {
-        overflow: 'justify',
-      },
-    },
-    tooltip: {
-      headerFormat: '',
-      pointFormat:
-        '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b>',
-    },
-    plotOptions: {
-      series: {
-        borderWidth: 0,
-        dataLabels: {
-          enabled: true,
-          format: '{point.y}',
-          style: {
-            color: '#a5a5a5',
-            fontFamily: 'Verdana',
-            fill: '#a5a5a5',
-            letterSpacing: '1px',
-          },
-        },
-      },
-    },
-    credits: {
-      enabled: false,
-    },
-    legend: {
-      enabled: false,
-    },
-    series: {
-      colorByPoint: response ? true : null,
-      data: response
-        ? response.data.map((item) => {
-            return {
-              name: item.key,
-              y: Number(item.value),
-            }
-          })
-        : [],
-    },
-  }
 
   return (
     <AppCard title="Top Device Names">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'
-          : null || <ColumnChart highcharts={Highcharts} options={options} />}
+          : null || (
+              <ColumnChart
+                highcharts={Highcharts}
+                options={response ? ChartConfig(response) : null}
+              />
+            )}
       </Spin>
     </AppCard>
   )
