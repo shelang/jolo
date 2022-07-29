@@ -1,13 +1,10 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
-import HighchartsReact from 'highcharts-react-official'
-import { Spin, Card, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
+import DashboardCard from '../dashboardCard'
 
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
-
-const { Title } = Typography
 
 const TopOses = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -82,20 +79,9 @@ const TopOses = () => {
   }
 
   return (
-    <div style={{ height: '100%' }}>
-      <Title level={5} style={{ marginBottom: 4 }}>
-        Top Operation Systems
-      </Title>
-      <Card style={{ width: '100%', borderRadius: 8 }}>
-        <Spin spinning={isLoading}>
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={options}
-            constructorType={'chart'}
-          />
-        </Spin>
-      </Card>
-    </div>
+    <DashboardCard
+      props={{ title: 'Top Operation Systems', isLoading, options, error }}
+    />
   )
 }
 

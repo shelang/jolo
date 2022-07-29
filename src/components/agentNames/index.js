@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
-import Highcharts from 'highcharts/highstock'
-import PieChart from 'highcharts-react-official'
-import { Spin, Card, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
-
-const { Title } = Typography
+import DashboardCard from '../dashboardCard'
 
 const AgentNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -84,16 +80,9 @@ const AgentNames = () => {
   }
 
   return (
-    <div>
-      <Title level={5} style={{ marginBottom: 4 }}>
-        Top Agent Names
-      </Title>
-      <Card style={{ width: '100%', borderRadius: 8, padding: 2 }}>
-        <Spin spinning={isLoading}>
-          <PieChart highcharts={Highcharts} options={options} />
-        </Spin>
-      </Card>
-    </div>
+    <DashboardCard
+      props={{ title: 'Top Agent Names', isLoading, options, error }}
+    />
   )
 }
 
