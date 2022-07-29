@@ -2,7 +2,7 @@ import React from 'react'
 import Highcharts from 'highcharts/highstock'
 import PieChart from 'highcharts-react-official'
 import { Card, Spin, Typography } from 'antd'
-
+import './style.scss'
 const { Title } = Typography
 
 const DashboardCard = ({ props }) => {
@@ -15,7 +15,9 @@ const DashboardCard = ({ props }) => {
       </Title>
       <Card className="cardBody">
         <Spin spinning={isLoading}>
-          <PieChart highcharts={Highcharts} options={options} />
+          {error
+            ? 'There is something wrong, please try again later'
+            : null || <PieChart highcharts={Highcharts} options={options} />}
         </Spin>
       </Card>
     </div>
