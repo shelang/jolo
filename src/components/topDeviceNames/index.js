@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import Highcharts from 'highcharts/highstock'
-import BarChart from 'highcharts-react-official'
-import { Spin, Card, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
-
-const { Title } = Typography
+import Highcharts from 'highcharts/highstock'
+import ColumnChart from 'highcharts-react-official'
+import AppCard from '../appCard'
+import { Spin } from 'antd'
 
 const TopDeviceNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -91,16 +90,13 @@ const TopDeviceNames = () => {
   }
 
   return (
-    <div style={{ height: '100%' }}>
-      <Title level={5} style={{ marginBottom: 4 }}>
-        Top Device Names
-      </Title>
-      <Card style={{ width: '100%', borderRadius: 8 }}>
-        <Spin spinning={isLoading}>
-          <BarChart highcharts={Highcharts} options={options} />
-        </Spin>
-      </Card>
-    </div>
+    <AppCard title="Top Device Names">
+      <Spin spinning={isLoading}>
+        {error
+          ? 'There is something wrong, please try again later'
+          : null || <ColumnChart highcharts={Highcharts} options={options} />}
+      </Spin>
+    </AppCard>
   )
 }
 
