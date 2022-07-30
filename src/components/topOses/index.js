@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
-import useFetch from '../../hooks/asyncAction'
 import Chart from 'highcharts-react-official'
 import AppCard from '../appCard'
+import useFetch from '../../hooks/asyncAction'
+import { PackedBubbleChartConfig } from '../../lib/PackedBubbleChartConfig'
 import { Spin } from 'antd'
-import ChartConfig from './config'
 
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
@@ -28,7 +28,12 @@ const TopOses = () => {
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'
-          : null || <Chart highcharts={Highcharts} options={response ? ChartConfig(response) : null} />}
+          : null || (
+              <Chart
+                highcharts={Highcharts}
+                options={response ? PackedBubbleChartConfig(response) : null}
+              />
+            )}
       </Spin>
     </AppCard>
   )

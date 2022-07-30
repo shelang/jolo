@@ -1,21 +1,17 @@
-const ChartConfig = (response) => {
-  let options
-  const series = response
-    ? response.data.map((item) => {
-        return {
-          name: item.key,
-          data: [{ value: Number(item.value) }],
-        }
-      })
-    : []
-  return (options = {
-    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
+export const PackedBubbleChartConfig = (response) => {
+  const series = response.data.map((item) => {
+    return {
+      name: item.key,
+      data: [{ value: Number(item.value) }],
+    }
+  })
 
+  return {
+    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
     chart: {
       type: 'packedbubble',
       height: '100%',
     },
-
     tooltip: {
       headerFormat: '',
       pointFormat:
@@ -27,7 +23,6 @@ const ChartConfig = (response) => {
     credits: {
       enabled: false,
     },
-
     plotOptions: {
       packedbubble: {
         minSize: '30%',
@@ -55,7 +50,5 @@ const ChartConfig = (response) => {
       enabled: false,
     },
     series: series,
-  })
+  }
 }
-
-export default ChartConfig

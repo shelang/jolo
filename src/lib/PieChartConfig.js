@@ -1,9 +1,29 @@
-const ChartConfig = (response) => {
-  let options
+export const PieChartConfig = (response) => {
+  const series = [
+    {
+      allowPointSelect: true,
 
-  return (options = {
+      name: '',
+      color: '#006600',
+      lineWidth: 1,
+      marker: {
+        enabled: false,
+        symbol: 'circle',
+        radius: 3,
+        states: {
+          hover: {
+            enabled: true,
+            lineWidth: 1,
+          },
+        },
+      },
+      data: response.data.map((item) => {
+        return { name: item.key, y: Number(item.value) }
+      }),
+    },
+  ]
+  return {
     colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
-
     chart: {
       type: 'pie',
       plotBackgroundColor: null,
@@ -38,17 +58,6 @@ const ChartConfig = (response) => {
         showInLegend: false,
       },
     },
-    series: [
-      {
-        innerSize: '30%',
-        data: response
-          ? response.data.map((item) => {
-              return { name: item.key, y: Number(item.value) }
-            })
-          : [],
-      },
-    ],
-  })
+    series: series,
+  }
 }
-
-export default ChartConfig

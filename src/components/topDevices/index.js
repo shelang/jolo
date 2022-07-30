@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import useFetch from '../../hooks/asyncAction'
 import Highcharts from 'highcharts/highstock'
 import PieChart from 'highcharts-react-official'
 import AppCard from '../appCard'
+import useFetch from '../../hooks/asyncAction'
+import { PieChartConfig } from '../../lib/PieChartConfig'
 import { Spin } from 'antd'
-import ChartConfig from './config'
 
 const TopDevices = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -25,7 +25,12 @@ const TopDevices = () => {
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'
-          : null || <PieChart highcharts={Highcharts} options={response ? ChartConfig(response) : null} />}
+          : null || (
+              <PieChart
+                highcharts={Highcharts}
+                options={response ? PieChartConfig(response) : null}
+              />
+            )}
       </Spin>
     </AppCard>
   )

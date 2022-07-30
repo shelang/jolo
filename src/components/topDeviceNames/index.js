@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import useFetch from '../../hooks/asyncAction'
 import Highcharts from 'highcharts/highstock'
 import ColumnChart from 'highcharts-react-official'
 import AppCard from '../appCard'
+import useFetch from '../../hooks/asyncAction'
+import { ColumnChartConfig } from '../../lib/ColumnChartConfig'
 import { Spin } from 'antd'
-import ChartConfig from './config'
 
 const TopDeviceNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -28,7 +28,7 @@ const TopDeviceNames = () => {
           : null || (
               <ColumnChart
                 highcharts={Highcharts}
-                options={response ? ChartConfig(response) : null}
+                options={response ? ColumnChartConfig(response) : {}}
               />
             )}
       </Spin>
