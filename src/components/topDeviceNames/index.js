@@ -4,7 +4,7 @@ import Highcharts from 'highcharts/highstock'
 import ColumnChart from 'highcharts-react-official'
 import AppCard from '../appCard'
 import { Spin } from 'antd'
-import ChartConfig from './config'
+import { ChartConfig } from './config'
 
 const TopDeviceNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()

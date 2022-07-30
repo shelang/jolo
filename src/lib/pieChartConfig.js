@@ -1,9 +1,6 @@
-const ChartConfig = (response) => {
-  let options
-
-  return (options = {
+export const PieChartConfig = (response) => {
+  return {
     colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
-
     chart: {
       type: 'pie',
       plotBackgroundColor: null,
@@ -41,14 +38,10 @@ const ChartConfig = (response) => {
     series: [
       {
         innerSize: '30%',
-        data: response
-          ? response.data.map((item) => {
-              return { name: item.key, y: Number(item.value) }
-            })
-          : [],
+        data: response.map((item) => {
+          return { name: item.key, y: Number(item.value) }
+        }),
       },
     ],
-  })
+  }
 }
-
-export default ChartConfig

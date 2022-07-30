@@ -1,5 +1,4 @@
-const ChartConfig = (response) => {
-  let options
+export const ChartConfig = (response) => {
   const series = {
     colorByPoint: response ? true : null,
     data: response.data.map((item) => {
@@ -9,7 +8,7 @@ const ChartConfig = (response) => {
       }
     }),
   }
-  return (options = {
+  return {
     colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
 
     chart: {
@@ -62,7 +61,5 @@ const ChartConfig = (response) => {
       enabled: false,
     },
     series: series,
-  })
+  }
 }
-
-export default ChartConfig
