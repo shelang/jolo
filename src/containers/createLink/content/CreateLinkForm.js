@@ -28,6 +28,8 @@ import {
   booleanEnum,
 } from '../../../utils/constants'
 import { useQuery } from '../../../hooks/queryParams'
+import ScriptSection from '../../../components/createLinkScript'
+import WebhookSection from '../../../components/createLinkWebhook'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -45,8 +47,6 @@ const marks = {
 
 const CreateLinkForm = () => {
   let query = useQuery()
-  const [scripts, setScripts] = useState([])
-  const [webhooks, setWebhooks] = useState([])
   const [hash, setHash] = useState(false)
   const [iframe, setIframe] = useState(false)
   const [form] = Form.useForm()
@@ -59,9 +59,6 @@ const CreateLinkForm = () => {
 
   const [selectedScript, setSelectedScript] = useState()
   const [selectedWebhook, setSelectedWebhook] = useState()
-  
-  const [scriptModalVisible, setScriptModalVisible] = useState(false)
-  const [webhookModalVisible, setWebhookModalVisible] = useState(false)
 
   const [operationSystems, setOperationSystems] = useState(os)
   const [targetDevices, setTargetDevices] = useState(devices)
@@ -150,11 +147,6 @@ const CreateLinkForm = () => {
       return total
     }, {})
   }
-  const onSelect = (data) => {
-    console.log('onSelect', data)
-    setSelectedScript(scripts.filter((script) => script.value === data)[0])
-    setSelectedWebhook(webhooks.filter((webhook) => webhook.value === data)[0])
-  }
   const onSearch = async (searchText) => {
     try {
       await fetchScripts({
@@ -202,35 +194,7 @@ const CreateLinkForm = () => {
       form.setFieldsValue(newValues)
     }
   }, [linkData.response])
-  useEffect(() => {
-    if (scriptData.response) {
-      const normalizedScripts = scriptData.response.scripts.reduce(
-        (total, acc) => {
-          total.push({
-            label: acc.name,
-            value: acc.id,
-          })
-          return total
-        },
-        [],
-      )
-      setScripts(normalizedScripts)
-    }
-    if (webhookData.response) {
-      const normalizedScripts = webhookData.response.webhooks.reduce(
-        (total, acc) => {
-          total.push({
-            label: acc.name,
-            value: acc.id,
-          })
-          return total
-        },
-        [],
-      )
-      setWebhooks(normalizedScripts)
-    }
-  }, [scriptData.response])
-
+ 
   return (
     <Spin spinning={linkData.isLoading}>
       <Form
@@ -554,70 +518,10 @@ const CreateLinkForm = () => {
             </Tooltip>
             <Switch checked={iframe} onChange={setIframe} />
           </Form.Item>
-          {!iframe && (
-            <>
-              <Title level={3}>
-                Retargeting codes
-                <Tooltip
-                  className={'customTooltip'}
-                  placement="top"
-                  title={tooltips.textTargeting}>
-                  <Button>?</Button>
-                </Tooltip>
-              </Title>
-              <AutoComplete
-                dropdownMatchSelectWidth={252}
-                style={{ width: 300 }}
-                options={scripts}
-                onSelect={onSelect}
-                onSearch={onSearch}
-                placeholder="Search Scripts"
-                value={selectedScript ? selectedScript.label : undefined}
-              />
-              <Divider />
-              <Space direction="vertical">
-                <Button
-                  type="primary"
-                  onClick={() => setScriptModalVisible(true)}>
-                  add script
-                </Button>
-              </Space>
-            </>
-          )}
+          {!iframe && <ScriptSection />}
         </Card>
 
-        <Card>
-          {!iframe && (
-            <>
-              <Title level={3}>
-                Retargeting codes
-                <Tooltip
-                  className={'customTooltip'}
-                  placement="top"
-                  title={tooltips.textTargeting}>
-                  <Button>?</Button>
-                </Tooltip>
-              </Title>
-              <AutoComplete
-                dropdownMatchSelectWidth={252}
-                style={{ width: 300 }}
-                options={webhooks}
-                onSelect={onSelect}
-                onSearch={onSearch}
-                placeholder="Search Webhook"
-                value={selectedWebhook ? selectedWebhook.label : undefined}
-              />
-              <Divider />
-              <Space direction="vertical">
-                <Button
-                  type="primary"
-                  onClick={() => setWebhookModalVisible(true)}>
-                  Add WebHook
-                </Button>
-              </Space>
-            </>
-          )}
-        </Card>
+        <Card>{!iframe && <WebhookSection />}</Card>
 
         <br />
         <Form.Item>
