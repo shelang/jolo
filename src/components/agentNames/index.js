@@ -7,14 +7,15 @@ import AppCard from '../appCard'
 import useFetch from '../../hooks/asyncAction'
 import { PieChartConfig } from '../../lib/PieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
+import { apiRoutes } from '../../utils/apiRoutes'
 
 const AgentNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
-  
+
   const fetchLinks = async () => {
     const linkedId = params.id
-    const URL = makingUrl('AgentNames', linkedId)
+    const URL = makingUrl(apiRoutes.AGENT_NAME, linkedId)
     await doFetch({
       url: URL,
       method: 'GET',

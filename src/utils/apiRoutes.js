@@ -1,7 +1,7 @@
 export const apiRoutes = {
-  AgentNames: `analytics/top/agent-names`,
-  TopDeviceBrands: `analytics/top/device-brands`,
-  TopDeviceNames: `analytics/top/device-names`,
-  TopDevices: `analytics/top/devices`,
-  TopOses: `analytics/top/oses`,
+  AGENT_NAME: 'analytics/<link_id>/top/agent-names',
+  TOP_DEVICE_BRANDS: 'analytics/<link_id>/top/device-brands',
+  TOP_DEVICE_NAMES: 'analytics/<link_id>/top/device-names',
+  TOP_DEVICES: 'analytics/<link_id>/top/devices',
+  TOP_OSES: 'analytics/<link_id>/top/oses',
 }

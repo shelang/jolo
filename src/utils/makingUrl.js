@@ -1,12 +1,10 @@
-import { apiRoutes } from './apiRoutes'
-
-export const makingUrl = (chartType,linkedId) => {
-  if (linkedId) {
-    const array = apiRoutes[chartType].split('/')
-    array.splice(1, 0, linkedId).toString()
-    const urlText = array.toString()
-    const URL = urlText.replaceAll(',', '/')
-    return URL
+export const makingUrl = (url, linkId) => {
+  let rv
+  if (linkId) {
+    rv = url.replace('<link_id>', linkId)
+  } else {
+    rv = url.replace('<link_id>/', '')
   }
-  return apiRoutes[chartType]
+  console.log(rv)
+  return rv
 }

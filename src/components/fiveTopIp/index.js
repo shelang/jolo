@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Spin, Card, List, Typography, Skeleton } from 'antd'
+import { Spin, Card, List, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 
 const { Title } = Typography
@@ -21,7 +21,7 @@ const FiveTopIp = () => {
   return (
     <div>
       <Title level={5} style={{ marginBottom: 4 }}>
-        Five Top Ips
+        Five Last Ips
       </Title>
       <Card style={{ width: '100%', borderRadius: 8 }}>
         <Spin spinning={isLoading}>
