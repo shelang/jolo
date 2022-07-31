@@ -4,35 +4,36 @@ import {
   FileAddOutlined,
   LinkOutlined,
   UserOutlined,
+  HomeOutlined,
 } from '@ant-design/icons'
 
 const menuItems = [
   {
     title: 'Dashboard',
-    icon: <FileAddOutlined />,
+    icon: <HomeOutlined />,
     url: 'dashboard',
-    id: 0,
+    id: 1,
     permission: 'dashboard:read',
   },
   {
     title: 'Create Link',
     icon: <FileAddOutlined />,
     url: 'dashboard/create-link?isEditing=false',
-    id: 1,
+    id: 2,
     permission: 'link:create',
   },
   {
     title: 'Links',
     icon: <LinkOutlined />,
     url: 'dashboard/links',
-    id: 2,
+    id: 3,
     permission: 'links:read',
   },
   {
     title: 'Scripts',
     icon: <CodeOutlined />,
     url: 'dashboard/scripts',
-    id: 3,
+    id: 4,
     permission: 'scripts:read',
   },
   ,
@@ -40,14 +41,14 @@ const menuItems = [
     title: 'Webhooks',
     icon: <CodeOutlined />,
     url: 'dashboard/webhooks',
-    id: 4,
+    id: 5,
     permission: 'webhooks:read',
   },
   {
     title: 'Profile',
     icon: <UserOutlined />,
     url: 'dashboard/profile',
-    id: 5,
+    id: 6,
     permission: 'profile:read',
   },
 ]

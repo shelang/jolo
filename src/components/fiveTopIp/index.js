@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { Spin, Card, List, Typography } from 'antd'
+import { Spin, List, Typography } from 'antd'
+import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
 
 const { Title } = Typography
@@ -19,19 +20,14 @@ const FiveTopIp = () => {
   }, [])
 
   return (
-    <div>
-      <Title level={5} style={{ marginBottom: 4 }}>
-        Five Last Ips
-      </Title>
-      <Card style={{ width: '100%', borderRadius: 8 }}>
-        <Spin spinning={isLoading}>
-          <List
-            dataSource={response ? response.data.slice(0, 5) : []}
-            renderItem={(item) => <List.Item>{item.key}</List.Item>}
-          />
-        </Spin>
-      </Card>
-    </div>
+    <AppCard title="Five Last Ips">
+      <Spin spinning={isLoading}>
+        <List
+          dataSource={response ? response.data.slice(0, 5) : []}
+          renderItem={(item) => <List.Item>{item.key}</List.Item>}
+        />
+      </Spin>
+    </AppCard>
   )
 }
 

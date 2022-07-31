@@ -1,10 +1,10 @@
 import React from 'react'
-import { Typography ,Card} from 'antd'
+import { Typography, Card } from 'antd'
 import './style.scss'
 
 const { Title } = Typography
 
-const AppCard = ({ children, title }) => {
+export const AppCard = ({ children, title }) => {
   return (
     <div>
       <Title level={5} className="cardTitle">
@@ -14,5 +14,3 @@ const AppCard = ({ children, title }) => {
     </div>
   )
 }
-
-export default AppCard

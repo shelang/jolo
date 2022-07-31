@@ -4,8 +4,10 @@
 }
 
 .internal_content {
-  background-color: #fff;
+  background-color: #f5f5f5;
   overflow: auto;
+  height: calc(100vh - 114px);
+  padding: 16px
 }
 
 .site-layout-background {

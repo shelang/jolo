@@ -9,36 +9,34 @@ import TopOses from '../../components/topOses'
 
 const Dashboard = () => {
   return (
-    <div style={{ backgroundColor: '#fafafa', padding: 16 }}>
-      <Row gutter={20} style={{ marginBottom: 32 }}>
-        <Col span={6}>
-          <Row gutter={20} style={{ marginBottom: 32 }}>
-            <Col span={24} style={{ marginBottom: 16 }}>
-              <FiveTopIp />
-            </Col>
-            <Col span={24}>
-              <TopOses />
-            </Col>
-          </Row>
-        </Col>
-        <Col span={18}>
-          <Row gutter={20} style={{ marginBottom: 32 }}>
-            <Col span={12}>
-              <AgentNames />
-            </Col>
-            <Col span={12}>
-              <TopDeviceBrands />
-            </Col>
-            <Col span={12}>
-              <TopDeviceNames />
-            </Col>
-            <Col span={12}>
-              <TopDevices />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+    <Row gutter={20} style={{ marginBottom: 32 }}>
+      <Col span={6}>
+        <Row gutter={20} style={{ marginBottom: 32 }}>
+          <Col span={24} style={{ marginBottom: 32 }}>
+            <FiveTopIp />
+          </Col>
+          <Col span={24}>
+            <TopOses />
+          </Col>
+        </Row>
+      </Col>
+      <Col span={18}>
+        <Row gutter={20} style={{ marginBottom: 32 }}>
+          <Col span={12} style={{ marginBottom: 32 }}>
+            <AgentNames />
+          </Col>
+          <Col span={12} style={{ marginBottom: 32 }}>
+            <TopDeviceBrands />
+          </Col>
+          <Col span={12} style={{ marginBottom: 32 }}>
+            <TopDeviceNames />
+          </Col>
+          <Col span={12} style={{ marginBottom: 32 }}>
+            <TopDevices />
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   )
 }
 
