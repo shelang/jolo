@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { AutoComplete, Button, Divider, Space, Tooltip, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import { tooltips } from '../../utils/constants'
-import ScriptModal from '../../containers/createLink/content/scriptModal'
+import ScriptModal from './content/scriptModal'
 
 const { Title } = Typography
 
