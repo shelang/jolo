@@ -613,7 +613,7 @@ const CreateLinkForm = () => {
               <Switch checked={iframe} onChange={setIframe} />
             </Form.Item>
             {!iframe && (
-              <ScriptSection scriptData={scriptData} onSearch={onSearch} />
+              <ScriptSection scriptData={scriptData} onSearch={onSearch} onIsLoading={isLoading} />
             )}
           </Card>
 
