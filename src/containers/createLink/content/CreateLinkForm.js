@@ -9,12 +9,10 @@ import {
   Select,
   DatePicker,
   Switch,
-  Divider,
   Card,
   Space,
   Spin,
   Tooltip,
-  AutoComplete,
   Slider,
   message,
 } from 'antd'
@@ -31,13 +29,11 @@ import {
 import { useQuery } from '../../../hooks/queryParams'
 import ScriptSection from '../../../components/createLinkScript'
 import WebhookSection from '../../../components/createLinkWebhook'
-import SuccefullModal from './succesfullModal'
-import readXlsxFile from 'read-excel-file'
-import { toast } from 'react-toastify'
+import { SuccefullModal } from './succesfullModal'
 
 const { TextArea } = Input
 const { Title } = Typography
-const keysTemplate = ['title', 'url']
+
 const marks = {
   5: '5',
   6: '6',
@@ -65,9 +61,6 @@ const CreateLinkForm = () => {
 
   const [massCreateResponses, setMassCreateResponses] = useState([])
 
-  const [fileList, setFileList] = useState([])
-  const [normalizedLinks, setNormalizedLinks] = useState([])
-
   const [selectedScript, setSelectedScript] = useState()
   const [selectedWebhook, setSelectedWebhook] = useState()
 
@@ -75,9 +68,6 @@ const CreateLinkForm = () => {
   const [targetDevices, setTargetDevices] = useState(devices)
 
   const [scriptData, fetchScripts] = useFetch()
-
-  const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] =
-    useState(false)
 
   const [{ response, isLoading, error }, doFetch] = useFetch({
     onError: () => {
@@ -90,26 +80,6 @@ const CreateLinkForm = () => {
   const createNewLink = () => {
     setIsModalVisible(false)
     form.resetFields()
-  }
-  const createNewLinks = () => {
-    normalizedLinks.forEach(async (normalizedLink) => {
-      try {
-        await doFetch({
-          url: 'links',
-          method: 'POST',
-          data: {
-            ...normalizedLink,
-          },
-        })
-      } catch (e) {}
-    })
-
-    if (massCreateErrorCount) {
-      toast.error('Creation Failed')
-    } else {
-      toast.success('Links Successfully Created')
-      setIsCreateLinkModalVisible(false)
-    }
   }
 
   const onFinish = async ({ iframe, ...values }) => {
@@ -245,30 +215,6 @@ const CreateLinkForm = () => {
       form.setFieldsValue(newValues)
     }
   }, [linkData.response])
-  useEffect(() => {
-    readXlsxFile(fileList[0]).then((rows) => {
-      // `rows` is an array of rows
-      // each row being an array of cells.
-      const normalizedRows = rows.reduce((total, row, index) => {
-        if (index === 0) {
-          return total
-        } else {
-          total.push({})
-          keysTemplate.map((key, keyIndex) => {
-            if (row[keyIndex]) {
-              return (total[index - 1][key] = row[keyIndex])
-            } else {
-              toast.error(`${key} Is Required`)
-            }
-          })
-          return total
-        }
-      }, [])
-
-      console.log(normalizedRows, 'normalizedRows')
-      setNormalizedLinks(normalizedRows)
-    })
-  }, [fileList])
 
   return (
     <>
@@ -613,7 +559,11 @@ const CreateLinkForm = () => {
               <Switch checked={iframe} onChange={setIframe} />
             </Form.Item>
             {!iframe && (
-              <ScriptSection scriptData={scriptData} onSearch={onSearch} onIsLoading={isLoading} />
+              <ScriptSection
+                onScriptData={scriptData}
+                onSearch={onSearch}
+                onIsLoading={isLoading}
+              />
             )}
           </Card>
 

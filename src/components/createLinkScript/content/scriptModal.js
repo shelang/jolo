@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Input, Modal, Space } from 'antd'
 const { TextArea } = Input
 
-const ScriptModal = (props) => {
+export const ScriptModal = (props) => {
   const {
     onScriptModalVisible,
     onScriptName,
@@ -44,5 +44,3 @@ const ScriptModal = (props) => {
     </Modal>
   )
 }
-
-export default ScriptModal

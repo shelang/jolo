@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { AutoComplete, Button, Divider, Space, Tooltip, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import { tooltips } from '../../utils/constants'
-import WebhookModal from './content/WebhookModal'
+import { WebhookModal } from './content/WebhookModal'
 
 const { Title } = Typography
 
@@ -16,7 +16,6 @@ const WebhookSection = (props) => {
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
 
   const [createWebhookData, createWebhook] = useFetch()
-
   const [webhookData, fetchWebhooks] = useFetch()
 
   const onSelect = (data) => {

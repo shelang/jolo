@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Modal, Row, Input, Divider, Button } from 'antd'
 const { Search } = Input
 
-const SuccefullModal = (props) => {
+export const SuccefullModal = (props) => {
   console.log(props)
   const {
     onCancel,
@@ -56,5 +56,3 @@ const SuccefullModal = (props) => {
     </Modal>
   )
 }
-
-export default SuccefullModal

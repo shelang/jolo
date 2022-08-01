@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Input, Modal, Space } from 'antd'
 const { TextArea } = Input
 
-const WebhookModal = (props) => {
+export const WebhookModal = (props) => {
   const {
     onIsLoading,
     onwebhookModalVisible,
@@ -11,8 +11,9 @@ const WebhookModal = (props) => {
     onChangeWebhookName,
     onWebhookUrl,
     onChengeWebhookUrl,
-    onCreateNewWebhook
+    onCreateNewWebhook,
   } = props
+  
   return (
     <Modal
       title="Create Webhook"
@@ -33,12 +34,13 @@ const WebhookModal = (props) => {
           value={onWebhookUrl}
           onChange={onChengeWebhookUrl}
         />
-        <Button loading={onIsLoading} type="primary" onClick={onCreateNewWebhook}>
+        <Button
+          loading={onIsLoading}
+          type="primary"
+          onClick={onCreateNewWebhook}>
           Submit
         </Button>
       </Space>
     </Modal>
   )
 }
-
-export default WebhookModal
