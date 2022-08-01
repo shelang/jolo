@@ -617,7 +617,7 @@ const CreateLinkForm = () => {
             )}
           </Card>
 
-          <Card>{!iframe && <WebhookSection />}</Card>
+          <Card>{!iframe && <WebhookSection onIsLoading={isLoading} />}</Card>
 
           <br />
           <Form.Item>

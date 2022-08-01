@@ -2,13 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { AutoComplete, Button, Divider, Space, Tooltip, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import { tooltips } from '../../utils/constants'
+import WebhookModal from './content/WebhookModal'
 
 const { Title } = Typography
 
-const WebhookSection = () => {
+const WebhookSection = (props) => {
+  const { onIsLoading } = props
+
   const [webhooks, setWebhooks] = useState([])
+  const [webhookName, setWebhookName] = useState('')
+  const [webhookUrl, setWebhookUrl] = useState('')
   const [selectedWebhook, setSelectedWebhook] = useState()
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
+
+  const [createWebhookData, createWebhook] = useFetch()
 
   const [webhookData, fetchWebhooks] = useFetch()
 
@@ -23,6 +30,21 @@ const WebhookSection = () => {
         method: 'GET',
       })
     } catch (e) {}
+  }
+  const createNewWebhook = async () => {
+    try {
+      await createWebhook({
+        url: 'webhook',
+        method: 'POST',
+        data: {
+          name: webhookName,
+          url: webhookUrl,
+        },
+      })
+      setWebhookModalVisible(false)
+    } catch (e) {
+    } finally {
+    }
   }
 
   useEffect(() => {
@@ -43,6 +65,20 @@ const WebhookSection = () => {
 
   return (
     <>
+      <WebhookModal
+        onIsLoading={onIsLoading}
+        onwebhookModalVisible={webhookModalVisible}
+        onCancel={() => setWebhookModalVisible(false)}
+        onWebhookName={webhookName}
+        onChangeWebhookName={(e) => {
+          setWebhookName(e.target.value)
+        }}
+        onWebhookUrl={webhookUrl}
+        onChengeWebhookUrl={(e) => {
+          setWebhookUrl(e.target.value)
+        }}
+        onCreateNewWebhook={createNewWebhook}
+      />
       <Title level={3}>
         Retargeting codes
         <Tooltip
