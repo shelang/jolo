@@ -5,24 +5,15 @@ import { tooltips } from '../../utils/constants'
 
 const { Title } = Typography
 
-const ScriptSection = () => {
+const ScriptSection = (props) => {
+  const { scriptData, onSearch } = props
   const [scripts, setScripts] = useState([])
   const [selectedScript, setSelectedScript] = useState()
   const [scriptModalVisible, setScriptModalVisible] = useState(false)
 
-  const [scriptData, fetchScripts] = useFetch()
-
   const onSelect = (data) => {
     console.log('onSelect', data)
     setSelectedScript(scripts.filter((script) => script.value === data)[0])
-  }
-  const onSearch = async (searchText) => {
-    try {
-      await fetchScripts({
-        url: `script/?name=${searchText}`,
-        method: 'GET',
-      })
-    } catch (e) {}
   }
 
   useEffect(() => {
