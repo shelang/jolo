@@ -30,6 +30,8 @@ import { useQuery } from '../../../hooks/queryParams'
 import ScriptSection from '../../../components/createLinkScript'
 import WebhookSection from '../../../components/createLinkWebhook'
 import { SuccefullModal } from './succesfullModal'
+import { reorderObjectKeys } from '../../../utils/general/reorderObjectKeys'
+import { deleteObjectKey } from '../../../utils/general/deleteObjectKey'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -141,22 +143,22 @@ const CreateLinkForm = () => {
     })
   }
 
-  const deleteObjectKey = (obj, key) => {
-    return Object.keys(obj).reduce((total, acc) => {
-      if (Number(acc) !== key) {
-        total[acc] = obj[acc]
-      }
-      return total
-    }, {})
-  }
-  const reorderObjectKeys = (obj) => {
-    return Object.keys(obj).reduce((total, acc, index) => {
-      if (index !== acc) {
-        total[index] = obj[acc]
-      }
-      return total
-    }, {})
-  }
+  // const deleteObjectKey = (obj, key) => {
+  //   return Object.keys(obj).reduce((total, acc) => {
+  //     if (Number(acc) !== key) {
+  //       total[acc] = obj[acc]
+  //     }
+  //     return total
+  //   }, {})
+  // }
+  // const reorderObjectKeys = (obj) => {
+  //   return Object.keys(obj).reduce((total, acc, index) => {
+  //     if (index !== acc) {
+  //       total[index] = obj[acc]
+  //     }
+  //     return total
+  //   }, {})
+  // }
 
   const labelCol = {
     lg: { span: 4 },
