@@ -26,14 +26,13 @@ import {
   devices,
   booleanEnum,
 } from '../../../utils/constants'
-import { DeviceTargeting } from './DeviceTargeting'
 import { useQuery } from '../../../hooks/queryParams'
 import ScriptSection from '../../../components/createLinkScript'
 import WebhookSection from '../../../components/createLinkWebhook'
 import { SuccefullModal } from './succesfullModal'
+import { copyToClipboard } from '../../../utils/general/copyToClipboard'
 import { reorderObjectKeys } from '../../../utils/general/reorderObjectKeys'
 import { deleteObjectKey } from '../../../utils/general/deleteObjectKey'
-import { OperationSystemTargeting } from './OperationSystemTargeting'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -88,7 +87,6 @@ const CreateLinkForm = () => {
 
   const onFinish = async ({ iframe, ...values }) => {
     if (editMode) {
-      console.log(selectedScript, selectedWebhook)
       const id = (response && response.id) || linkId
       await doFetch({
         url: `links/${id}`,
@@ -124,7 +122,6 @@ const CreateLinkForm = () => {
     console.log('Failed:', errorInfo)
   }
   const onFieldsChange = (changedFields) => {
-    console.log(changedFields, 'saggg')
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
       setSelectedDevices({
         ...selectedDevices,
@@ -157,11 +154,6 @@ const CreateLinkForm = () => {
     sm: { span: 24 },
     xs: { span: 24 },
   }
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(response.redirectTo)
-    message.success('Copied to Your Clipboard')
-  }
-
   const onCancel = () => {
     setIsModalVisible(false)
     if (massCreateResponses.length <= 1) {
@@ -176,7 +168,7 @@ const CreateLinkForm = () => {
         method: 'GET',
       })
     } catch (e) {}
-  }
+  } // TODO:install debbounce from lodash and use it here
 
   useEffect(() => {
     response && setMassCreateResponses([...massCreateResponses, response])
@@ -207,13 +199,14 @@ const CreateLinkForm = () => {
   return (
     <>
       <SuccefullModal
-        onCopyToClipboard={copyToClipboard}
+        onCopyToClipboard={() => copyToClipboard(response)}
         onMassCreateResponses={massCreateResponses}
         onIsModalVisible={isModalVisible}
         onCreateNewLink={createNewLink}
         onCancel={onCancel}
       />
       <Spin spinning={linkData.isLoading}>
+        {/* TODO: creat a component from Form  */}
         <Form
           form={form}
           scrollToFirstError
@@ -347,19 +340,188 @@ const CreateLinkForm = () => {
           <Row>
             <Col md={16} xs={24}>
               <Space direction="vertical" style={{ width: '100%' }}>
-                <DeviceTargeting
-                  onSelectedDevices={selectedDevices}
-                  onSetSelectedDevices={setSelectedDevices}
-                  onTargetDevices={targetDevices}
-                  onSetTargetDevices={setTargetDevices}
-                  Form={Form}
-                />
-                <OperationSystemTargeting
-                  Form={Form}
-                  onOperationSystems={operationSystems}
-                  onSelectedOs={selectedOs}
-                  onSetSelectedOs={setSelectedOs}
-                />
+                <Card>
+                  <Title level={3}>
+                    Device Targeting:
+                    <Tooltip
+                      className={'customTooltip'}
+                      placement="top"
+                      title={tooltips.textTargeting}>
+                      <Button>?</Button>
+                    </Tooltip>
+                  </Title>
+                  <Form.List name="devices">
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields.map(({ key, name, fieldKey, ...restField }) => (
+                          <Space
+                            key={key}
+                            size={0}
+                            style={{ display: 'flex', marginBottom: 8 }}
+                            align="baseline">
+                            <Form.Item
+                              {...restField}
+                              wrapperCol={{ span: 24 }}
+                              name={[name, 'type']}
+                              fieldKey={[fieldKey, 'type']}
+                              rules={[
+                                { required: true, message: 'Missing type' },
+                              ]}>
+                              <Select
+                                style={{ width: 200 }}
+                                placeholder="Device">
+                                {targetDevices.map((targetDevice) => {
+                                  if (
+                                    Object.values(selectedDevices).includes(
+                                      targetDevice.toLowerCase(),
+                                    )
+                                  ) {
+                                    return null
+                                  } else {
+                                    return (
+                                      <Select.Option
+                                        value={targetDevice.toLowerCase()}>
+                                        {targetDevice}
+                                      </Select.Option>
+                                    )
+                                  }
+                                })}
+                              </Select>
+                            </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              wrapperCol={{ span: 24 }}
+                              name={[name, 'url']}
+                              fieldKey={[fieldKey, 'url']}
+                              rules={[
+                                { required: true, message: 'Missing URL' },
+                              ]}>
+                              <Input placeholder="url" style={{ width: 300 }} />
+                            </Form.Item>
+                            <MinusCircleOutlined
+                              style={{ marginLeft: 10 }}
+                              onClick={() => {
+                                const newSelectedDevices = reorderObjectKeys(
+                                  deleteObjectKey(selectedDevices, name),
+                                )
+                                setSelectedDevices(newSelectedDevices)
+                                remove(name)
+                              }}
+                            />
+                          </Space>
+                        ))}
+                        <Form.Item>
+                          {fields.length < 2 && (
+                            <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}>
+                              Add Device
+                            </Button>
+                          )}
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                </Card>
+                <Card>
+                  <Title level={3}>
+                    Operation System Targeting:
+                    <Tooltip
+                      className={'customTooltip'}
+                      placement="top"
+                      title={tooltips.textTargeting}>
+                      <Button>?</Button>
+                    </Tooltip>
+                  </Title>
+                  <Form.List name="os">
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields.map(
+                          ({
+                            key,
+                            name,
+                            fieldKey,
+                            labelCol,
+                            wrapperCol,
+                            ...restField
+                          }) => (
+                            <Space
+                              key={key}
+                              size={0}
+                              style={{ display: 'flex', marginBottom: 8 }}
+                              align="baseline">
+                              <Form.Item
+                                {...restField}
+                                wrapperCol={{ span: 24 }}
+                                name={[name, 'type']}
+                                fieldKey={[fieldKey, 'type']}
+                                rules={[
+                                  { required: true, message: 'Missing type' },
+                                ]}>
+                                <Select
+                                  style={{ width: 200 }}
+                                  placeholder="Operation System">
+                                  {operationSystems.map((operationSystem) => {
+                                    if (
+                                      Object.values(selectedOs).includes(
+                                        operationSystem.toLowerCase(),
+                                      )
+                                    ) {
+                                      return null
+                                    } else {
+                                      return (
+                                        <Select.Option
+                                          value={operationSystem.toLowerCase()}>
+                                          {operationSystem}
+                                        </Select.Option>
+                                      )
+                                    }
+                                  })}
+                                </Select>
+                              </Form.Item>
+                              <Form.Item
+                                {...restField}
+                                wrapperCol={{ span: 24 }}
+                                name={[name, 'url']}
+                                fieldKey={[fieldKey, 'url']}
+                                rules={[
+                                  { required: true, message: 'Missing URL' },
+                                ]}>
+                                <Input
+                                  placeholder="url"
+                                  style={{ width: 300 }}
+                                />
+                              </Form.Item>
+                              <MinusCircleOutlined
+                                style={{ marginLeft: 10 }}
+                                onClick={() => {
+                                  const newSelectedOs = reorderObjectKeys(
+                                    deleteObjectKey(selectedOs, name),
+                                  )
+                                  setSelectedOs(newSelectedOs)
+                                  remove(name)
+                                }}
+                              />
+                            </Space>
+                          ),
+                        )}
+                        <Form.Item>
+                          {fields.length < 2 && (
+                            <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}>
+                              Add Operation System
+                            </Button>
+                          )}
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                </Card>
               </Space>
             </Col>
           </Row>
@@ -382,14 +544,20 @@ const CreateLinkForm = () => {
                 onScriptData={scriptData}
                 onSearch={onSearch}
                 onIsLoading={isLoading}
-                onSelectedScript={(selectedScript) =>
-                  setSelectedScript(selectedScript)
-                }
               />
             )}
           </Card>
 
-          <Card>{!iframe && <WebhookSection onIsLoading={isLoading} />}</Card>
+          <Card>
+            {!iframe && (
+              <WebhookSection
+                onIsLoading={isLoading}
+                onSelectedWebhook={(selectedWebhook) =>
+                  setSelectedWebhook(selectedWebhook)
+                }
+              />
+            )}
+          </Card>
 
           <br />
           <Form.Item>
