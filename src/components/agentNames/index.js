@@ -27,7 +27,7 @@ const AgentNames = () => {
   }, [])
 
   return (
-    <AppCard title="Top Agent Names">
+    <AppCard noPadding title="Top Agent Names">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'

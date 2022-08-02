@@ -27,7 +27,7 @@ const TopDevices = () => {
   }, [])
 
   return (
-    <AppCard title="Top Devices">
+    <AppCard noPadding title="Top Devices">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'

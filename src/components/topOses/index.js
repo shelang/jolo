@@ -30,7 +30,7 @@ const TopOses = () => {
   }, [])
 
   return (
-    <AppCard title="Top Operation Systems">
+    <AppCard noPadding title="Top Operation Systems">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'

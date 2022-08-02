@@ -1,16 +1,14 @@
 import React from 'react'
-import { Typography, Card } from 'antd'
+import { Card } from 'antd'
 import './style.scss'
 
-const { Title } = Typography
-
-export const AppCard = ({ children, title }) => {
+export const AppCard = ({ children, title, noPadding }) => {
   return (
-    <div>
-      <Title level={5} className="cardTitle">
-        {title}
-      </Title>
-      <Card className="cardBody">{children}</Card>
-    </div>
+    <>
+      {title && <p className="cardTitle">{title}</p>}
+      <Card bodyStyle={{ padding: noPadding ? 4 : 24 }} className="cardBody">
+        {children}
+      </Card>
+    </>
   )
 }

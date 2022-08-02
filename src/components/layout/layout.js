@@ -18,12 +18,14 @@ function AppLayout(props) {
   const location = useLocation()
   const history = useHistory()
   const pathSnippets = location.pathname.split('/').filter((i) => i)
-  const breadcrumbItems = pathSnippets.map((_, index) => {
+  const breadcrumbItems = pathSnippets.map((pathSnippet, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
 
     return (
       <Breadcrumb.Item key={url}>
-        <Link to={url}>{_}</Link>
+        <Link style={{ fontSize: 16 }} to={url}>
+          {titleCase(pathSnippet)}
+        </Link>
       </Breadcrumb.Item>
     )
   })
@@ -54,35 +56,13 @@ function AppLayout(props) {
           <KitMenu />
         </Sider>
         <Content className="internal_content">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-            }}>
-            <PageHeader
-              className="site-page-header"
-              onBack={() => history.goBack()}
-              title={titleCase(pathSnippets[pathSnippets.length - 1])}
-            />
-            {breadcrumbItems.length > 1 && (
-              <Breadcrumb>{breadcrumbItems}</Breadcrumb>
-            )}
+          <div className="bread_crumb_wrapper">
+            <Breadcrumb separator={'>'}>{breadcrumbItems}</Breadcrumb>
           </div>
 
-          {props.children}
+          <div className="content">{props.children}</div>
         </Content>
       </Layout>
-      <Footer
-        style={{
-          alignItems: 'center',
-          height: 50,
-          padding: 0,
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
-        LinkComposer ©2021 Created by LinkComposer Team
-      </Footer>
     </Layout>
   )
 }

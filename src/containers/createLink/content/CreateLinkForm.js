@@ -119,7 +119,6 @@ const CreateLinkForm = () => {
     console.log('Failed:', errorInfo)
   }
   const onFieldsChange = (changedFields) => {
-    console.log(changedFields, 'saggg')
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
       setSelectedDevices({
         ...selectedDevices,
@@ -147,7 +146,7 @@ const CreateLinkForm = () => {
       }
       return total
     }, {})
-  }
+  } // TODO:move to utils
   const reorderObjectKeys = (obj) => {
     return Object.keys(obj).reduce((total, acc, index) => {
       if (index !== acc) {
@@ -155,7 +154,7 @@ const CreateLinkForm = () => {
       }
       return total
     }, {})
-  }
+  } // TODO:move to utils
 
   const labelCol = {
     lg: { span: 4 },
@@ -172,7 +171,7 @@ const CreateLinkForm = () => {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(response.redirectTo)
     message.success('Copied to Your Clipboard')
-  }
+  } //TODO: move to utils
 
   const onCancel = () => {
     setIsModalVisible(false)
@@ -188,7 +187,7 @@ const CreateLinkForm = () => {
         method: 'GET',
       })
     } catch (e) {}
-  }
+  } // TODO:install debbounce from lodash and use it here
 
   useEffect(() => {
     response && setMassCreateResponses([...massCreateResponses, response])
@@ -226,6 +225,7 @@ const CreateLinkForm = () => {
         onCancel={onCancel}
       />
       <Spin spinning={linkData.isLoading}>
+        {/* TODO: creat a component from Form  */}
         <Form
           form={form}
           scrollToFirstError
@@ -567,7 +567,16 @@ const CreateLinkForm = () => {
             )}
           </Card>
 
-          <Card>{!iframe && <WebhookSection onIsLoading={isLoading} />}</Card>
+          <Card>
+            {!iframe && (
+              <WebhookSection
+                onIsLoading={isLoading}
+                onSelectedWebhook={(selectedWebhook) =>
+                  setSelectedWebhook(selectedWebhook)
+                }
+              />
+            )}
+          </Card>
 
           <br />
           <Form.Item>
