@@ -84,6 +84,7 @@ const CreateLinkForm = () => {
 
   const onFinish = async ({ iframe, ...values }) => {
     if (editMode) {
+      console.log(selectedScript,selectedWebhook);
       const id = (response && response.id) || linkId
       await doFetch({
         url: `links/${id}`,
@@ -563,6 +564,9 @@ const CreateLinkForm = () => {
                 onScriptData={scriptData}
                 onSearch={onSearch}
                 onIsLoading={isLoading}
+                onSelectedScript={(selectedScript) =>
+                  setSelectedScript(selectedScript)
+                }
               />
             )}
           </Card>
