@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { debounce } from 'lodash'
 import {
   Row,
   Col,
@@ -161,14 +162,20 @@ const CreateLinkForm = () => {
       query.set('isEditing', true)
     }
   }
-  const onSearch = async (searchText) => {
+
+  const searchScript = async (searchText) => {
+    console.log(searchText)
     try {
       await fetchScripts({
         url: `script/?name=${searchText}`,
         method: 'GET',
       })
     } catch (e) {}
-  } // TODO:install debbounce from lodash and use it here
+  }
+  const handler = useCallback(debounce(searchScript, 600), [])
+  const onSearch = (searchText) => {
+    handler(searchText)
+  }
 
   useEffect(() => {
     response && setMassCreateResponses([...massCreateResponses, response])
@@ -206,7 +213,6 @@ const CreateLinkForm = () => {
         onCancel={onCancel}
       />
       <Spin spinning={linkData.isLoading}>
-        {/* TODO: creat a component from Form  */}
         <Form
           form={form}
           scrollToFirstError
