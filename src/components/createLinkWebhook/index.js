@@ -7,7 +7,7 @@ import { WebhookModal } from './content/WebhookModal'
 const { Title } = Typography
 
 const WebhookSection = (props) => {
-  const { onIsLoading } = props
+  const { onIsLoading, onSelectedWebhook } = props
 
   const [webhooks, setWebhooks] = useState([])
   const [webhookName, setWebhookName] = useState('')
@@ -19,8 +19,11 @@ const WebhookSection = (props) => {
   const [webhookData, fetchWebhooks] = useFetch()
 
   const onSelect = (data) => {
-    console.log('onSelect', data)
-    setSelectedWebhook(webhooks.filter((webhook) => webhook.value === data)[0])
+    const selectedWebhook = webhooks.filter(
+      (webhook) => webhook.value === data,
+    )[0]
+    setSelectedWebhook(selectedWebhook)
+    onSelectedWebhook(selectedWebhook)
   }
   const onSearch = async (searchText) => {
     try {

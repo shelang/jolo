@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
 import Chart from 'highcharts-react-official'
-import AppCard from '../appCard'
+import { useParams } from 'react-router-dom'
+import { Spin } from 'antd'
+import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
 import { PackedBubbleChartConfig } from '../../lib/PackedBubbleChartConfig'
-import { Spin } from 'antd'
-import { useParams } from 'react-router-dom'
 import { makingUrl } from '../../utils/makingUrl'
+import { apiRoutes } from '../../utils/apiRoutes'
 
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
@@ -14,10 +15,10 @@ require('highcharts/highcharts-more')(Highcharts)
 const TopOses = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
-  
+
   const fetchLinks = async () => {
-    const linkedId = params.id 
-    const URL = makingUrl("TopOses",linkedId)
+    const linkId = params.id
+    const URL = makingUrl(apiRoutes.TOP_OSES, linkId)
     await doFetch({
       url: URL,
       method: 'GET',
@@ -29,7 +30,7 @@ const TopOses = () => {
   }, [])
 
   return (
-    <AppCard title="Top Operation Systems">
+    <AppCard noPadding title="Top Operation Systems">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'

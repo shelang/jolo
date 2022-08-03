@@ -1,8 +1,17 @@
-.cardTitle{
-    margin-bottom: 4;
+.cardTitle {
+  margin-bottom: 4px;
+  padding-left: 16px;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  color: #172326;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 8px;
+  font-weight: 900;
 }
-.cardBody{
-    padding: 2px;
-    border-radius: 8px;
-    width: 100%;
+.cardBody {
+  border-radius: 8px;
+  width: 100%;
 }

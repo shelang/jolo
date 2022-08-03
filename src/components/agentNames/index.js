@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import Highcharts from 'highcharts/highstock'
 import PieChart from 'highcharts-react-official'
 import { Spin } from 'antd'
-import AppCard from '../appCard'
+import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
 import { PieChartConfig } from '../../lib/PieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
@@ -27,7 +27,7 @@ const AgentNames = () => {
   }, [])
 
   return (
-    <AppCard title="Top Agent Names">
+    <AppCard noPadding title="Top Agent Names">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'

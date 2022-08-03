@@ -143,6 +143,7 @@ const CreateLinkForm = () => {
     })
   }
 
+
   const labelCol = {
     lg: { span: 4 },
     md: { span: 12 },
@@ -155,6 +156,7 @@ const CreateLinkForm = () => {
     sm: { span: 24 },
     xs: { span: 24 },
   }
+
   const onCancel = () => {
     setIsModalVisible(false)
     if (massCreateResponses.length <= 1) {
@@ -176,6 +178,7 @@ const CreateLinkForm = () => {
   const onSearch = (searchText) => {
     handler(searchText)
   }
+
 
   useEffect(() => {
     response && setMassCreateResponses([...massCreateResponses, response])
@@ -213,6 +216,7 @@ const CreateLinkForm = () => {
         onCancel={onCancel}
       />
       <Spin spinning={linkData.isLoading}>
+        {/* TODO: creat a component from Form  */}
         <Form
           form={form}
           scrollToFirstError
