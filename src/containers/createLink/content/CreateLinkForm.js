@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { debounce } from 'lodash'
 import {
   Row,
   Col,
@@ -30,6 +31,9 @@ import { useQuery } from '../../../hooks/queryParams'
 import ScriptSection from '../../../components/createLinkScript'
 import WebhookSection from '../../../components/createLinkWebhook'
 import { SuccefullModal } from './succesfullModal'
+import { copyToClipboard } from '../../../utils/general/copyToClipboard'
+import { reorderObjectKeys } from '../../../utils/general/reorderObjectKeys'
+import { deleteObjectKey } from '../../../utils/general/deleteObjectKey'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -119,7 +123,6 @@ const CreateLinkForm = () => {
     console.log('Failed:', errorInfo)
   }
   const onFieldsChange = (changedFields) => {
-    console.log(changedFields, 'saggg')
     if (changedFields[0].name[0] + changedFields[0].name[2] === 'devicestype') {
       setSelectedDevices({
         ...selectedDevices,
@@ -140,23 +143,6 @@ const CreateLinkForm = () => {
     })
   }
 
-  const deleteObjectKey = (obj, key) => {
-    return Object.keys(obj).reduce((total, acc) => {
-      if (Number(acc) !== key) {
-        total[acc] = obj[acc]
-      }
-      return total
-    }, {})
-  }
-  const reorderObjectKeys = (obj) => {
-    return Object.keys(obj).reduce((total, acc, index) => {
-      if (index !== acc) {
-        total[index] = obj[acc]
-      }
-      return total
-    }, {})
-  }
-
   const labelCol = {
     lg: { span: 4 },
     md: { span: 12 },
@@ -169,11 +155,6 @@ const CreateLinkForm = () => {
     sm: { span: 24 },
     xs: { span: 24 },
   }
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(response.redirectTo)
-    message.success('Copied to Your Clipboard')
-  }
-
   const onCancel = () => {
     setIsModalVisible(false)
     if (massCreateResponses.length <= 1) {
@@ -181,13 +162,19 @@ const CreateLinkForm = () => {
       query.set('isEditing', true)
     }
   }
-  const onSearch = async (searchText) => {
+
+  const searchScript = async (searchText) => {
+    console.log(searchText)
     try {
       await fetchScripts({
         url: `script/?name=${searchText}`,
         method: 'GET',
       })
     } catch (e) {}
+  }
+  const handler = useCallback(debounce(searchScript, 600), [])
+  const onSearch = (searchText) => {
+    handler(searchText)
   }
 
   useEffect(() => {
@@ -219,7 +206,7 @@ const CreateLinkForm = () => {
   return (
     <>
       <SuccefullModal
-        onCopyToClipboard={copyToClipboard}
+        onCopyToClipboard={() => copyToClipboard(response)}
         onMassCreateResponses={massCreateResponses}
         onIsModalVisible={isModalVisible}
         onCreateNewLink={createNewLink}
@@ -567,7 +554,16 @@ const CreateLinkForm = () => {
             )}
           </Card>
 
-          <Card>{!iframe && <WebhookSection onIsLoading={isLoading} />}</Card>
+          <Card>
+            {!iframe && (
+              <WebhookSection
+                onIsLoading={isLoading}
+                onSelectedWebhook={(selectedWebhook) =>
+                  setSelectedWebhook(selectedWebhook)
+                }
+              />
+            )}
+          </Card>
 
           <br />
           <Form.Item>
