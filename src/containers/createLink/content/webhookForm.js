@@ -24,7 +24,7 @@ export const WebhookForm = ({ Form, iframe, setIframe, onSelectedWebhook }) => {
   }
 
   return (
-    <Card>
+    <>
       <Form.Item
         label="URL Masking:"
         name="iframe"
@@ -46,6 +46,6 @@ export const WebhookForm = ({ Form, iframe, setIframe, onSelectedWebhook }) => {
           onSelectedWebhook={onSelectedWebhook}
         />
       )}
-    </Card>
+    </>
   )
 }

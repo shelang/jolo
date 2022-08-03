@@ -15,7 +15,7 @@ export const DeviceTargeting = ({
   setSelectedDevices,
 }) => {
   return (
-    <Card>
+    <>
       <Title level={3}>
         Device Targeting:
         <Tooltip
@@ -86,6 +86,6 @@ export const DeviceTargeting = ({
           </>
         )}
       </Form.List>
-    </Card>
+    </>
   )
 }

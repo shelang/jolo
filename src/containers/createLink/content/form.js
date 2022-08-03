@@ -14,6 +14,7 @@ import {
   Slider,
   Typography,
   Spin,
+  Divider,
 } from 'antd'
 import { redirectModes, linkStatus, tooltips } from '../../../utils/constants'
 import { DeviceTargeting } from './DeviceTargeting'
@@ -231,8 +232,11 @@ export const CreateLinkForm = ({
       </Form.Item>
 
       <Row>
-        <Col md={16} xs={24}>
-          <Space direction="vertical" style={{ width: '100%' }}>
+        <Col xs={24}>
+          <Space
+            direction="vertical"
+            style={{ width: '100%' }}
+            split={<Divider />}>
             <Spin spinning={altTypesData.isLoading}>
               <DeviceTargeting
                 Form={Form}
@@ -249,21 +253,21 @@ export const CreateLinkForm = ({
                 setSelectedOs={setSelectedOs}
               />
             </Spin>
+            <ScriptForm
+              Form={Form}
+              iframe={iframe}
+              setIframe={setIframe}
+              onSelectedScript={setSelectedScript}
+            />
+            <WebhookForm
+              Form={Form}
+              iframe={iframe}
+              setIframe={setIframe}
+              onSelectedWebhook={setSelectedWebhook}
+            />
           </Space>
         </Col>
       </Row>
-      <ScriptForm
-        Form={Form}
-        iframe={iframe}
-        setIframe={setIframe}
-        onSelectedScript={setSelectedScript}
-      />
-      <WebhookForm
-        Form={Form}
-        iframe={iframe}
-        setIframe={setIframe}
-        onSelectedWebhook={setSelectedWebhook}
-      />
 
       <br />
       <Form.Item>

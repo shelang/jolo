@@ -15,7 +15,7 @@ export const OperationSystemTargeting = ({
   setSelectedOs,
 }) => {
   return (
-    <Card>
+    <>
       <Title level={3}>
         Operation System Targeting:
         <Tooltip
@@ -97,6 +97,6 @@ export const OperationSystemTargeting = ({
           </>
         )}
       </Form.List>
-    </Card>
+    </>
   )
 }

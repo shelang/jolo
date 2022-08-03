@@ -24,7 +24,7 @@ export const ScriptForm = ({ Form, iframe, setIframe, onSelectedScript }) => {
   }
 
   return (
-    <Card>
+    <>
       <Form.Item
         label="URL Masking:"
         name="iframe"
@@ -46,6 +46,6 @@ export const ScriptForm = ({ Form, iframe, setIframe, onSelectedScript }) => {
           onSelectedScript={onSelectedScript}
         />
       )}
-    </Card>
+    </>
   )
 }
