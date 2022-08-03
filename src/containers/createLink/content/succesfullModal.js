@@ -9,7 +9,7 @@ export const SuccefullModal = (props) => {
     onIsModalVisible,
     onCreateNewLink,
     onMassCreateResponses,
-    copyToClipboard,
+    onCopyToClipboard,
   } = props
 
   return (
@@ -30,7 +30,7 @@ export const SuccefullModal = (props) => {
                 <Col span={17}>
                   <Search
                     value={res && res.redirectTo}
-                    onSearch={copyToClipboard}
+                    onSearch={onCopyToClipboard}
                     enterButton="Copy"
                   />
                   <span className="linksFrom">Created from: {res.url}</span>

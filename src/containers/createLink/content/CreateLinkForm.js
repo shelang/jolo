@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { debounce } from 'lodash'
 import {
   Row,
   Col,
@@ -30,6 +31,9 @@ import { useQuery } from '../../../hooks/queryParams'
 import ScriptSection from '../../../components/createLinkScript'
 import WebhookSection from '../../../components/createLinkWebhook'
 import { SuccefullModal } from './succesfullModal'
+import { copyToClipboard } from '../../../utils/general/copyToClipboard'
+import { reorderObjectKeys } from '../../../utils/general/reorderObjectKeys'
+import { deleteObjectKey } from '../../../utils/general/deleteObjectKey'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -139,22 +143,6 @@ const CreateLinkForm = () => {
     })
   }
 
-  const deleteObjectKey = (obj, key) => {
-    return Object.keys(obj).reduce((total, acc) => {
-      if (Number(acc) !== key) {
-        total[acc] = obj[acc]
-      }
-      return total
-    }, {})
-  } // TODO:move to utils
-  const reorderObjectKeys = (obj) => {
-    return Object.keys(obj).reduce((total, acc, index) => {
-      if (index !== acc) {
-        total[index] = obj[acc]
-      }
-      return total
-    }, {})
-  } // TODO:move to utils
 
   const labelCol = {
     lg: { span: 4 },
@@ -168,10 +156,6 @@ const CreateLinkForm = () => {
     sm: { span: 24 },
     xs: { span: 24 },
   }
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(response.redirectTo)
-    message.success('Copied to Your Clipboard')
-  } //TODO: move to utils
 
   const onCancel = () => {
     setIsModalVisible(false)
@@ -180,14 +164,21 @@ const CreateLinkForm = () => {
       query.set('isEditing', true)
     }
   }
-  const onSearch = async (searchText) => {
+
+  const searchScript = async (searchText) => {
+    console.log(searchText)
     try {
       await fetchScripts({
         url: `script/?name=${searchText}`,
         method: 'GET',
       })
     } catch (e) {}
-  } // TODO:install debbounce from lodash and use it here
+  }
+  const handler = useCallback(debounce(searchScript, 600), [])
+  const onSearch = (searchText) => {
+    handler(searchText)
+  }
+
 
   useEffect(() => {
     response && setMassCreateResponses([...massCreateResponses, response])
@@ -218,7 +209,7 @@ const CreateLinkForm = () => {
   return (
     <>
       <SuccefullModal
-        onCopyToClipboard={copyToClipboard}
+        onCopyToClipboard={() => copyToClipboard(response)}
         onMassCreateResponses={massCreateResponses}
         onIsModalVisible={isModalVisible}
         onCreateNewLink={createNewLink}
