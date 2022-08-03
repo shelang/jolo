@@ -6,8 +6,8 @@ import { ScriptModal } from './content/scriptModal'
 
 const { Title } = Typography
 
-const ScriptSection = (props) => {
-  const { onScriptData, onSearch, onIsLoading ,onSelectedScript} = props
+export const ScriptSection = (props) => {
+  const { onScriptData, onSearch, isLoading, onSelectedScript } = props
 
   const [scriptContent, setScriptContent] = useState('')
   const [scriptName, setScriptName] = useState('')
@@ -18,7 +18,6 @@ const ScriptSection = (props) => {
   const [createScriptData, createScripts] = useFetch()
 
   const onSelect = (data) => {
-    console.log('onSelect', data)
     const selectedScript = scripts.filter((script) => script.value === data)[0]
     setSelectedScript(selectedScript)
     onSelectedScript(selectedScript)
@@ -68,7 +67,7 @@ const ScriptSection = (props) => {
         onChangeScriptContent={(e) => {
           setScriptContent(e.target.value)
         }}
-        onIsLoading={onIsLoading}
+        onIsLoading={isLoading}
         onCreateNewScript={createNewScript}
         onCancel={() => setScriptModalVisible(false)}
       />
@@ -99,5 +98,3 @@ const ScriptSection = (props) => {
     </>
   )
 }
-
-export default ScriptSection

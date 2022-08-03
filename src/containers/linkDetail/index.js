@@ -65,7 +65,6 @@ const LinkDetail = (props) => {
       case 'current': {
         endDate = moment()
         startDate = moment().startOf('month')
-        console.log('fire', startDate)
 
         break
       }
@@ -83,7 +82,6 @@ const LinkDetail = (props) => {
       default: {
         endDate = moment()
         startDate = moment().subtract(value, 'days')
-        console.log('fire', startDate)
         break
       }
     }
@@ -180,7 +178,7 @@ const LinkDetail = (props) => {
           </Row>
         </Spin>
       </Card>
-      <section style={{padding:"2rem"}}>
+      <section style={{ padding: '2rem' }}>
         <Row gutter={20}>
           <Col span={8}>
             <TopOses />

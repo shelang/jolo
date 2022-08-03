@@ -5,6 +5,5 @@ export const makingUrl = (url, linkId) => {
   } else {
     rv = url.replace('<link_id>/', '')
   }
-  console.log(rv)
   return rv
 }

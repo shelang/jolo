@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { AutoComplete, Button, Divider, Space, Tooltip, Typography } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import { tooltips } from '../../utils/constants'
-import { WebhookModal } from './content/WebhookModal'
+import { WebhookModal } from './content/webhookModal'
 
 const { Title } = Typography
 
 const WebhookSection = (props) => {
-  const { onIsLoading, onSelectedWebhook } = props
+  const { webhookData, onSearch, isLoading, onSelectedWebhook } = props
 
   const [webhooks, setWebhooks] = useState([])
   const [webhookName, setWebhookName] = useState('')
@@ -16,7 +16,6 @@ const WebhookSection = (props) => {
   const [webhookModalVisible, setWebhookModalVisible] = useState(false)
 
   const [createWebhookData, createWebhook] = useFetch()
-  const [webhookData, fetchWebhooks] = useFetch()
 
   const onSelect = (data) => {
     const selectedWebhook = webhooks.filter(
@@ -25,14 +24,7 @@ const WebhookSection = (props) => {
     setSelectedWebhook(selectedWebhook)
     onSelectedWebhook(selectedWebhook)
   }
-  const onSearch = async (searchText) => {
-    try {
-      await fetchWebhooks({
-        url: `webhook/?name=${searchText}`,
-        method: 'GET',
-      })
-    } catch (e) {}
-  }
+
   const createNewWebhook = async () => {
     try {
       await createWebhook({
@@ -68,7 +60,7 @@ const WebhookSection = (props) => {
   return (
     <>
       <WebhookModal
-        onIsLoading={onIsLoading}
+        onIsLoading={isLoading}
         onwebhookModalVisible={webhookModalVisible}
         onCancel={() => setWebhookModalVisible(false)}
         onWebhookName={webhookName}

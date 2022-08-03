@@ -12,7 +12,6 @@ const RefreshToken = () => {
   const refreshToken = () => {
     const cookies = parseCookies()
     const user = JSON.parse(cookies.user)
-    console.log(cookies, 'cookies')
     if (user) {
       setCookie(
         null,

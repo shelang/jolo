@@ -1,15 +1,15 @@
 import React from 'react'
-import { Card } from 'antd'
-import './style.scss'
+import { AppCard } from '../../components/appCard'
 import CreateLinkForm from './content/CreateLinkForm'
 import CreateLinkFromFile from './content/CreateLinkFromFile'
+import './style.scss'
 
 function CreateLink() {
   return (
-    <Card>
+    <AppCard>
       <CreateLinkFromFile />
       <CreateLinkForm />
-    </Card>
+    </AppCard>
   )
 }
 

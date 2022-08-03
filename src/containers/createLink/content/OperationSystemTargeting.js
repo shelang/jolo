@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Input, Select, Space, Tooltip, Typography } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { tooltips } from '../../../utils/constants'
+import { tooltips, os } from '../../../utils/constants'
 import { deleteObjectKey } from '../../../utils/general/deleteObjectKey'
 import { reorderObjectKeys } from '../../../utils/general/reorderObjectKeys'
+import { titleCase } from '../../../utils/titlePath'
 
 const { Title } = Typography
 
-export const OperationSystemTargeting = (props) => {
-  const { Form, onOperationSystems, onSelectedOs, onSetSelectedOs } = props
-
+export const OperationSystemTargeting = ({
+  Form,
+  oss: operationSystems,
+  selectedOs,
+  setSelectedOs,
+}) => {
   return (
     <Card>
       <Title level={3}>
@@ -34,15 +38,15 @@ export const OperationSystemTargeting = (props) => {
                   <Form.Item
                     {...restField}
                     wrapperCol={{ span: 24 }}
-                    name={[name, 'type']}
-                    fieldKey={[fieldKey, 'type']}
+                    name={[name, 'key']}
+                    fieldKey={[fieldKey, 'key']}
                     rules={[{ required: true, message: 'Missing type' }]}>
                     <Select
                       style={{ width: 200 }}
                       placeholder="Operation System">
-                      {onOperationSystems.map((operationSystem) => {
+                      {operationSystems.map((operationSystem) => {
                         if (
-                          Object.values(onSelectedOs).includes(
+                          Object.values(selectedOs).includes(
                             operationSystem.toLowerCase(),
                           )
                         ) {
@@ -51,7 +55,7 @@ export const OperationSystemTargeting = (props) => {
                           return (
                             <Select.Option
                               value={operationSystem.toLowerCase()}>
-                              {operationSystem}
+                              {titleCase(operationSystem)}
                             </Select.Option>
                           )
                         }
@@ -70,9 +74,9 @@ export const OperationSystemTargeting = (props) => {
                     style={{ marginLeft: 10 }}
                     onClick={() => {
                       const newSelectedOs = reorderObjectKeys(
-                        deleteObjectKey(onSelectedOs, name),
+                        deleteObjectKey(selectedOs, name),
                       )
-                      onSetSelectedOs(newSelectedOs)
+                      setSelectedOs(newSelectedOs)
                       remove(name)
                     }}
                   />
@@ -80,7 +84,7 @@ export const OperationSystemTargeting = (props) => {
               ),
             )}
             <Form.Item>
-              {fields.length < 2 && (
+              {fields.length < operationSystems.length && (
                 <Button
                   type="dashed"
                   onClick={() => add()}

@@ -1,29 +1,19 @@
-import React from 'react'
-import {
-  Button,
-  Card,
-  Input,
-  Select,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Button, Card, Input, Select, Space, Tooltip, Typography } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { tooltips } from '../../../utils/constants'
+import { tooltips, devices } from '../../../utils/constants'
 import { deleteObjectKey } from '../../../utils/general/deleteObjectKey'
 import { reorderObjectKeys } from '../../../utils/general/reorderObjectKeys'
+import { titleCase } from '../../../utils/titlePath'
 
 const { Title } = Typography
 
-export const DeviceTargeting = (props) => {
-  const {
-    Form,
-    onSelectedDevices,
-    onSetSelectedDevices,
-    onTargetDevices,
-    onSetTargetDevices,
-  } = props
-
+export const DeviceTargeting = ({
+  Form,
+  devices,
+  selectedDevices,
+  setSelectedDevices,
+}) => {
   return (
     <Card>
       <Title level={3}>
@@ -47,25 +37,19 @@ export const DeviceTargeting = (props) => {
                 <Form.Item
                   {...restField}
                   wrapperCol={{ span: 24 }}
-                  name={[name, 'type']}
-                  fieldKey={[fieldKey, 'type']}
+                  name={[name, 'key']}
+                  fieldKey={[fieldKey, 'key']}
                   rules={[{ required: true, message: 'Missing type' }]}>
                   <Select style={{ width: 200 }} placeholder="Device">
-                    {onTargetDevices.map((targetDevice) => {
-                      if (
-                        Object.values(onSelectedDevices).includes(
-                          targetDevice.toLowerCase(),
-                        )
-                      ) {
-                        return null
-                      } else {
-                        return (
-                          <Select.Option value={targetDevice.toLowerCase()}>
-                            {targetDevice}
-                          </Select.Option>
-                        )
-                      }
-                    })}
+                    {devices.map((device, index) =>
+                      Object.values(selectedDevices).includes(
+                        device.toLowerCase(),
+                      ) ? null : (
+                        <Select.Option value={device.toLowerCase()}>
+                          {titleCase(device)}
+                        </Select.Option>
+                      ),
+                    )}
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -80,16 +64,16 @@ export const DeviceTargeting = (props) => {
                   style={{ marginLeft: 10 }}
                   onClick={() => {
                     const newSelectedDevices = reorderObjectKeys(
-                      deleteObjectKey(onSelectedDevices, name),
+                      deleteObjectKey(selectedDevices, name),
                     )
-                    onSetSelectedDevices(newSelectedDevices)
+                    setSelectedDevices(newSelectedDevices)
                     remove(name)
                   }}
                 />
               </Space>
             ))}
             <Form.Item>
-              {fields.length < 2 && (
+              {fields.length < devices.length && (
                 <Button
                   type="dashed"
                   onClick={() => add()}
@@ -105,4 +89,3 @@ export const DeviceTargeting = (props) => {
     </Card>
   )
 }
-

@@ -29,7 +29,6 @@ function AppLayout(props) {
       </Breadcrumb.Item>
     )
   })
-  console.log(breadcrumbItems, 'breadcrumbItems')
   return (
     <Layout>
       <Header>

@@ -62,7 +62,6 @@ const CreateLinkFromFile = () => {
         }
       }, [])
 
-      console.log(normalizedRows, 'normalizedRows')
       setNormalizedLinks(normalizedRows)
     })
   }, [fileList])
@@ -90,9 +89,7 @@ const CreateLinkFromFile = () => {
         onUploadProps={uploadProps}
       />
       <Row>
-        <Col md={20} xs={24}>
-          <Title>Creating Link</Title>
-        </Col>
+        <Col md={20} xs={24}></Col>
         <Col md={4} xs={24}>
           <Link level={5} onClick={() => setIsCreateLinkModalVisible(true)}>
             Creating Link From File

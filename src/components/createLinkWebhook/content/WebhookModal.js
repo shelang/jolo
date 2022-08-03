@@ -13,7 +13,7 @@ export const WebhookModal = (props) => {
     onChengeWebhookUrl,
     onCreateNewWebhook,
   } = props
-  
+
   return (
     <Modal
       title="Create Webhook"
