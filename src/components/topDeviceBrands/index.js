@@ -12,13 +12,13 @@ import { apiRoutes } from '../../utils/apiRoutes'
 
 addTreemapModule(Highcharts)
 
-const TopDeviceBrands = () => {
+const TopDeviceBrands = ({queryParams}) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICE_BRANDS, linkId)
+    const URL = makingUrl(apiRoutes.TOP_DEVICE_BRANDS, linkId,queryParams)
     await doFetch({
       url: URL,
       method: 'GET',

@@ -12,13 +12,14 @@ import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
 
 funnel(Highcharts)
 
-const TopDeviceBrands = () => {
+const TopDeviceBrands = ({queryParams}) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId)
+    const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId,queryParams)
+    console.log(URL);
     await doFetch({
       url: URL,
       method: 'GET',

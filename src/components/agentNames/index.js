@@ -9,13 +9,13 @@ import { PieChartConfig } from '../../lib/PieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 
-const AgentNames = () => {
+const AgentNames = ({queryParams}) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkedId = params.id
-    const URL = makingUrl(apiRoutes.AGENT_NAME, linkedId)
+    const URL = makingUrl(apiRoutes.AGENT_NAME, linkedId,queryParams)
     await doFetch({
       url: URL,
       method: 'GET',

@@ -12,13 +12,14 @@ import { apiRoutes } from '../../utils/apiRoutes'
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
 
-const TopOses = () => {
+const TopOses = ({queryParams}) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
-
+  
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_OSES, linkId)
+    const URL = makingUrl(apiRoutes.TOP_OSES, linkId ,queryParams)
+    console.log("ULR",URL);
     await doFetch({
       url: URL,
       method: 'GET',
