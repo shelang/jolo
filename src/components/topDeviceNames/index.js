@@ -6,19 +6,19 @@ import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
+import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
-import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
 
 funnel(Highcharts)
 
-const TopDeviceBrands = ({queryParams}) => {
+const TopDeviceBrands = ({ queryParams }) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId,queryParams)
+    const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId, queryParams)
     console.log(URL);
     await doFetch({
       url: URL,
@@ -36,11 +36,11 @@ const TopDeviceBrands = ({queryParams}) => {
         {error
           ? 'There is something wrong, please try again later'
           : null || (
-              <TreemapChart
-                highcharts={Highcharts}
-                options={response ? PyramidChartConfig(response) : {}}
-              />
-            )}
+            <TreemapChart
+              highcharts={Highcharts}
+              options={response ? PyramidChartConfig(response) : {}}
+            />
+          )}
       </Spin>
     </AppCard>
   )

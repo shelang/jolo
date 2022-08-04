@@ -1,0 +1,75 @@
+.infoTitleCard {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  border-radius: 8px;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  background: #ffffff;
+}
+.primaryInfoTitleCard {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  border-radius: 8px;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  background: rgb(86, 135, 147);
+
+  .infoTitleLabel {
+    color: #fff;
+  }
+  .infoTitleValue {
+    color: #fff;
+  }
+
+  svg {
+    fill: #fff;
+  }
+}
+
+.infoTitleLabel {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 16px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  letter-spacing: 0.1px;
+  margin: 8px 0px 0px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.infoTitleValue {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 28px;
+  line-height: 48px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  letter-spacing: 0.25px;
+  color: rgb(50, 50, 50);
+}
+.infoTitleCard > svg {
+  font-size: 24px;
+  fill: rgb(86, 135, 147);
+}
+
+.infoSkeleton {
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  background: #ffffff;
+}
+
+.circleSkeleton {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 8px;
+}
