@@ -1,21 +1,27 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
-import ColumnChart from 'highcharts-react-official'
+import TreemapChart from 'highcharts-react-official'
+import funnel from 'highcharts/modules/funnel.js'
 import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
+
 import { TreemapChartConfig } from '../../lib/TreemapChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
+import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
 
-const TopDeviceNames = () => {
+funnel(Highcharts)
+
+const TopDeviceBrands = ({queryParams}) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId)
+    const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId,queryParams)
+    console.log(URL);
     await doFetch({
       url: URL,
       method: 'GET',
@@ -27,13 +33,14 @@ const TopDeviceNames = () => {
   }, [])
 
   return (
-    <AppCard title="Top Device Names">
+    <AppCard noPadding title="Top Device Names">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'
           : null || (
-              <ColumnChart
+              <TreemapChart
                 highcharts={Highcharts}
+
                 options={response ? TreemapChartConfig(response) : {}}
               />
             )}
@@ -42,4 +49,4 @@ const TopDeviceNames = () => {
   )
 }
 
-export default TopDeviceNames
+export default TopDeviceBrands

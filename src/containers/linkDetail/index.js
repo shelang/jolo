@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/asyncAction'
 import moment from 'moment'
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
+import Highcharts from 'highcharts/highstock'
+import ColumnChart from 'highcharts-react-official'
 import {
   DatePicker,
   Row,
@@ -20,7 +20,7 @@ import TopDeviceBrands from '../../components/topDeviceBrands'
 import TopOses from '../../components/topOses'
 import { encodeQueryData } from '../../utils/queryParams'
 import { timeframes } from '../../utils/constants'
-
+import { ColumnChartConfig } from '../../lib/ColumnChartConfig'
 const { RangePicker } = DatePicker
 const { Title } = Typography
 const { Option } = Select
@@ -31,12 +31,15 @@ const LinkDetail = (props) => {
   const [bucket, setBucket] = useState(null)
   const [timeFrame, setTimeFrame] = useState('0')
   const [buckets, setBuckets] = useState([])
-
   const [{ response, isLoading }, doFetch] = useFetch()
 
   useEffect(() => {
     fetchLinkDetail()
   }, [startDate, endDate, bucket])
+
+  const from = startDate.utc().startOf('day').format()
+  const to = endDate.utc().format()
+  const queryParams = `?from=${from}&to=${to}`
 
   const fetchLinkDetail = async () => {
     const queryParams = encodeQueryData({
@@ -49,6 +52,7 @@ const LinkDetail = (props) => {
       method: 'GET',
     })
   }
+
   const handleChangeDates = (dates, datesString) => {
     setStartDate(dates[0])
     setEndDate(dates[1])
@@ -115,22 +119,6 @@ const LinkDetail = (props) => {
     }
   }, [response])
 
-  const options = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'Clicks',
-    },
-
-    yAxis: {
-      title: {
-        text: 'Click Counts',
-      },
-    },
-    series: buckets,
-  }
-
   return (
     <>
       <Card>
@@ -171,8 +159,11 @@ const LinkDetail = (props) => {
             </Col>
             <br />
             <Col span={24}>
-              {buckets.length && (
-                <HighchartsReact highcharts={Highcharts} options={options} />
+              {timeFrame !== '0' && bucket && (
+                <ColumnChart
+                  highcharts={Highcharts}
+                  options={ColumnChartConfig(buckets) || {}}
+                />
               )}
             </Col>
           </Row>
@@ -181,21 +172,21 @@ const LinkDetail = (props) => {
       <section style={{ padding: '2rem' }}>
         <Row gutter={20}>
           <Col span={8}>
-            <TopOses />
+            <TopOses  queryParams={queryParams}/>
           </Col>
           <Col span={8}>
-            <AgentNames />
+            <AgentNames queryParams={queryParams}/>
           </Col>
           <Col span={8}>
-            <TopDevices />
+            <TopDevices queryParams={queryParams}/>
           </Col>
         </Row>
         <Row gutter={20}>
           <Col span={12}>
-            <TopDeviceBrands />
+            <TopDeviceBrands queryParams={queryParams}/>
           </Col>
           <Col span={12}>
-            <TopDeviceNames />
+            <TopDeviceNames queryParams={queryParams}/>
           </Col>
         </Row>
       </section>

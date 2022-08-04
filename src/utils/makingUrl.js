@@ -1,9 +1,10 @@
-export const makingUrl = (url, linkId, params) => {
+export const makingUrl = (url, linkId,queryParams) => {
+
   let rv
   if (linkId) {
     rv = url.replace('<link_id>', linkId)
   } else {
     rv = url.replace('<link_id>/', '')
   }
-  return rv
+  return rv +`${queryParams?queryParams :""}`
 }
