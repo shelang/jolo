@@ -21,6 +21,9 @@ export const TreemapChartConfig = (response) => {
     chart: {
       type: 'treemap',
     },
+    credits: {
+      enabled: false,
+    },
     title: {
       text: '',
     },
