@@ -7,13 +7,13 @@ import { apiRoutes } from '../../utils/apiRoutes'
 import { InfoTile } from '../infoTile'
 import './style.scss'
 
-const AgentNames = ({queryParams}) => {
+const AgentNames = ({ queryParams }) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkedId = params.id
-    const URL = makingUrl(apiRoutes.AGENT_NAME, linkedId,queryParams)
+    const URL = makingUrl(apiRoutes.AGENT_NAME, linkedId, queryParams)
     await doFetch({
       url: URL,
       method: 'GET',
@@ -23,6 +23,11 @@ const AgentNames = ({queryParams}) => {
   useEffect(() => {
     fetchLinks()
   }, [])
+  useEffect(() => {
+    if (Object.keys(queryParams).length) {
+      fetchLinks()
+    }
+  }, [queryParams.from, queryParams.to])
 
   const data = response?.data ?? Array.from(new Array(5))
   return (

@@ -1,22 +1,14 @@
 export const ColumnChartConfig = (response) => {
-  console.log(response)
-  const series = {
-    colorByPoint: true,
-    data: response.map((item) => {
-      return {
-        name: item.name,
-        y: Number(item.data[0]),
-      }
-    }),
-  }
-
   return {
-    colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
+    colors: ['#003f5c', '#ffa600', '#bc5090', '#ff6361', '#ffa600'],
 
     chart: {
-      type: 'column',
+      zoomType: 'xy',
     },
     title: {
+      text: '',
+    },
+    subtitle: {
       text: '',
     },
     xAxis: {
@@ -27,18 +19,23 @@ export const ColumnChartConfig = (response) => {
         text: null,
       },
     },
-    yAxis: {
-      min: 0,
-      title: {
-        text: '',
+    yAxis: [
+      {
+        // Primary yAxis
+
+        title: {
+          text: 'click counts',
+        },
       },
-      credits: {
-        enabled: false,
+      {
+        // Secondary yAxis
+        title: {
+          text: 'unique click count',
+        },
+
+        opposite: true,
       },
-      labels: {
-        overflow: 'justify',
-      },
-    },
+    ],
     tooltip: {
       headerFormat: '',
       pointFormat:
@@ -62,6 +59,25 @@ export const ColumnChartConfig = (response) => {
     legend: {
       enabled: false,
     },
-    series: series,
+    series: [
+      {
+        name: 'click counts',
+        type: 'column',
+        yAxis: 1,
+        data: response.map((item) => item.count),
+        tooltip: {
+          valueSuffix: ' {value} times clicked',
+        },
+      },
+      {
+        name: 'unique click count',
+        type: 'spline',
+        data: response.map((item) => item.uniqCount),
+
+        tooltip: {
+          valueSuffix: ' {value} times clicked with unique IP',
+        },
+      },
+    ],
   }
 }

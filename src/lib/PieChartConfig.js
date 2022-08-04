@@ -23,29 +23,9 @@ const convertNameToImage = (name) => {
 }
 
 export const PieChartConfig = (response) => {
-  const series = [
-    {
-      allowPointSelect: true,
-
-      name: '',
-      color: '#006600',
-      lineWidth: 1,
-      marker: {
-        enabled: false,
-        symbol: 'circle',
-        radius: 3,
-        states: {
-          hover: {
-            enabled: true,
-            lineWidth: 1,
-          },
-        },
-      },
-      data: response.data.map((item) => {
-        return { name: item.key, y: Number(item.value) }
-      }),
-    },
-  ]
+  const series = response.data.map((item) => {
+    return { name: item.key, y: Number(item.value) }
+  })
   return {
     colors: ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'],
     chart: {
@@ -140,6 +120,26 @@ export const PieChartConfig = (response) => {
         showInLegend: true,
       },
     },
-    series: series,
+    series: [
+      {
+        allowPointSelect: true,
+
+        name: '',
+        color: '#006600',
+        lineWidth: 1,
+        marker: {
+          enabled: false,
+          symbol: 'circle',
+          radius: 3,
+          states: {
+            hover: {
+              enabled: true,
+              lineWidth: 1,
+            },
+          },
+        },
+        data: series,
+      },
+    ],
   }
 }

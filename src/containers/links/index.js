@@ -4,6 +4,7 @@ import { Table, Space, Spin, message, Divider, Input } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 import { AppCard } from '../../components/appCard'
+import moment from 'moment'
 
 const { Search } = Input
 
@@ -43,6 +44,7 @@ const Links = () => {
       title: 'Created at',
       dataIndex: 'createAt',
       key: 'createAt',
+      render: (item) => moment(item).format('YYYY-MM-DD'),
     },
     {
       title: 'Action',

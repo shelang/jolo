@@ -12,14 +12,14 @@ import { apiRoutes } from '../../utils/apiRoutes'
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
 
-const TopOses = ({queryParams}) => {
+const TopOses = ({ queryParams }) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
-  
+
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_OSES, linkId ,queryParams)
-    console.log("ULR",URL);
+    const URL = makingUrl(apiRoutes.TOP_OSES, linkId, queryParams)
+    console.log('ULR', URL)
     await doFetch({
       url: URL,
       method: 'GET',
@@ -29,6 +29,12 @@ const TopOses = ({queryParams}) => {
   useEffect(() => {
     fetchLinks()
   }, [])
+  useEffect(() => {
+    if (Object.keys(queryParams).length) {
+      console.log('here')
+      fetchLinks()
+    }
+  }, [queryParams.from, queryParams.to])
 
   return (
     <AppCard noPadding title="Top Operation Systems">
@@ -38,7 +44,7 @@ const TopOses = ({queryParams}) => {
           : null || (
               <Chart
                 highcharts={Highcharts}
-                options={response ? PieChartConfig(response) : null}
+                options={response?.data ? PieChartConfig(response) : {}}
               />
             )}
       </Spin>

@@ -1,5 +1,10 @@
 import React from 'react'
-import { FaChrome, FaSafari, FaFirefoxBrowser } from 'react-icons/fa'
+import {
+  FaChrome,
+  FaSafari,
+  FaFirefoxBrowser,
+  FaWhatsapp,
+} from 'react-icons/fa'
 import Skeleton from 'react-loading-skeleton'
 import SamsungBrowser from '../../assets/SamsungBrowser.png'
 
@@ -12,6 +17,7 @@ export const InfoTile = ({ value, label, isLoading, primary }) => {
     SamsungBrowser: <img src={SamsungBrowser} alt="logo" width={24} />,
     Safari: <FaSafari />,
     'Chrome Webview': <FaChrome />,
+    WhatsApp: <FaWhatsapp />,
   }
   return isLoading ? (
     <div className="infoSkeleton">
