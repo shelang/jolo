@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-import { ColumnChartConfig } from '../../lib/ColumnChartConfig'
+import { TreemapChartConfig } from '../../lib/TreemapChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 
@@ -34,7 +34,7 @@ const TopDeviceNames = () => {
           : null || (
               <ColumnChart
                 highcharts={Highcharts}
-                options={response ? ColumnChartConfig(response) : {}}
+                options={response ? TreemapChartConfig(response) : {}}
               />
             )}
       </Spin>

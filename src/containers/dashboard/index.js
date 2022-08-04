@@ -10,23 +10,24 @@ import TopOses from '../../components/topOses'
 const Dashboard = () => {
   return (
     <Row gutter={20} style={{ marginBottom: 32 }}>
+      <Col span={24} style={{ marginBottom: 32 }}>
+        <AgentNames />
+      </Col>
       <Col span={6}>
         <Row gutter={20} style={{ marginBottom: 32 }}>
           <Col span={24} style={{ marginBottom: 32 }}>
             <FiveTopIp />
           </Col>
           <Col span={24}>
-            <TopOses />
+            {' '}
+            <TopDeviceBrands />
           </Col>
         </Row>
       </Col>
       <Col span={18}>
         <Row gutter={20} style={{ marginBottom: 32 }}>
           <Col span={12} style={{ marginBottom: 32 }}>
-            <AgentNames />
-          </Col>
-          <Col span={12} style={{ marginBottom: 32 }}>
-            <TopDeviceBrands />
+            <TopOses />
           </Col>
           <Col span={12} style={{ marginBottom: 32 }}>
             <TopDeviceNames />

@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Highcharts from 'highcharts/highstock'
-import PieChart from 'highcharts-react-official'
-import { Spin } from 'antd'
-import { AppCard } from '../appCard'
+import { Spin, Row, Col } from 'antd'
 import useFetch from '../../hooks/asyncAction'
-import { PieChartConfig } from '../../lib/PieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
+import { InfoTile } from '../infoTile'
+import './style.scss'
 
 const AgentNames = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -26,19 +24,28 @@ const AgentNames = () => {
     fetchLinks()
   }, [])
 
+  const data = response?.data ?? Array.from(new Array(5))
   return (
-    <AppCard noPadding title="Top Agent Names">
-      <Spin spinning={isLoading}>
-        {error
-          ? 'There is something wrong, please try again later'
-          : null || (
-              <PieChart
-                highcharts={Highcharts}
-                options={response ? PieChartConfig(response) : null}
+    <>
+      <p className="cardTitle">Top Browsers</p>
+
+      <div className="cardBody">
+        {data.map((browser, index) => {
+          const width = 90 / data.length
+          return (
+            <div style={{ width: `${width}%` }}>
+              <InfoTile
+                key={index}
+                value={browser?.value}
+                label={browser?.key}
+                isLoading={isLoading}
+                primary={index === 2 || index === 3}
               />
-            )}
-      </Spin>
-    </AppCard>
+            </div>
+          )
+        })}
+      </div>
+    </>
   )
 }
 
