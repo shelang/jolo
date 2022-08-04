@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/asyncAction'
 import moment from 'moment'
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
+import Highcharts from 'highcharts/highstock'
+import ColumnChart from 'highcharts-react-official'
 import {
   DatePicker,
   Row,
@@ -20,7 +20,7 @@ import TopDeviceBrands from '../../components/topDeviceBrands'
 import TopOses from '../../components/topOses'
 import { encodeQueryData } from '../../utils/queryParams'
 import { timeframes } from '../../utils/constants'
-
+import { ColumnChartConfig } from '../../lib/ColumnChartConfig'
 const { RangePicker } = DatePicker
 const { Title } = Typography
 const { Option } = Select
@@ -115,22 +115,6 @@ const LinkDetail = (props) => {
     }
   }, [response])
 
-  const options = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'Clicks',
-    },
-
-    yAxis: {
-      title: {
-        text: 'Click Counts',
-      },
-    },
-    series: buckets,
-  }
-
   return (
     <>
       <Card>
@@ -171,8 +155,11 @@ const LinkDetail = (props) => {
             </Col>
             <br />
             <Col span={24}>
-              {buckets.length && (
-                <HighchartsReact highcharts={Highcharts} options={options} />
+              {timeFrame !== "0" && bucket && (
+                <ColumnChart
+                  highcharts={Highcharts}
+                  options={ColumnChartConfig(buckets) || {}}
+                />
               )}
             </Col>
           </Row>
