@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
-import PieChart from 'highcharts-react-official'
+import TreemapChart from 'highcharts-react-official'
+import addTreemapModule from 'highcharts/modules/treemap'
 import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-import { PieChartConfig } from '../../lib/PieChartConfig'
+import { TreemapChartConfig } from '../../lib/TreemapChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
+
+addTreemapModule(Highcharts)
 
 const TopDeviceBrands = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
@@ -32,9 +35,9 @@ const TopDeviceBrands = () => {
         {error
           ? 'There is something wrong, please try again later'
           : null || (
-              <PieChart
+              <TreemapChart
                 highcharts={Highcharts}
-                options={response ? PieChartConfig(response) : null}
+                options={response ? TreemapChartConfig(response) : null}
               />
             )}
       </Spin>
