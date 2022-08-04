@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
+
+import { TreemapChartConfig } from '../../lib/TreemapChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
@@ -38,7 +40,8 @@ const TopDeviceBrands = ({queryParams}) => {
           : null || (
               <TreemapChart
                 highcharts={Highcharts}
-                options={response ? PyramidChartConfig(response) : {}}
+
+                options={response ? TreemapChartConfig(response) : {}}
               />
             )}
       </Spin>

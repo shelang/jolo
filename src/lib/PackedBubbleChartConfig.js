@@ -42,6 +42,7 @@ export const PackedBubbleChartConfig = (response) => {
             fontFamily: 'Verdana',
             fill: '#a5a5a5',
             letterSpacing: '1px',
+            strokeWidth: 0,
           },
         },
       },

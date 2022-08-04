@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-import { PackedBubbleChartConfig } from '../../lib/PackedBubbleChartConfig'
+import { PieChartConfig } from '../../lib/PieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 
@@ -38,7 +38,7 @@ const TopOses = ({queryParams}) => {
           : null || (
               <Chart
                 highcharts={Highcharts}
-                options={response ? PackedBubbleChartConfig(response) : null}
+                options={response ? PieChartConfig(response) : null}
               />
             )}
       </Spin>

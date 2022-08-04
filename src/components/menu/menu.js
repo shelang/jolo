@@ -3,22 +3,22 @@ import menuItems from './menuItems'
 import Can from '../can/can'
 import { Menu } from 'antd'
 import { useHistory, NavLink } from 'react-router-dom'
-import { LogoutOutlined } from '@ant-design/icons'
-import { destroyCookie } from 'nookies'
+import './style.scss'
 
 function KitMenu() {
   const history = useHistory()
   const [selectedKeys, setSelectedKeys] = useState('')
 
   const handleClick = (e) => {
-    if (e.key === '0') {
-      destroyCookie(null, 'user')
-      history.push('/login')
-    } else setSelectedKeys(e.key)
+    setSelectedKeys(e.key)
   }
+
   useEffect(() => {
     menuItems.forEach((menuItem) => {
-      if (history.location.pathname.includes(menuItem.url)) {
+      const menuItemUrl = `/${menuItem.url.split('?')[0]}`
+      const pathname = history.location.pathname
+
+      if (pathname.includes(menuItemUrl) && pathname === menuItemUrl) {
         setSelectedKeys(menuItem.id.toString())
       }
     })
@@ -27,6 +27,7 @@ function KitMenu() {
   return (
     <Menu
       mode="inline"
+      theme="dark"
       selectedKeys={[selectedKeys]}
       onClick={handleClick}
       style={{
@@ -40,6 +41,7 @@ function KitMenu() {
             depth={1}
             yes={(props) => (
               <Menu.Item
+                className="menuItem"
                 key={menuItem.id.toString()}
                 icon={menuItem.icon}
                 {...props}>
@@ -51,12 +53,6 @@ function KitMenu() {
           />
         )
       })}
-      <Menu.Item
-        key="0"
-        icon={<LogoutOutlined />}
-        style={{ position: 'absolute', bottom: 10 }}>
-        Sign Out
-      </Menu.Item>
     </Menu>
   )
 }
