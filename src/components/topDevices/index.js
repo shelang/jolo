@@ -9,13 +9,13 @@ import { PieChartConfig } from '../../lib/PieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 
-const TopDevices = () => {
+const TopDevices = ({queryParams}) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICES, linkId)
+    const URL = makingUrl(apiRoutes.TOP_DEVICES, linkId,queryParams)
     await doFetch({
       url: URL,
       method: 'GET',
