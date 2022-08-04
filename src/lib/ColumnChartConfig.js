@@ -1,10 +1,11 @@
 export const ColumnChartConfig = (response) => {
+  console.log(response)
   const series = {
     colorByPoint: true,
-    data: response.data.map((item) => {
+    data: response.map((item) => {
       return {
-        name: item.key,
-        y: Number(item.value),
+        name: item.name,
+        y: Number(item.data[0]),
       }
     }),
   }
@@ -19,8 +20,8 @@ export const ColumnChartConfig = (response) => {
       text: '',
     },
     xAxis: {
-      categories: response.data.map((item) => {
-        return item.key
+      categories: response.map((item) => {
+        return item.name
       }),
       title: {
         text: null,
