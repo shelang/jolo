@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { Spin, List, Typography } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
+import { apiRoutes } from '../../utils/apiRoutes'
+import { makingUrl } from '../../utils/makingUrl'
 
 const { Text, Paragraph } = Typography
-const FiveTopIp = () => {
+const FiveTopIp = ({ queryParams }) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const [IPS, setIPS] = useState([])
 
   const fetchLinks = async () => {
+    const URL = makingUrl(apiRoutes.TOP_FIVE_IP, null, queryParams)
+
     await doFetch({
-      url: 'analytics/last/ips',
+      url: URL,
       method: 'GET',
     })
   }
@@ -58,7 +62,12 @@ const FiveTopIp = () => {
   useEffect(() => {
     fetchLinks()
   }, [])
-
+  useEffect(() => {
+    if (Object.keys(queryParams).length) {
+      setIPS([])
+      fetchLinks()
+    }
+  }, [queryParams.from, queryParams.to])
   useEffect(() => {
     if (response && response.data) {
       findIPSLocation()

@@ -1,24 +1,24 @@
 import React, { useEffect } from 'react'
-import Highcharts from 'highcharts/highstock'
-import TreemapChart from 'highcharts-react-official'
-import addTreemapModule from 'highcharts/modules/treemap'
+import Highcharts from 'highcharts'
+import Chart from 'highcharts-react-official'
+import funnel from 'highcharts/modules/funnel.js'
 import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-import { TreemapChartConfig } from '../../lib/TreemapChartConfig'
+import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 
-addTreemapModule(Highcharts)
+funnel(Highcharts)
 
-const TopDeviceBrands = ({queryParams}) => {
+const TopDeviceBrands = ({ queryParams }) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICE_BRANDS, linkId,queryParams)
+    const URL = makingUrl(apiRoutes.TOP_DEVICE_BRANDS, linkId, queryParams)
     await doFetch({
       url: URL,
       method: 'GET',
@@ -28,6 +28,11 @@ const TopDeviceBrands = ({queryParams}) => {
   useEffect(() => {
     fetchLinks()
   }, [])
+  useEffect(() => {
+    if (Object.keys(queryParams).length) {
+      fetchLinks()
+    }
+  }, [queryParams.from, queryParams.to])
 
   return (
     <AppCard noPadding title="Top Device Brands">
@@ -35,9 +40,9 @@ const TopDeviceBrands = ({queryParams}) => {
         {error
           ? 'There is something wrong, please try again later'
           : null || (
-              <TreemapChart
+              <Chart
                 highcharts={Highcharts}
-                options={response ? TreemapChartConfig(response) : null}
+                options={response?.data ? PyramidChartConfig(response) : {}}
               />
             )}
       </Spin>

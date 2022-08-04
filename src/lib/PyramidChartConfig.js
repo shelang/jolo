@@ -1,3 +1,5 @@
+import { UserSwitchOutlined } from '@ant-design/icons'
+
 export const PyramidChartConfig = (response) => {
   const series = {
     data: response.data.map((item) => {
@@ -21,15 +23,17 @@ export const PyramidChartConfig = (response) => {
           softConnector: true,
         },
         center: ['40%', '50%'],
-        width: '60%',
+        width: '80%',
       },
+    },
+    legend: {
+      enabled: false,
     },
     credits: {
       enabled: false,
     },
     tooltip: {
       formatter: function () {
-        console.log(this, 'this')
         return (
           'The value for <b>' +
           this.key +
@@ -43,6 +47,12 @@ export const PyramidChartConfig = (response) => {
       borderRadius: 8,
       borderWidth: 1,
     },
-    series: series,
+
+    series: [
+      {
+        name: 'Unique users',
+        data: series.data,
+      },
+    ],
   }
 }

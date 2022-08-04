@@ -5,5 +5,8 @@ export const makingUrl = (url, linkId, queryParams) => {
   } else {
     rv = url.replace('<link_id>/', '')
   }
-  return rv + `${queryParams ? queryParams : ""}`
+  if (Object.keys(queryParams).length) {
+    rv = rv + `?from=${queryParams.from}&to=${queryParams.to}`
+  }
+  return rv
 }

@@ -5,17 +5,17 @@ import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-import { PieChartConfig } from '../../lib/PieChartConfig'
+import { SemiPieChartConfig } from '../../lib/SemiPieChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
 
-const TopDevices = ({queryParams}) => {
+const TopDevices = ({ queryParams }) => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
   const fetchLinks = async () => {
     const linkId = params.id
-    const URL = makingUrl(apiRoutes.TOP_DEVICES, linkId,queryParams)
+    const URL = makingUrl(apiRoutes.TOP_DEVICES, linkId, queryParams)
     await doFetch({
       url: URL,
       method: 'GET',
@@ -25,6 +25,11 @@ const TopDevices = ({queryParams}) => {
   useEffect(() => {
     fetchLinks()
   }, [])
+  useEffect(() => {
+    if (Object.keys(queryParams).length) {
+      fetchLinks()
+    }
+  }, [queryParams.from, queryParams.to])
 
   return (
     <AppCard noPadding title="Top Devices">
@@ -34,7 +39,7 @@ const TopDevices = ({queryParams}) => {
           : null || (
               <PieChart
                 highcharts={Highcharts}
-                options={response ? PieChartConfig(response) : null}
+                options={response?.data ? SemiPieChartConfig(response) : {}}
               />
             )}
       </Spin>
