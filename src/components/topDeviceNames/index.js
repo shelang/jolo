@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react'
 import Highcharts from 'highcharts/highstock'
-import ColumnChart from 'highcharts-react-official'
+import TreemapChart from 'highcharts-react-official'
+import funnel from 'highcharts/modules/funnel.js'
 import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-import { ColumnChartConfig } from '../../lib/ColumnChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
+import { PyramidChartConfig } from '../../lib/PyramidChartConfig'
 
-const TopDeviceNames = () => {
+funnel(Highcharts)
+
+const TopDeviceBrands = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
   const params = useParams()
 
@@ -27,14 +30,14 @@ const TopDeviceNames = () => {
   }, [])
 
   return (
-    <AppCard title="Top Device Names">
+    <AppCard noPadding title="Top Device Names">
       <Spin spinning={isLoading}>
         {error
           ? 'There is something wrong, please try again later'
           : null || (
-              <ColumnChart
+              <TreemapChart
                 highcharts={Highcharts}
-                options={response ? ColumnChartConfig(response) : {}}
+                options={response ? PyramidChartConfig(response) : {}}
               />
             )}
       </Spin>
@@ -42,4 +45,4 @@ const TopDeviceNames = () => {
   )
 }
 
-export default TopDeviceNames
+export default TopDeviceBrands
