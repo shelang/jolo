@@ -18,7 +18,7 @@ jobs:
       run: echo "TAG_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Docker Build and Save
       run: |
-        docker build -t shelang/jolo:$TAG_VERSION -f src/main/docker/Dockerfile.native .
+        docker build -t shelang/jolo:$TAG_VERSION -f Dockerfile .
         docker save shelang/jolo:$TAG_VERSION > shelang-jolo-$TAG_VERSION.docker.tar.gz
     - name: Create Release
       uses: softprops/action-gh-release@v0.1.14
