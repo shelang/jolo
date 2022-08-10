@@ -1,4 +1,4 @@
-FROM node:14-alpine AS build
+FROM node:14-alpine3.15 AS build
 
 WORKDIR /build-stage
 
@@ -14,7 +14,7 @@ ARG REACT_APP_BASE_URL="/api/v1"
 
 RUN npm run build
 
-FROM nginx:1.21-alpine
+FROM nginx:1.23-alpine
 
 WORKDIR /jolo
 
