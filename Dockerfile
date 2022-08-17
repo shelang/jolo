@@ -9,6 +9,7 @@ RUN npm install --production --legacy-peer-deps
 
 COPY src src
 COPY public public
+COPY craco.config.js craco.config.js
 
 ARG REACT_APP_BASE_URL="/api/v1"
 
