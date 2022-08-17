@@ -1,8 +1,8 @@
-FROM node:14-alpine3.15 AS build
+FROM node:14-slim AS build
 
 WORKDIR /build-stage
 
-RUN apk add python2 make g++
+RUN apt update && apt -y install python2 make g++
 RUN npm i -g npm
 COPY package.json package-lock.json ./
 RUN npm install --production
