@@ -5,7 +5,7 @@ WORKDIR /build-stage
 RUN apt update && apt -y install python2 make g++
 RUN npm i -g npm
 COPY package.json package-lock.json ./
-RUN npm install --production
+RUN npm install --production --legacy-peer-deps
 
 COPY src src
 COPY public public
