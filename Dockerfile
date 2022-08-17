@@ -1,20 +1,21 @@
-FROM node:14-alpine AS build
+FROM node:14-slim AS build
 
 WORKDIR /build-stage
 
-RUN apk add python2 make g++
+RUN apt update && apt -y install python2 make g++
 RUN npm i -g npm
 COPY package.json package-lock.json ./
-RUN npm install --production
+RUN npm install --production --legacy-peer-deps
 
 COPY src src
 COPY public public
+COPY craco.config.js craco.config.js
 
 ARG REACT_APP_BASE_URL="/api/v1"
 
 RUN npm run build
 
-FROM nginx:1.21-alpine
+FROM nginx:1.23-alpine
 
 WORKDIR /jolo
 
