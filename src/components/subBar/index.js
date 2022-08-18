@@ -48,8 +48,8 @@ export const SubBar = ({ onChange, hasBucket = false }) => {
     setEndDate(endDate)
     onChange(
       {
-        from: startDate.format('YYYY-MM-DD'),
-        to: endDate.format('YYYY-MM-DD'),
+        from: startDate.utc().set({ hour: 0, minute: 0, second: 0 }).format(),
+        to: endDate.utc().set({ hour: 0, minute: 0, second: 0 }).format(),
       },
       hasBucket ? bucket : null,
     )

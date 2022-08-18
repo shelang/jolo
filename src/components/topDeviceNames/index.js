@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom'
 import { Spin } from 'antd'
 import { AppCard } from '../appCard'
 import useFetch from '../../hooks/asyncAction'
-
 import { TreemapChartConfig } from '../../lib/TreemapChartConfig'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
@@ -20,7 +19,6 @@ const TopDeviceBrands = ({ queryParams }) => {
   const fetchLinks = async () => {
     const linkId = params.id
     const URL = makingUrl(apiRoutes.TOP_DEVICE_NAMES, linkId, queryParams)
-
     await doFetch({
       url: URL,
       method: 'GET',
