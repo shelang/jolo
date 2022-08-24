@@ -74,7 +74,7 @@ const WebhookSection = (props) => {
         onCreateNewWebhook={createNewWebhook}
       />
       <Title level={3}>
-        Retargeting codes
+        Webhook
         <Tooltip
           className={'customTooltip'}
           placement="top"
