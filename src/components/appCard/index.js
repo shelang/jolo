@@ -7,7 +7,11 @@ export const AppCard = ({ children, title, noPadding }) => {
     <>
       {title && <p className="cardTitle">{title}</p>}
       <Card
-        bodyStyle={{ padding: noPadding ? 4 : 24, width: '100%' }}
+        bodyStyle={{
+          padding: noPadding ? 4 : 24,
+          width: '100%',
+          marginBottom: 16,
+        }}
         className="cardBody">
         {children}
       </Card>

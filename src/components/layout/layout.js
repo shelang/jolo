@@ -33,6 +33,7 @@ function AppLayout(props) {
   const menu = (
     <Menu>
       <Menu.Item
+        style={{}}
         onClick={() => {
           destroyCookie(null, 'user')
           history.push('/login')
@@ -56,12 +57,11 @@ function AppLayout(props) {
         <Content className="internal_content">
           <div className="bread_crumb_wrapper">
             <Breadcrumb separator={'>'}>{breadcrumbItems}</Breadcrumb>
-            <Dropdown overlay={menu} trigger={['click']}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                  <UserOutlined />
-                </Space>
-              </a>
+            <Dropdown
+              overlay={menu}
+              trigger={['click']}
+              className="userMenuWrapper">
+              <UserOutlined />
             </Dropdown>
           </div>
 

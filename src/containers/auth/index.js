@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
+import Logo from '../../assets/logo-light-New.png'
 import useFetch from '../../hooks/asyncAction'
-import useCache from '../../hooks/cacheData'
 import { useHistory } from 'react-router-dom'
-import { Form, Input, Button, Space, Row, Col, Typography } from 'antd'
-import './auth.scss'
+import { Form, Input, Button, Space, Row, Col, Typography, Image } from 'antd'
 import { setCookie } from 'nookies'
+import './auth.scss'
 
 const { Title } = Typography
 const layout = {
@@ -42,42 +42,54 @@ function Login() {
 
   return (
     <div className="auth-container">
-      <Row>
-        <Col span={24}>
-          <Title level={2}>Login</Title>
-        </Col>
-        <Col span={24} className="login-form">
-          <Form
-            {...layout}
-            name="basic"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}>
-            <Form.Item
-              name="username"
-              rules={[
-                { required: true, message: 'Please input your username!' },
-              ]}>
-              <Input placeholder="Username" />
-            </Form.Item>
+      <div className="auth-wrapper-image"></div>
+      <div className="auth-wrapper-form">
+        <Row className="auth-form">
+          <Col span={24}>
+            <Title level={1} className="auth-form-title">
+              Welcome To Link Composer
+            </Title>
+          </Col>
+          <Col span={24} className="login-form">
+            <Form
+              {...layout}
+              name="basic"
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}>
+              <Form.Item
+                name="username"
+                rules={[
+                  { required: true, message: 'Please input your username!' },
+                ]}>
+                <Input placeholder="Username" size="large" className="input" />
+              </Form.Item>
 
-            <Form.Item
-              name="password"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}>
-              <Input.Password placeholder="Password" />
-            </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[
+                  { required: true, message: 'Please input your password!' },
+                ]}>
+                <Input.Password
+                  placeholder="Password"
+                  size="large"
+                  className="input"
+                />
+              </Form.Item>
 
-            <Form.Item>
-              <Space size="middle">
-                <Button type="primary" htmlType="submit" loading={isLoading}>
+              <Form.Item style={{ width: '100%' }}>
+                <Button
+                  size="large"
+                  type="primary"
+                  htmlType="submit"
+                  loading={isLoading}
+                  style={{ width: '100%' }}>
                   Log in
                 </Button>
-              </Space>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
+      </div>
     </div>
   )
 }
