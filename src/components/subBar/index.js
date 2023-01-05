@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import moment from 'moment'
-import { DatePicker, Select, Space } from 'antd'
+import dayjs from 'dayjs'
+import { DatePicker, Row, Select, Space, Col } from 'antd'
 import { timeframes } from '../../utils/constants'
 import { AppCard } from '../appCard'
 import './style.scss'
@@ -8,9 +8,9 @@ import './style.scss'
 const { RangePicker } = DatePicker
 const { Option } = Select
 
-export const SubBar = ({ onChange, hasBucket = false }) => {
-  const [startDate, setStartDate] = useState(moment())
-  const [endDate, setEndDate] = useState(moment())
+export const SubBar = ({ onChange, hasBucket = false, isStick }) => {
+  const [startDate, setStartDate] = useState(dayjs())
+  const [endDate, setEndDate] = useState(dayjs())
   const [timeFrame, setTimeFrame] = useState('0')
   const [bucket, setBucket] = useState(null)
 
@@ -21,25 +21,25 @@ export const SubBar = ({ onChange, hasBucket = false }) => {
 
     switch (value) {
       case 'current': {
-        endDate = moment()
-        startDate = moment().startOf('month')
+        endDate = dayjs().endOf('date')
+        startDate = dayjs().startOf('month')
 
         break
       }
       case 'prev': {
-        endDate = moment().startOf('month')
-        startDate = moment().subtract(1, 'months').startOf('month')
+        endDate = dayjs().startOf('month')
+        startDate = dayjs().subtract(1, 'months').startOf('month')
         break
       }
       case 'prevYear': {
-        endDate = moment().startOf('year')
-        startDate = moment().subtract(1, 'years').startOf('year')
+        endDate = dayjs().startOf('year')
+        startDate = dayjs().subtract(1, 'years').startOf('year')
         break
       }
 
       default: {
-        endDate = moment()
-        startDate = moment().subtract(value, 'days')
+        endDate = dayjs().endOf('date')
+        startDate = dayjs().subtract(value, 'days')
         break
       }
     }
@@ -48,8 +48,8 @@ export const SubBar = ({ onChange, hasBucket = false }) => {
     setEndDate(endDate)
     onChange(
       {
-        from: startDate.utc().set({ hour: 0, minute: 0, second: 0 }).format(),
-        to: endDate.utc().set({ hour: 0, minute: 0, second: 0 }).format(),
+        from: startDate.format(),
+        to: endDate.format(),
       },
       hasBucket ? bucket : null,
     )
@@ -78,7 +78,13 @@ export const SubBar = ({ onChange, hasBucket = false }) => {
   }
 
   return (
-    <AppCard>
+    <AppCard
+      styles={{
+        marginBottom: 16,
+        marginLeft: isStick ? -16 : 0,
+        minWidth: isStick ? window.innerWidth - 80 : '100%',
+        transition: 'all 0.2s ease-in-out',
+      }}>
       <Space>
         <Space>
           <span className="title">Date Range:</span>
@@ -94,9 +100,11 @@ export const SubBar = ({ onChange, hasBucket = false }) => {
             defaultValue={timeFrame}
             onChange={handleChangeTimeFrame}
             style={{ minWidth: 200 }}>
-            {Object.keys(timeframes).map((timeFrameKey) => {
+            {Object.keys(timeframes).map((timeFrameKey, index) => {
               return (
-                <Option value={timeFrameKey}>{timeframes[timeFrameKey]}</Option>
+                <Option key={timeFrameKey.concat(index)} value={timeFrameKey}>
+                  {timeframes[timeFrameKey]}
+                </Option>
               )
             })}
           </Select>

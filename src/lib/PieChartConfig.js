@@ -42,7 +42,6 @@ export const PieChartConfig = (response) => {
     },
     tooltip: {
       formatter: function () {
-        console.log(this, 'this')
         return (
           'The value for <b>' +
           this.key +

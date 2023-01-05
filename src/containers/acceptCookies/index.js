@@ -8,19 +8,19 @@ const AcceptCookies = () => {
 
   const handleShowCookie = () => {
     setShowCookie(false)
-    setCookie(null, 'isCookieAccepted', 'true', {
+    setCookie(null, 'LinkComposerisCookiesAccepted', 'true', {
       maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
     })
   }
 
   useEffect(() => {
     const cookies = parseCookies()
-    if (!cookies.isCookieAccepted) {
-      setCookie(null, 'isCookieAccepted', 'false', {
+    if (!cookies.LinkComposerisCookiesAccepted) {
+      setCookie(null, 'LinkComposerisCookiesAccepted', 'false', {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
     } else {
-      const res = JSON.parse(cookies.isCookieAccepted)
+      const res = JSON.parse(cookies.LinkComposerisCookiesAccepted)
 
       if (res) {
         setShowCookie(!res)

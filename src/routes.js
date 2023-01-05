@@ -1,19 +1,20 @@
-import React, { Suspense } from 'react';
-import PrivateRoute from './utils/privateRoute';
-import AppLayout from './components/layout/layout';
-import LoginLayout from './components/layout/LoginLayout';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import { Spin } from 'antd';
+import React, { Suspense } from 'react'
+import PrivateRoute from './utils/privateRoute'
+import AppLayout from './components/layout/layout'
+import LoginLayout from './components/layout/LoginLayout'
+import { Switch, Route, Redirect } from 'react-router-dom'
+import { Spin } from 'antd'
 
-const Login = React.lazy(() => import('./containers/auth'));
-const CreateLink = React.lazy(() => import('./containers/createLink'));
-const Links = React.lazy(() => import('./containers/links'));
-const Scripts = React.lazy(() => import('./containers/scripts'));
-const Webhook = React.lazy(() => import('./containers/webhook'));
-const Profile = React.lazy(() => import('./containers/profile'));
-const RefreshToken = React.lazy(() => import('./containers/refresh'));
-const LinkDetail = React.lazy(() => import('./containers/linkDetail'));
-const Dashboard = React.lazy(() => import('./containers/dashboard'));
+const Login = React.lazy(() => import('./containers/auth'))
+const CreateLink = React.lazy(() => import('./containers/createLink'))
+const Links = React.lazy(() => import('./containers/links'))
+const Scripts = React.lazy(() => import('./containers/scripts'))
+const Webhook = React.lazy(() => import('./containers/webhook'))
+const Profile = React.lazy(() => import('./containers/profile'))
+const RefreshToken = React.lazy(() => import('./containers/refresh'))
+const LinkDetail = React.lazy(() => import('./containers/linkDetail'))
+const Dashboard = React.lazy(() => import('./containers/dashboard'))
+const Workspaces = React.lazy(() => import('./containers/workspaces'))
 
 function Routes() {
   return (
@@ -27,12 +28,10 @@ function Routes() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignContent: 'center',
-          }}
-        >
+          }}>
           <Spin />
         </div>
-      }
-    >
+      }>
       <Switch>
         <Route
           exact
@@ -43,26 +42,21 @@ function Routes() {
             </LoginLayout>
           )}
         />
-        <Route
-          exact
-          path="/login"
-          render={() => (
-            <LoginLayout>
-              <Login />
-            </LoginLayout>
-          )}
-        />
+        <Route exact path="/login" render={() => <Login />} />
         <PrivateRoute
           path="/"
           exact
-          render={() => (
-            <Redirect
-              to={{
-                pathname: '/dashboard',
-              }}
-            />
-          )}
+          render={() => {
+            return (
+              <Redirect
+                to={{
+                  pathname: '/dashboard',
+                }}
+              />
+            )
+          }}
         />
+        <PrivateRoute path="/workspaces" exact render={() => <Workspaces />} />
         <PrivateRoute
           path="/dashboard"
           exact
@@ -128,6 +122,6 @@ function Routes() {
         />
       </Switch>
     </Suspense>
-  );
+  )
 }
-export default Routes;
+export default Routes

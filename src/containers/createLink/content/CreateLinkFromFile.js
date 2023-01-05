@@ -4,6 +4,8 @@ import readXlsxFile from 'read-excel-file'
 import { FromFileModal } from './fromFileModal'
 import useFetch from '../../../hooks/asyncAction'
 import { toast } from 'react-toastify'
+import { FileAddOutlined } from '@ant-design/icons'
+
 const { Title, Link } = Typography
 
 const keysTemplate = ['title', 'url']
@@ -88,14 +90,10 @@ const CreateLinkFromFile = () => {
         onCreateNewLinks={createNewLinks}
         onUploadProps={uploadProps}
       />
-      <Row>
-        <Col md={20} xs={24}></Col>
-        <Col md={4} xs={24}>
-          <Link level={5} onClick={() => setIsCreateLinkModalVisible(true)}>
-            Creating Link From File
-          </Link>
-        </Col>
-      </Row>
+      <Link level={5} onClick={() => setIsCreateLinkModalVisible(true)}>
+        <FileAddOutlined style={{ marginRight: 4 }} />
+        Creating Link From File
+      </Link>
     </>
   )
 }

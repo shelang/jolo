@@ -15,7 +15,7 @@ const RefreshToken = () => {
     if (user) {
       setCookie(
         null,
-        'user',
+        'linkComposerUser',
         JSON.stringify({ ...user, token: user.refresh }),
         {
           maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
@@ -34,7 +34,7 @@ const RefreshToken = () => {
 
   useEffect(() => {
     if (response) {
-      setCookie(null, 'user', JSON.stringify(response), {
+      setCookie(null, 'linkComposerUser', JSON.stringify(response), {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
       history.goBack()
@@ -43,7 +43,7 @@ const RefreshToken = () => {
 
   useEffect(() => {
     if (error && error.status === 401) {
-      destroyCookie(null, 'user')
+      destroyCookie(null, 'linkComposerUser')
       history.push('/login')
     }
   }, [error])

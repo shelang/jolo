@@ -1,0 +1,14 @@
+.sticked {
+  right: 0;
+
+  transition: all 0.2s ease-in-out;
+
+  .ant-card {
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+.normal {
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}

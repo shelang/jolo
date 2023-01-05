@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import CreateLinkFromFile from './CreateLinkFromFile'
 import {
   Row,
   Col,
@@ -21,6 +22,9 @@ import { DeviceTargeting } from './DeviceTargeting'
 import { OperationSystemTargeting } from './OperationSystemTargeting'
 import { ScriptForm } from './ScriptForm'
 import { WebhookForm } from './webhookForm'
+
+import { AppCard } from '../../../components/appCard'
+import { Sticky } from '../../../components/sticky'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -113,168 +117,225 @@ export const CreateLinkForm = ({
   }
 
   return (
-    <Form
-      form={form}
-      scrollToFirstError
-      labelAlign="left"
-      name="create link"
-      labelCol={labelCol}
-      wrapperCol={wrapperCol}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      onFieldsChange={onFieldsChange}
-      initialValues={
-        initialValues ?? { status: 'ACTIVE', redirectCode: 301, hashLength: 6 }
-      }>
-      <Form.Item
-        label="Friendly Name:"
-        name="title"
-        tooltip={tooltips.friendlyName}
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Title!',
-          },
-        ]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Destination URL:"
-        name="url"
-        tooltip={tooltips.destinationUrl}
-        rules={[
-          {
-            required: true,
-            message: 'Please input your URL!',
-          },
-        ]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Status"
-        name="status"
-        rules={[
-          {
-            required: false,
-            message: 'Please input your Status!',
-          },
-        ]}>
-        <Select>
-          {Object.keys(linkStatus).map((key) => {
-            return (
-              <Select.Option value={linkStatus[key]} key={key}>
-                {key}
-              </Select.Option>
-            )
-          })}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Redirect Mode:"
-        name="redirectCode"
-        tooltip={tooltips.redirectMode}
-        rules={[
-          {
-            required: false,
-            message: 'Please input your Redirect Mode!',
-          },
-        ]}>
-        <Select>
-          {redirectModes.map((redirectMode) => {
-            return (
-              <Select.Option value={redirectMode}>{redirectMode}</Select.Option>
-            )
-          })}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Expiration Date:"
-        name="expireAt"
-        tooltip={tooltips.expirationDate}
-        rules={[
-          {
-            required: false,
-            message: 'Please input your Expire Date!',
-          },
-        ]}>
-        <DatePicker showTime={{ format: 'HH:mm' }} showNow={false} />
-      </Form.Item>
-      <Form.Item
-        label="Note:"
-        name="description"
-        tooltip={tooltips.note}
-        rules={[
-          {
-            required: false,
-            message: 'Please input your Description!',
-          },
-        ]}>
-        <TextArea maxLength={255} autoSize={{ minRows: 3, maxRows: 6 }} />
-      </Form.Item>
+    <>
+      <Form
+        form={form}
+        scrollToFirstError
+        labelAlign="left"
+        name="create link"
+        labelCol={labelCol}
+        wrapperCol={wrapperCol}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        onFieldsChange={onFieldsChange}
+        initialValues={
+          initialValues ?? {
+            status: 'ACTIVE',
+            redirectCode: 301,
+            hashLength: 6,
+          }
+        }>
+        <Sticky topOffset={-16}>
+          <FormHeader isLoading={isLoading} />
+        </Sticky>
 
-      <Form.Item label={hash ? 'Hash Url' : 'Hash Length'}>
-        <Switch checked={hash} onChange={setHash} />
-      </Form.Item>
-      <Form.Item name={hash ? 'hash' : 'hashLength'} tooltip={tooltips.hashUrl}>
-        {hash ? (
-          <Input placeholder="Hash Url" />
-        ) : (
-          <Slider defaultValue={6} min={5} max={12} marks={marks} step={1} />
-        )}
-      </Form.Item>
+        <AppCard styles={{ marginBottom: 16 }}>
+          <Form.Item
+            label="Friendly Name:"
+            name="title"
+            tooltip={tooltips.friendlyName}
+            rules={[
+              {
+                required: true,
+                message: 'Please input your Title!',
+              },
+            ]}>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Destination URL:"
+            name="url"
+            tooltip={tooltips.destinationUrl}
+            rules={[
+              {
+                required: true,
+                message: 'Please input your URL!',
+              },
+            ]}>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Status"
+            name="status"
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Status!',
+              },
+            ]}>
+            <Select>
+              {Object.keys(linkStatus).map((key) => {
+                return (
+                  <Select.Option value={linkStatus[key]} key={key}>
+                    {key}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Redirect Mode:"
+            name="redirectCode"
+            tooltip={tooltips.redirectMode}
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Redirect Mode!',
+              },
+            ]}>
+            <Select>
+              {redirectModes.map((redirectMode) => {
+                return (
+                  <Select.Option value={redirectMode}>
+                    {redirectMode}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Expiration Date:"
+            name="expireAt"
+            tooltip={tooltips.expirationDate}
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Expire Date!',
+              },
+            ]}>
+            <DatePicker showTime={{ format: 'HH:mm' }} showNow={false} />
+          </Form.Item>
+          <Form.Item
+            label="Note:"
+            name="description"
+            tooltip={tooltips.note}
+            rules={[
+              {
+                required: false,
+                message: 'Please input your Description!',
+              },
+            ]}>
+            <TextArea maxLength={255} autoSize={{ minRows: 3, maxRows: 6 }} />
+          </Form.Item>
 
-      <Form.Item
-        label="Forward Parameters:"
-        name="forwardParameter"
-        tooltip={tooltips.forwardParameters}
-        valuePropName="checked">
-        <Switch />
-      </Form.Item>
+          <Form.Item label={hash ? 'Hash Url' : 'Hash Length'}>
+            <Switch checked={hash} onChange={setHash} />
+          </Form.Item>
+          <Form.Item
+            name={hash ? 'hash' : 'hashLength'}
+            tooltip={tooltips.hashUrl}>
+            {hash ? (
+              <Input placeholder="Hash Url" />
+            ) : (
+              <Slider
+                defaultValue={6}
+                min={5}
+                max={12}
+                marks={marks}
+                step={1}
+              />
+            )}
+          </Form.Item>
 
+          <Form.Item
+            label="Forward Parameters:"
+            name="forwardParameter"
+            tooltip={tooltips.forwardParameters}
+            valuePropName="checked">
+            <Switch />
+          </Form.Item>
+        </AppCard>
+
+        <AppCard styles={{ marginBottom: 16 }}>
+          <Row>
+            <Col xs={24}>
+              <Space
+                direction="vertical"
+                style={{ width: '100%' }}
+                split={<Divider />}>
+                <Spin spinning={altTypesData.isLoading}>
+                  <DeviceTargeting
+                    Form={Form}
+                    devices={altTypesData.response?.devices ?? []}
+                    selectedDevices={selectedDevices}
+                    setSelectedDevices={setSelectedDevices}
+                  />
+                </Spin>
+                <Spin spinning={altTypesData.isLoading}>
+                  <OperationSystemTargeting
+                    Form={Form}
+                    oss={altTypesData.response?.os ?? []}
+                    selectedOs={selectedOs}
+                    setSelectedOs={setSelectedOs}
+                  />
+                </Spin>
+              </Space>
+            </Col>
+          </Row>
+        </AppCard>
+
+        <AppCard styles={{ marginBottom: 116 }}>
+          <Row>
+            <Col xs={24}>
+              <Space
+                direction="vertical"
+                style={{ width: '100%' }}
+                split={<Divider />}>
+                <ScriptForm
+                  Form={Form}
+                  iframe={iframe}
+                  setIframe={setIframe}
+                  onSelectedScript={setSelectedScript}
+                />
+                <WebhookForm
+                  Form={Form}
+                  iframe={iframe}
+                  setIframe={setIframe}
+                  onSelectedWebhook={setSelectedWebhook}
+                />
+              </Space>
+            </Col>
+          </Row>
+        </AppCard>
+      </Form>
+    </>
+  )
+}
+
+const FormHeader = ({ isStick, isLoading }) => {
+  return (
+    <AppCard
+      styles={{
+        marginBottom: 16,
+        marginLeft: isStick ? -16 : 0,
+        minWidth: isStick ? window.innerWidth - 80 : '100%',
+        transition: 'all 0.2s ease-in-out',
+      }}>
       <Row>
         <Col xs={24}>
           <Space
-            direction="vertical"
-            style={{ width: '100%' }}
-            split={<Divider />}>
-            <Spin spinning={altTypesData.isLoading}>
-              <DeviceTargeting
-                Form={Form}
-                devices={altTypesData.response?.devices ?? []}
-                selectedDevices={selectedDevices}
-                setSelectedDevices={setSelectedDevices}
-              />
-            </Spin>
-            <Spin spinning={altTypesData.isLoading}>
-              <OperationSystemTargeting
-                Form={Form}
-                oss={altTypesData.response?.os ?? []}
-                selectedOs={selectedOs}
-                setSelectedOs={setSelectedOs}
-              />
-            </Spin>
-            <ScriptForm
-              Form={Form}
-              iframe={iframe}
-              setIframe={setIframe}
-              onSelectedScript={setSelectedScript}
-            />
-            <WebhookForm
-              Form={Form}
-              iframe={iframe}
-              setIframe={setIframe}
-              onSelectedWebhook={setSelectedWebhook}
-            />
+            direction="row"
+            align="center"
+            style={{ width: '100%', justifyContent: 'space-between' }}>
+            <CreateLinkFromFile />
+            <Form.Item style={{ margin: 0 }}>
+              <Button loading={isLoading} type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
           </Space>
         </Col>
       </Row>
-
-      <br />
-      <Form.Item>
-        <Button loading={isLoading} type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    </AppCard>
   )
 }

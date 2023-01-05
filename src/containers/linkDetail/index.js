@@ -11,6 +11,7 @@ import TopDeviceBrands from '../../components/topDeviceBrands'
 import TopOses from '../../components/topOses'
 import { encodeQueryData } from '../../utils/queryParams'
 import { ColumnChartConfig } from '../../lib/ColumnChartConfig'
+import { Sticky } from '../../components/sticky'
 
 import { SubBar } from '../../components/subBar'
 import { AppCard } from '../../components/appCard'
@@ -63,51 +64,52 @@ const LinkDetail = (props) => {
   return (
     <>
       <Spin spinning={isLoading}>
+        <Sticky topOffset={-16}>
+          <SubBar
+            onChange={(time, bucket) => {
+              setTime(time)
+              setBucket(bucket)
+            }}
+            hasBucket
+          />
+        </Sticky>
+
         <Row>
-          <Col span={24} style={{ marginBottom: 32 }}>
-            <SubBar
-              onChange={(time, bucket) => {
-                setTime(time)
-                setBucket(bucket)
-              }}
-              hasBucket
-            />
-          </Col>
-          <Col span={24} style={{ marginBottom: 32 }}>
+          <Col span={24} style={{ marginBottom: 24 }}>
             <AgentNames queryParams={time} />
           </Col>
-          <Col span={24} style={{ marginBottom: 32 }}>
-            <AppCard title="Click Counts">
-              {bucket ? (
+
+          {bucket ? (
+            <Col span={24} style={{ marginBottom: 24 }}>
+              <AppCard title="Click Counts">
                 <ColumnChart
                   highcharts={Highcharts}
                   options={ColumnChartConfig(buckets) || {}}
                 />
-              ) : (
-                <span>Please Choose Periodical </span>
-              )}
-            </AppCard>
+              </AppCard>
+            </Col>
+          ) : null}
+        </Row>
+
+        <Row gutter={10} style={{ marginBottom: 24 }}>
+          <Col span={24}>
+            <Row gutter={20} style={{ marginBottom: 24 }}>
+              <Col span={12} style={{ marginBottom: 24 }}>
+                <TopOses queryParams={time} />
+              </Col>
+              <Col span={12} style={{ marginBottom: 24 }}>
+                <TopDeviceBrands queryParams={time} />
+              </Col>
+              <Col span={12} style={{ marginBottom: 24 }}>
+                <TopDevices queryParams={time} />
+              </Col>{' '}
+              <Col span={12}>
+                <TopDeviceNames queryParams={time} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Spin>
-      <Row gutter={20} style={{ marginBottom: 32 }}>
-        <Col span={24}>
-          <Row gutter={20} style={{ marginBottom: 32 }}>
-            <Col span={12} style={{ marginBottom: 32 }}>
-              <TopOses queryParams={time} />
-            </Col>
-            <Col span={12} style={{ marginBottom: 32 }}>
-              <TopDeviceBrands queryParams={time} />
-            </Col>
-            <Col span={12} style={{ marginBottom: 32 }}>
-              <TopDevices queryParams={time} />
-            </Col>{' '}
-            <Col span={12}>
-              <TopDeviceNames queryParams={time} />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
     </>
   )
 }

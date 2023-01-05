@@ -29,7 +29,7 @@ function Login() {
 
   useEffect(() => {
     if (response) {
-      setCookie(null, 'user', JSON.stringify(response), {
+      setCookie(null, 'linkComposerUser', JSON.stringify(response), {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
       history.push('./dashboard')
@@ -42,7 +42,7 @@ function Login() {
 
   return (
     <div className="auth-container">
-      <div className="auth-wrapper-image"></div>
+      <div className="auth-wrapper-image" />
       <div className="auth-wrapper-form">
         <Row className="auth-form">
           <Col span={24}>

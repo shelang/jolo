@@ -26,14 +26,10 @@ function KitMenu() {
 
   return (
     <Menu
-      mode="inline"
-      theme="dark"
       selectedKeys={[selectedKeys]}
       onClick={handleClick}
-      style={{
-        height: '100%',
-        overflow: 'auto',
-      }}>
+      className="menu"
+      inlineCollapsed>
       {menuItems.map((menuItem) => {
         return (
           <Can
@@ -44,6 +40,7 @@ function KitMenu() {
                 className="menuItem"
                 key={menuItem.id.toString()}
                 icon={menuItem.icon}
+                label={menuItem.title}
                 {...props}>
                 <NavLink to={`/${menuItem.url}`}>{menuItem.title}</NavLink>
               </Menu.Item>

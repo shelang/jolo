@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Spin, Row, Col } from 'antd'
+import { Row, Col, Space } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import { makingUrl } from '../../utils/makingUrl'
 import { apiRoutes } from '../../utils/apiRoutes'
@@ -34,11 +34,10 @@ const AgentNames = ({ queryParams }) => {
     <>
       <p className="cardTitle">Top Browsers</p>
 
-      <div className="cardBody">
+      <Row gutter={10} wrap>
         {data.map((browser, index) => {
-          const width = 90 / data.length
           return (
-            <div style={{ width: `${width}%` }}>
+            <Col flex={24 / data.length}>
               <InfoTile
                 key={index}
                 value={browser?.value}
@@ -46,10 +45,10 @@ const AgentNames = ({ queryParams }) => {
                 isLoading={isLoading}
                 primary={index === 2 || index === 3}
               />
-            </div>
+            </Col>
           )
         })}
-      </div>
+      </Row>
     </>
   )
 }
