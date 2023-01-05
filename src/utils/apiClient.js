@@ -52,7 +52,9 @@ async function ApiClient(path, options) {
   const cookies = parseCookies()
   if (Object.keys(cookies).length !== 0 && cookies.linkComposerUser) {
     const user = JSON.parse(cookies.linkComposerUser)
+    const workspaceID = JSON.parse(cookies['x-wsid'])
     fetchOptions.headers.Authorization = `Bearer ${user.token}`
+    fetchOptions.headers['x-wsid'] = workspaceID
   }
 
   return fetch(url, { ...fetchOptions })

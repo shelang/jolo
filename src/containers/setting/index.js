@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import useFetch from '../../hooks/asyncAction'
 import { Menu, Card, Row, Col } from 'antd'
 import {
   AppstoreOutlined,
