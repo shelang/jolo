@@ -5,6 +5,7 @@ import {
   LinkOutlined,
   UserOutlined,
   HomeOutlined,
+  SettingOutlined,
 } from '@ant-design/icons'
 
 const menuItems = [
@@ -45,11 +46,11 @@ const menuItems = [
     permission: 'webhooks:read',
   },
   {
-    title: 'Profile',
-    icon: <UserOutlined />,
-    url: 'dashboard/profile',
+    title: 'Settings',
+    icon: <SettingOutlined />,
+    url: 'dashboard/settings',
     id: 6,
-    permission: 'profile:read',
+    permission: 'settings:read',
   },
 ]
 

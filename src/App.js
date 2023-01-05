@@ -11,11 +11,11 @@ function App() {
     <ConfigProvider
       theme={{
         components: {
-          Layout: { colorBgHeader: 'white' },
+          Layout: { colorBgHeader: '#fff' },
           Menu: {
-            colorItemText: 'white',
-            colorItemTextSelected: 'white',
-            colorItemTextHover: 'white',
+            colorItemText: '#fff',
+            colorItemTextSelected: '#fff',
+            colorItemTextHover: '#fff',
             colorItemBgSelected: '#568793',
           },
         },

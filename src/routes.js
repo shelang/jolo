@@ -15,6 +15,7 @@ const RefreshToken = React.lazy(() => import('./containers/refresh'))
 const LinkDetail = React.lazy(() => import('./containers/linkDetail'))
 const Dashboard = React.lazy(() => import('./containers/dashboard'))
 const Workspaces = React.lazy(() => import('./containers/workspaces'))
+const Setting = React.lazy(() => import('./containers/setting'))
 
 function Routes() {
   return (
@@ -117,6 +118,15 @@ function Routes() {
           render={() => (
             <AppLayout>
               <Profile />
+            </AppLayout>
+          )}
+        />
+        <PrivateRoute
+          path="/dashboard/settings"
+          exact
+          render={() => (
+            <AppLayout>
+              <Setting />
             </AppLayout>
           )}
         />
