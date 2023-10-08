@@ -3,6 +3,7 @@ import Routes from './routes'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { ConfigProvider } from 'antd'
+
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -11,12 +12,12 @@ function App() {
     <ConfigProvider
       theme={{
         components: {
-          Layout: { colorBgHeader: '#fff' },
+          Layout: { headerBg: '#fff' },
           Menu: {
-            colorItemText: '#fff',
-            colorItemTextSelected: '#fff',
-            colorItemTextHover: '#fff',
-            colorItemBgSelected: '#568793',
+            itemColor: '#fff',
+            itemSelectedColor: '#fff',
+            itemHoverColor: '#fff',
+            itemSelectedBg: '#568793',
           },
         },
         token: {

@@ -21,4 +21,22 @@
   background-color: #365c64;
   position: relative;
   z-index: 10;
+  .ant-menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 68px;
+
+    .ant-menu-title-content {
+      opacity: 1 !important;
+      font-size: 11px;
+      margin-left: 0 !important;
+
+      display: flex !important;
+      height: 22px;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }

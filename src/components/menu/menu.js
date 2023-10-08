@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import menuItems from './menuItems'
-import Can from '../can/can'
 import { Menu } from 'antd'
-import { useHistory, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './style.scss'
 
 function KitMenu() {
-  const history = useHistory()
   const [selectedKeys, setSelectedKeys] = useState('')
 
   const handleClick = (e) => {
@@ -16,7 +14,7 @@ function KitMenu() {
   useEffect(() => {
     menuItems.forEach((menuItem) => {
       const menuItemUrl = `/${menuItem.url.split('?')[0]}`
-      const pathname = history.location.pathname
+      const pathname = window.location.pathname
 
       if (pathname.includes(menuItemUrl) && pathname === menuItemUrl) {
         setSelectedKeys(menuItem.id.toString())
@@ -29,28 +27,13 @@ function KitMenu() {
       selectedKeys={[selectedKeys]}
       onClick={handleClick}
       className="menu"
-      inlineCollapsed>
-      {menuItems.map((menuItem) => {
-        return (
-          <Can
-            key={menuItem.id.toString()}
-            depth={1}
-            yes={(props) => (
-              <Menu.Item
-                className="menuItem"
-                key={menuItem.id.toString()}
-                icon={menuItem.icon}
-                label={menuItem.title}
-                {...props}>
-                <NavLink to={`/${menuItem.url}`}>{menuItem.title}</NavLink>
-              </Menu.Item>
-            )}
-            no={() => null}
-            perform={menuItem.permission}
-          />
-        )
-      })}
-    </Menu>
+      items={menuItems.map((menuItem) => ({
+        label: <NavLink to={`/${menuItem.url}`}>{menuItem.title}</NavLink>,
+        title: menuItem.title,
+        key: menuItem.id.toString(),
+        icon: menuItem.icon,
+      }))}
+    />
   )
 }
 

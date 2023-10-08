@@ -37,9 +37,8 @@ const AgentNames = ({ queryParams }) => {
       <Row gutter={10} wrap>
         {data.map((browser, index) => {
           return (
-            <Col flex={24 / data.length}>
+            <Col flex={24 / data.length} key={index}>
               <InfoTile
-                key={index}
                 value={browser?.value}
                 label={browser?.key}
                 isLoading={isLoading}

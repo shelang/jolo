@@ -48,13 +48,13 @@ async function ApiClient(path, options) {
     fetchOptions.headers['Content-Type'] = 'application/json'
     fetchOptions.headers['Accept'] = 'application/json'
   }
-
   const cookies = parseCookies()
+
   if (Object.keys(cookies).length !== 0 && cookies.linkComposerUser) {
     const user = JSON.parse(cookies.linkComposerUser)
-    const workspaceID = JSON.parse(cookies['x-wsid'])
+    const workspaceID = cookies['x-wsid'] && JSON.parse(cookies['x-wsid'])
     fetchOptions.headers.Authorization = `Bearer ${user.token}`
-    fetchOptions.headers['x-wsid'] = workspaceID
+    if (workspaceID) fetchOptions.headers['x-wsid'] = workspaceID
   }
 
   return fetch(url, { ...fetchOptions })

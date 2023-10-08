@@ -1,4 +1,4 @@
-import rules from '../../rules';
+import rules from '../../rules'
 
 const check = (rules, action, data, depth) => {
   // const user = JSON.parse(window.localStorage.getItem('user'));
@@ -27,46 +27,46 @@ const check = (rules, action, data, depth) => {
   //   default:
   //     return false;
   // }
-  return true;
-};
+  return true
+}
 
 const checkRoutePermission = (permissions) => {
-  const routesPermissions = permissions.routes;
+  const routesPermissions = permissions.routes
   if (routesPermissions) {
     for (const routesPermission of routesPermissions) {
-      if (window.location.pathname.startsWith(routesPermission)) return true;
+      if (window.location.pathname.startsWith(routesPermission)) return true
     }
   }
-};
+}
 const checkStaticPermission = (action, permissions) => {
-  const staticPermissions = permissions.static;
+  const staticPermissions = permissions.static
 
-  return staticPermissions && staticPermissions.includes(action);
-};
+  return staticPermissions && staticPermissions.includes(action)
+}
 const checkDynamicPermission = (action, permissions, data) => {
-  const dynamicPermissions = permissions.dynamic;
+  const dynamicPermissions = permissions.dynamic
 
   if (dynamicPermissions) {
-    const permissionCondition = dynamicPermissions[action];
+    const permissionCondition = dynamicPermissions[action]
     if (!permissionCondition) {
       // dynamic rule not provided for action
-      return false;
+      return false
     }
 
-    return permissionCondition(data);
+    return permissionCondition(data)
   }
-};
+}
 
-const Can = (props) => {
+const Can = ({ yes, no, ...props }) => {
   return check(rules, props.perform, props.data, props.depth)
-    ? props.yes(props)
-    : props.no();
-};
+    ? yes(props)
+    : no()
+}
 
 Can.defaultProps = {
   yes: () => null,
   no: () => null,
   depth: 0,
-};
+}
 
-export default Can;
+export default Can

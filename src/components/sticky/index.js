@@ -42,7 +42,13 @@ export const Sticky = ({ children, topOffset = 0 }) => {
   }, [isStick])
 
   useEffect(() => {
-    document.querySelector('#content').addEventListener('scroll', handleScroll)
+    document.querySelector('#content')?.addEventListener('scroll', handleScroll)
+
+    return () => {
+      document
+        .querySelector('#content')
+        ?.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   return StickyHeader

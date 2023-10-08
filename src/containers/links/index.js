@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Table, Space, Spin, message, Divider, Input } from 'antd'
+import { useNavigate, useLocation } from 'react-router-dom'
+import {
+  Table,
+  Space,
+  Spin,
+  message,
+  Divider,
+  Input,
+  Modal,
+  QRCode,
+} from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 import { AppCard } from '../../components/appCard'
@@ -9,9 +18,11 @@ import moment from 'moment'
 const { Search } = Input
 
 const Links = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [currentPage, setCurrentPage] = useState(1)
   const [searchValue, setSearchValue] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [linkHash, setLinkHash] = useState('')
 
   const [{ response, isLoading }, doFetch] = useFetch()
 
@@ -27,6 +38,26 @@ const Links = () => {
   }
   const searchByName = (value) => {
     setSearchValue(value)
+  }
+  const downloadQRCode = () => {
+    const canvas = document.querySelector('#myqrcode canvas')
+    if (canvas) {
+      const url = canvas.toDataURL()
+      const a = document.createElement('a')
+      a.download = 'QRCode.png'
+      a.href = url
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    }
+  }
+  const showModal = (linkHash) => {
+    setLinkHash(linkHash)
+    setIsModalOpen(true)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
   }
 
   const columns = [
@@ -51,16 +82,27 @@ const Links = () => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a onClick={(e) => history.push(`./links/${record.linkId}`)}>
+          <a onClick={(e) => navigate(`./links/${record.linkId}`)}>
             View Report
           </a>
           <a
             onClick={(e) =>
-              history.push(`./create-link?id=${record.linkId}&isEditing=true`)
+              navigate(`./create-link?id=${record.linkId}&isEditing=true`)
             }>
             Edit
           </a>
-          <a onClick={(e) => copyToClipboard(record.linkHash)}>Copy</a>
+          <a
+            onClick={(e) =>
+              copyToClipboard(`${window.location.origin}/r/${record.linkHash}`)
+            }>
+            Copy
+          </a>
+          <a
+            onClick={() =>
+              showModal(`${window.location.origin}/r/${record.linkHash}`)
+            }>
+            QRCode
+          </a>
         </Space>
       ),
     },
@@ -81,6 +123,16 @@ const Links = () => {
   return (
     <AppCard>
       <Spin spinning={isLoading}>
+        <Modal
+          title="Link QR Code"
+          open={isModalOpen}
+          onCancel={handleCancel}
+          onOk={downloadQRCode}
+          okText="Download">
+          <div id="myqrcode">
+            <QRCode value={linkHash} bgColor="#fff" />
+          </div>
+        </Modal>
         <Search onSearch={searchByName} enterButton="Search" />
         <Divider />
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react'
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import React from 'react'
+import { useLocation, useNavigate, Outlet } from 'react-router-dom'
 import { destroyCookie } from 'nookies'
 import { UserOutlined, LogoutOutlined, GlobalOutlined } from '@ant-design/icons'
-import { Layout, Breadcrumb, Dropdown, Menu } from 'antd'
+import { Layout, Breadcrumb, Dropdown } from 'antd'
 import KitMenu from '../menu/menu'
 import { titleCase } from '../../utils/titlePath'
 import './layout.scss'
@@ -11,47 +11,56 @@ const { Content, Sider, Header } = Layout
 
 function AppLayout(props) {
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const pathSnippets = location.pathname.split('/').filter((i) => i)
   const breadcrumbItems = pathSnippets.map((pathSnippet, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
 
-    return (
-      <Breadcrumb.Item key={url}>
-        <Link style={{ fontSize: 16 }} to={url}>
-          {titleCase(pathSnippet)}
-        </Link>
-      </Breadcrumb.Item>
-    )
+    return {
+      href: url,
+      title: titleCase(pathSnippet),
+    }
   })
-
-  const menu = (
-    <Menu>
-      <Menu.Item
-        style={{}}
-        onClick={() => {
-          destroyCookie(null, 'linkComposerUser')
-          history.push('/login')
-        }}
-        icon={<LogoutOutlined />}>
-        Sign Out
-      </Menu.Item>{' '}
-      <Menu.Item
-        style={{}}
-        onClick={() => {
-          history.push('/workspaces')
-        }}
-        icon={<GlobalOutlined />}>
-        Workspace
-      </Menu.Item>{' '}
-    </Menu>
-  )
-
-  const menuStyle = {
-    boxShadow: '0px 0px 10px rgba(86, 135, 147, 0.2)',
-    padding: 8,
-  }
+  const items = [
+    {
+      key: '1',
+      label: (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            cursor: 'pointer',
+          }}
+          onClick={() => {
+            destroyCookie(null, 'linkComposerUser')
+            navigate('/login')
+          }}>
+          <LogoutOutlined style={{ marginRight: 12 }} />
+          Sign Out
+        </div>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            cursor: 'not-allowed',
+          }}
+          onClick={() => {
+            // history.push('/workspaces')
+          }}>
+          <GlobalOutlined style={{ marginRight: 12 }} />
+          Workspace
+        </div>
+      ),
+    },
+  ]
 
   return (
     <Layout>
@@ -65,19 +74,17 @@ function AppLayout(props) {
       </Sider>
       <Layout>
         <Header className="bread_crumb_wrapper">
-          <Breadcrumb separator={'>'}>{breadcrumbItems}</Breadcrumb>
+          <Breadcrumb separator={'>'} items={breadcrumbItems} />
+
           <Dropdown
-            overlay={menu}
-            dropdownRender={(menu) =>
-              React.cloneElement(menu, { style: menuStyle })
-            }
+            menu={{ items }}
             trigger={['click']}
             className="userMenuWrapper">
             <UserOutlined />
           </Dropdown>
         </Header>
         <Content className="ant_content" id="content">
-          {props.children}
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

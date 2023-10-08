@@ -22,11 +22,7 @@ const Setting = () => {
     }
   }
 
-  const items = [
-    getItem('Profile', 'profile', <UserOutlined />),
-    getItem('Navigation Two', 'sub2', <AppstoreOutlined />),
-    getItem('Navigation Three', 'sub4', <SettingOutlined />),
-  ]
+  const items = [getItem('Profile', 'profile', <UserOutlined />)]
   const onClick = (e) => {
     console.log('click', e)
     setSelectedMenu(e.key)

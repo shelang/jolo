@@ -1,53 +1,53 @@
-import { useReducer } from "react";
-import { useHistory } from "react-router-dom";
-import ApiClient from "../utils/apiClient";
+import { useReducer } from 'react'
+import { useNavigate } from 'react-router-dom'
+import ApiClient from '../utils/apiClient'
 
 const dataFetchReducer = (state, action) => {
-	switch (action.type) {
-		case "FETCH_INIT":
-			return { ...state, isLoading: true, error: null, response: null };
-		case "FETCH_SUCCESS":
-			return {
-				...state,
-				isLoading: false,
-				error: null,
-				response: action.payload,
-			};
-		case "FETCH_FAILURE":
-			return {
-				...state,
-				isLoading: false,
-				error: action.payload,
-				response: null,
-			};
-		default:
-			return state;
-	}
-};
+  switch (action.type) {
+    case 'FETCH_INIT':
+      return { ...state, isLoading: true, error: null, response: null }
+    case 'FETCH_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+        response: action.payload,
+      }
+    case 'FETCH_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+        response: null,
+      }
+    default:
+      return state
+  }
+}
 
 function useFetch(action) {
-	const [state, dispatch] = useReducer(dataFetchReducer, {
-		isLoading: false,
-		error: null,
-		response: null,
-	});
-	const history = useHistory();
+  const [state, dispatch] = useReducer(dataFetchReducer, {
+    isLoading: false,
+    error: null,
+    response: null,
+  })
+  const navigate = useNavigate()
 
-	async function performAction(options) {
-		try {
-			dispatch({ type: "FETCH_INIT" });
-			const res = await ApiClient(options.url, options);
-			action && action.onSuccess && action.onSuccess(res);
-			dispatch({ type: "FETCH_SUCCESS", payload: res });
-		} catch (e) {
-			if (e.status === 401) {
-				history.push("/refresh");
-			}
-			action && action.onError && action.onError(e);
-			dispatch({ type: "FETCH_FAILURE", payload: e });
-		}
-	}
+  async function performAction(options) {
+    try {
+      dispatch({ type: 'FETCH_INIT' })
+      const res = await ApiClient(options.url, options)
+      action && action.onSuccess && action.onSuccess(res)
+      dispatch({ type: 'FETCH_SUCCESS', payload: res })
+    } catch (e) {
+      if (e.status === 401) {
+        navigate('/refresh')
+      }
+      action && action.onError && action.onError(e)
+      dispatch({ type: 'FETCH_FAILURE', payload: e })
+    }
+  }
 
-	return [state, performAction];
+  return [state, performAction]
 }
-export default useFetch;
+export default useFetch

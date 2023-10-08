@@ -2,7 +2,7 @@ import { parseCookies } from 'nookies'
 
 function isAuthenticated() {
   const cookies = parseCookies()
-  if (cookies.user) {
+  if (cookies.linkComposerUser) {
     const user = JSON.parse(cookies.linkComposerUser)
 
     return user && user.token

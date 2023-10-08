@@ -1,13 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { Col, Row } from 'antd'
 import { SubBar } from '../../components/subBar'
-import FiveTopIp from '../../components/fiveTopIp'
-import AgentNames from '../../components/agentNames'
-import TopDevices from '../../components/topDevices'
-import TopDeviceNames from '../../components/topDeviceNames'
-import TopDeviceBrands from '../../components/topDeviceBrands'
-import TopOses from '../../components/topOses'
 import { Sticky } from '../../components/sticky'
+
+const FiveTopIp = React.lazy(() => import('../../components/fiveTopIp'))
+const AgentNames = React.lazy(() => import('../../components/agentNames'))
+const TopDevices = React.lazy(() => import('../../components/topDevices'))
+const TopDeviceNames = React.lazy(() =>
+  import('../../components/topDeviceNames'),
+)
+const TopOses = React.lazy(() => import('../../components/topOses'))
+const TopDeviceBrands = React.lazy(() =>
+  import('../../components/topDeviceBrands'),
+)
 
 const Dashboard = () => {
   const [time, setTime] = useState({})

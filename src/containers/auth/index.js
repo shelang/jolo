@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Logo from '../../assets/logo-light-New.png'
 import useFetch from '../../hooks/asyncAction'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Space, Row, Col, Typography, Image } from 'antd'
 import { setCookie } from 'nookies'
 import './auth.scss'
@@ -13,7 +13,7 @@ const layout = {
 
 function Login() {
   const [{ response, isLoading, error }, doFetch] = useFetch()
-  let history = useHistory()
+  let navigate = useNavigate()
 
   const onFinish = async (values) => {
     await doFetch({
@@ -32,7 +32,7 @@ function Login() {
       setCookie(null, 'linkComposerUser', JSON.stringify(response), {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
-      history.push('./dashboard')
+      navigate('./dashboard')
     }
   }, [response])
 

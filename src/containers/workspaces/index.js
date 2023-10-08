@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Typography, Space, Skeleton } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { setCookie } from 'nookies'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useFetch from '../../hooks/asyncAction'
 import './style.scss'
 
@@ -21,7 +21,7 @@ const WorkspaceItem = ({ workspace, onClick }) => {
 
 const Workspaces = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const fetchWorkspaces = async () => {
     try {
@@ -34,7 +34,7 @@ const Workspaces = () => {
 
   const handleWorkspaceClick = (id) => {
     setCookie(null, ' x-wsid', JSON.stringify(id))
-    history.push('/dashboard')
+    navigate('/dashboard')
   }
 
   useEffect(() => {

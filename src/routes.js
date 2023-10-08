@@ -1,9 +1,8 @@
 import React, { Suspense } from 'react'
-import PrivateRoute from './utils/privateRoute'
 import AppLayout from './components/layout/layout'
-import LoginLayout from './components/layout/LoginLayout'
-import { Switch, Route, Redirect } from 'react-router-dom'
 import { Spin } from 'antd'
+
+import { Routes as ReactRoutes, Route, Navigate } from 'react-router-dom'
 
 const Login = React.lazy(() => import('./containers/auth'))
 const CreateLink = React.lazy(() => import('./containers/createLink'))
@@ -17,121 +16,107 @@ const Dashboard = React.lazy(() => import('./containers/dashboard'))
 const Workspaces = React.lazy(() => import('./containers/workspaces'))
 const Setting = React.lazy(() => import('./containers/setting'))
 
+const Loading = () => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        width: '100%',
+        height: '100vh',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}>
+      <Spin />
+    </div>
+  )
+}
+
 function Routes() {
   return (
-    <Suspense
-      fallback={
-        <div
-          style={{
-            display: 'flex',
-            width: '100%',
-            height: '100vh',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignContent: 'center',
-          }}>
-          <Spin />
-        </div>
-      }>
-      <Switch>
+    <ReactRoutes>
+      <Route exact path="/refresh" element={<RefreshToken />} />
+      <Route exact path="/login" element={<Login />} />
+      <Route
+        path="/"
+        exact
+        element={<Navigate to="/dashboard" replace={true} />}
+      />
+      <Route path="/workspaces" exact element={<Workspaces />} />
+      <Route path="/dashboard" element={<AppLayout />}>
         <Route
-          exact
-          path="/refresh"
-          render={() => (
-            <LoginLayout>
-              <RefreshToken />
-            </LoginLayout>
-          )}
-        />
-        <Route exact path="/login" render={() => <Login />} />
-        <PrivateRoute
-          path="/"
-          exact
-          render={() => {
-            return (
-              <Redirect
-                to={{
-                  pathname: '/dashboard',
-                }}
-              />
-            )
-          }}
-        />
-        <PrivateRoute path="/workspaces" exact render={() => <Workspaces />} />
-        <PrivateRoute
-          path="/dashboard"
-          exact
-          render={() => (
-            <AppLayout>
+          index
+          element={
+            <Suspense fallback={<Loading />}>
               <Dashboard />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/create-link"
           exact
-          render={() => (
-            <AppLayout>
+          element={
+            <Suspense fallback={<Loading />}>
               <CreateLink />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/links"
           exact
-          render={() => (
-            <AppLayout>
+          element={
+            <Suspense fallback={<Loading />}>
               <Links />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/links/:id"
           exact
-          render={(props) => (
-            <AppLayout>
-              <LinkDetail {...props} />
-            </AppLayout>
-          )}
+          element={
+            <Suspense fallback={<Loading />}>
+              <LinkDetail />
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/scripts"
           exact
-          render={() => (
-            <AppLayout>
+          element={
+            <Suspense fallback={<Loading />}>
               <Scripts />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/webhooks"
           exact
-          render={() => (
-            <AppLayout>
+          element={
+            <Suspense fallback={<Loading />}>
               <Webhook />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/profile"
           exact
-          render={() => (
-            <AppLayout>
+          element={
+            <Suspense fallback={<Loading />}>
               <Profile />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-        <PrivateRoute
+        <Route
           path="/dashboard/settings"
           exact
-          render={() => (
-            <AppLayout>
+          element={
+            <Suspense fallback={<Loading />}>
               <Setting />
-            </AppLayout>
-          )}
+            </Suspense>
+          }
         />
-      </Switch>
-    </Suspense>
+      </Route>
+    </ReactRoutes>
   )
 }
 export default Routes

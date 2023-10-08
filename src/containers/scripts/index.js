@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
 import { Modal, Button, Input, Table, Spin, Divider, Form } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
@@ -12,7 +11,6 @@ const { TextArea, Search } = Input
 function Scripts() {
   let query = useQuery()
 
-  const history = useHistory()
   const [currentPage, setCurrentPage] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isEditModalVisible, setIsEditModalVisible] = useState(false)

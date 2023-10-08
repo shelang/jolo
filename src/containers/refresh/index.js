@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import useFetch from '../../hooks/asyncAction'
 import { Spin } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
 const RefreshToken = () => {
   const [{ response, isLoading, error }, doFetch] = useFetch()
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const refreshToken = () => {
     const cookies = parseCookies()
@@ -37,14 +37,14 @@ const RefreshToken = () => {
       setCookie(null, 'linkComposerUser', JSON.stringify(response), {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
-      history.goBack()
+      navigate(-1)
     }
   }, [response])
 
   useEffect(() => {
     if (error && error.status === 401) {
       destroyCookie(null, 'linkComposerUser')
-      history.push('/login')
+      navigate('/login')
     }
   }, [error])
 
