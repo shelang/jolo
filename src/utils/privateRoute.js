@@ -6,16 +6,11 @@ import Can from '../components/can/can'
 function PrivateRoute(props) {
   if (isAuthenticated()) {
     return (
-      <Route
-        {...props}
-        element={
-          <Can
-            yes={() => props.element}
-            no={() => <Navigate to="/dashboard" replace={true} />}
-            perform={props.perform}
-            depth={props.depth}
-          />
-        }
+      <Can
+        yes={() => props.element}
+        no={() => <Navigate to="/dashboard" replace={true} />}
+        perform={props.perform}
+        depth={props.depth}
       />
     )
   } else {

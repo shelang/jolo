@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import AppLayout from './components/layout/layout'
+import PrivateRoute from './utils/privateRoute'
 import { Spin } from 'antd'
-
 import { Routes as ReactRoutes, Route, Navigate } from 'react-router-dom'
 
 const Login = React.lazy(() => import('./containers/auth'))
@@ -48,7 +48,7 @@ function Routes() {
           index
           element={
             <Suspense fallback={<Loading />}>
-              <Dashboard />
+              <PrivateRoute element={<Dashboard />} />
             </Suspense>
           }
         />
@@ -57,7 +57,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <CreateLink />
+              <PrivateRoute element={<CreateLink />} />
             </Suspense>
           }
         />
@@ -66,7 +66,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <Links />
+              <PrivateRoute element={<Links />} />
             </Suspense>
           }
         />
@@ -75,7 +75,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <LinkDetail />
+              <PrivateRoute element={<LinkDetail />} />
             </Suspense>
           }
         />
@@ -84,7 +84,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <Scripts />
+              <PrivateRoute element={<Scripts />} />
             </Suspense>
           }
         />
@@ -93,7 +93,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <Webhook />
+              <PrivateRoute element={<Webhook />} />
             </Suspense>
           }
         />
@@ -102,7 +102,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <Profile />
+              <PrivateRoute element={<Profile />} />
             </Suspense>
           }
         />
@@ -111,7 +111,7 @@ function Routes() {
           exact
           element={
             <Suspense fallback={<Loading />}>
-              <Setting />
+              <PrivateRoute element={<Setting />} />
             </Suspense>
           }
         />
