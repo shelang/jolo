@@ -17,7 +17,7 @@ export const WebhookModal = (props) => {
   return (
     <Modal
       title="Create Webhook"
-      visible={onwebhookModalVisible}
+      open={onwebhookModalVisible}
       onCancel={onCancel}
       footer={null}>
       <Space direction="vertical" style={{ width: '100%' }}>

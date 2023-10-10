@@ -15,7 +15,7 @@ export const SuccefullModal = (props) => {
   return (
     <Modal
       title="Created Link(s) Successfully"
-      visible={onIsModalVisible}
+      open={onIsModalVisible}
       onCancel={onCancel}
       onOk={onCreateNewLink}
       cancelText={onMassCreateResponses.length > 1 ? 'Cancel' : 'Edit'}

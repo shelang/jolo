@@ -144,7 +144,7 @@ function Webhook() {
         <Divider />
         <Modal
           title={isEditingMode ? 'Edit webhook' : 'Create webhook'}
-          visible={isModalVisible}
+          open={isModalVisible}
           onCancel={handleCancel}
           footer={null}
           destroyOnClose>

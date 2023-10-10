@@ -12,7 +12,7 @@ export const FromFileModal = (props) => {
   return (
     <Modal
       title="Create Links From File"
-      visible={onIsCreateLinkModalVisible}
+      open={onIsCreateLinkModalVisible}
       onCancel={onCancel}
       onOk={onCreateNewLinks}
       okText="Create Links">

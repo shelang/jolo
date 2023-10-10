@@ -136,7 +136,7 @@ function Scripts() {
         <Divider />
         <Modal
           title="Edit Script"
-          visible={isEditModalVisible}
+          open={isEditModalVisible}
           onCancel={handleCancelEdit}
           footer={null}>
           <Form
@@ -161,7 +161,7 @@ function Scripts() {
         </Modal>
         <Modal
           title="Create Script"
-          visible={isModalVisible}
+          open={isModalVisible}
           onCancel={handleCancel}
           footer={null}>
           <Form
