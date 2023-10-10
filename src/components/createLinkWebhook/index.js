@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { AutoComplete, Button, Divider, Space, Tooltip, Typography } from 'antd'
+import {
+  AutoComplete,
+  Button,
+  Divider,
+  Space,
+  Tooltip,
+  Typography,
+  Input,
+  Modal,
+  Space,
+} from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import { tooltips } from '../../utils/constants'
-import { WebhookModal } from './content/webhookModal'
+// import { WebhookModal } from './content/webhookModal'
 
 const { Title } = Typography
+const { TextArea } = Input
 
 const WebhookSection = (props) => {
   const { webhookData, onSearch, isLoading, onSelectedWebhook } = props
@@ -102,3 +113,46 @@ const WebhookSection = (props) => {
 }
 
 export default WebhookSection
+
+export const WebhookModal = (props) => {
+  const {
+    onIsLoading,
+    onwebhookModalVisible,
+    onCancel,
+    onWebhookName,
+    onChangeWebhookName,
+    onWebhookUrl,
+    onChengeWebhookUrl,
+    onCreateNewWebhook,
+  } = props
+
+  return (
+    <Modal
+      title="Create Webhook"
+      open={onwebhookModalVisible}
+      onCancel={onCancel}
+      footer={null}>
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Input
+          placeholder="Webhook Name"
+          style={{ width: '100%' }}
+          value={onWebhookName}
+          onChange={onChangeWebhookName}
+        />
+        <TextArea
+          placeholder="Webhook URL"
+          style={{ width: '100%' }}
+          rows={4}
+          value={onWebhookUrl}
+          onChange={onChengeWebhookUrl}
+        />
+        <Button
+          loading={onIsLoading}
+          type="primary"
+          onClick={onCreateNewWebhook}>
+          Submit
+        </Button>
+      </Space>
+    </Modal>
+  )
+}

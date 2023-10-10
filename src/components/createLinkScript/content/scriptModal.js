@@ -17,7 +17,7 @@ export const ScriptModal = (props) => {
   return (
     <Modal
       title="Create Script"
-      visible={onScriptModalVisible}
+      open={onScriptModalVisible}
       onCancel={onCancel}
       footer={null}>
       <Space direction="vertical" style={{ width: '100%' }}>
