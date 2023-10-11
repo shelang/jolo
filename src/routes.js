@@ -35,14 +35,38 @@ const Loading = () => {
 function Routes() {
   return (
     <ReactRoutes>
-      <Route exact path="/refresh" element={<RefreshToken />} />
-      <Route exact path="/login" element={<Login />} />
+      <Route
+        exact
+        path="/refresh"
+        element={
+          <Suspense fallback={<Loading />}>
+            <RefreshToken />
+          </Suspense>
+        }
+      />
+      <Route
+        exact
+        path="/login"
+        element={
+          <Suspense fallback={<Loading />}>
+            <Login />
+          </Suspense>
+        }
+      />
       <Route
         path="/"
         exact
         element={<Navigate to="/dashboard" replace={true} />}
       />
-      <Route path="/workspaces" exact element={<Workspaces />} />
+      <Route
+        path="/workspaces"
+        exact
+        element={
+          <Suspense fallback={<Loading />}>
+            <Workspaces />
+          </Suspense>
+        }
+      />
       <Route path="/dashboard" element={<AppLayout />}>
         <Route
           index

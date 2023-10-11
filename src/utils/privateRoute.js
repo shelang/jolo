@@ -14,7 +14,7 @@ function PrivateRoute(props) {
       />
     )
   } else {
-    return <Route {...props} element={<Navigate to="/login" />} />
+    return <Navigate to="/login" />
   }
 }
 export default PrivateRoute
