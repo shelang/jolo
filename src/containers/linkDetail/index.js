@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import useFetch from '../../hooks/asyncAction'
-import moment from 'moment'
 import Highcharts from 'highcharts/highstock'
 import ColumnChart from 'highcharts-react-official'
+import dayjs from 'dayjs'
+import { useParams } from 'react-router-dom'
+import utc from 'dayjs/plugin/utc'
 import { Row, Col, Spin, Card, Typography, Space, Select } from 'antd'
 import AgentNames from '../../components/agentNames'
 import TopDevices from '../../components/topDevices'
@@ -18,12 +20,17 @@ import { AppCard } from '../../components/appCard'
 
 const { Title } = Typography
 const { Option } = Select
+dayjs.extend(utc)
 
 const LinkDetail = (props) => {
   const [buckets, setBuckets] = useState([])
-  const [time, setTime] = useState({})
-  const [timeFrame, setTimeFrame] = useState('0')
+  const [time, setTime] = useState({
+    from: dayjs().startOf('day').utc().format(),
+    to: dayjs().utc().format(),
+  })
   const [bucket, setBucket] = useState(null)
+
+  const params = useParams()
 
   const [{ response, isLoading }, doFetch] = useFetch()
 
@@ -37,8 +44,11 @@ const LinkDetail = (props) => {
       to: time.to,
       bucket,
     })
+
+    console.log(queryParams, 'queryParams')
+    console.log(params, 'params')
     await doFetch({
-      url: `analytics/${props.match.params.id}?${queryParams}`,
+      url: `analytics/${params?.id}?${queryParams}`,
       method: 'GET',
     })
   }

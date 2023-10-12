@@ -60,9 +60,6 @@ const FiveTopIp = ({ queryParams }) => {
   }
 
   useEffect(() => {
-    fetchLinks()
-  }, [])
-  useEffect(() => {
     if (Object.keys(queryParams).length) {
       setIPS([])
       fetchLinks()

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Col, Row } from 'antd'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { SubBar } from '../../components/subBar'
 import { Sticky } from '../../components/sticky'
 
@@ -14,9 +16,15 @@ const TopDeviceBrands = React.lazy(() =>
   import('../../components/topDeviceBrands'),
 )
 
-const Dashboard = () => {
-  const [time, setTime] = useState({})
+dayjs.extend(utc)
 
+const Dashboard = () => {
+  const [time, setTime] = useState({
+    from: dayjs().startOf('day').utc().format(),
+    to: dayjs().utc().format(),
+  })
+
+  console.log(time)
   return (
     <Row gutter={10} style={{ marginBottom: 24 }}>
       <Sticky topOffset={-16}>

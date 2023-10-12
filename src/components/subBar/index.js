@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { DatePicker, Row, Select, Space, Col } from 'antd'
 import { timeframes } from '../../utils/constants'
 import { AppCard } from '../appCard'
@@ -7,6 +8,7 @@ import './style.scss'
 
 const { RangePicker } = DatePicker
 const { Option } = Select
+dayjs.extend(utc)
 
 export const SubBar = ({ onChange, hasBucket = false, isStick }) => {
   const [startDate, setStartDate] = useState(dayjs())
@@ -18,7 +20,6 @@ export const SubBar = ({ onChange, hasBucket = false, isStick }) => {
     setTimeFrame(value)
     let endDate = null
     let startDate = null
-
     switch (value) {
       case 'current': {
         endDate = dayjs().endOf('date')
@@ -31,6 +32,7 @@ export const SubBar = ({ onChange, hasBucket = false, isStick }) => {
         startDate = dayjs().subtract(1, 'months').startOf('month')
         break
       }
+      case 'beginning':
       case 'prevYear': {
         endDate = dayjs().startOf('year')
         startDate = dayjs().subtract(1, 'years').startOf('year')
@@ -48,8 +50,8 @@ export const SubBar = ({ onChange, hasBucket = false, isStick }) => {
     setEndDate(endDate)
     onChange(
       {
-        from: startDate.format(),
-        to: endDate.format(),
+        from: startDate.utc().format(),
+        to: endDate.utc().format(),
       },
       hasBucket ? bucket : null,
     )

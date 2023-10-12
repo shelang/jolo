@@ -23,9 +23,6 @@ const TopDevices = ({ queryParams }) => {
   }
 
   useEffect(() => {
-    fetchLinks()
-  }, [])
-  useEffect(() => {
     if (Object.keys(queryParams).length) {
       fetchLinks()
     }

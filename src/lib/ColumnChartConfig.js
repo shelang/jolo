@@ -48,9 +48,9 @@ export const ColumnChartConfig = (response) => {
           enabled: true,
           format: '{point.y}',
           style: {
-            color: '#a5a5a5',
+            color: '#dedede',
             fontFamily: 'Verdana',
-            fill: '#a5a5a5',
+            fill: '#dedede',
             letterSpacing: '1px',
           },
         },
@@ -67,6 +67,16 @@ export const ColumnChartConfig = (response) => {
         data: response.map((item) => item.count),
         tooltip: {
           valueSuffix: ' {value} times clicked',
+        },
+        dataLabels: {
+          enabled: true,
+          format: '{point.y}',
+          style: {
+            color: '#030303',
+            fontFamily: 'Verdana',
+            fill: '#030303',
+            letterSpacing: '1px',
+          },
         },
       },
       {

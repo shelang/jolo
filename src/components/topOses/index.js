@@ -18,6 +18,7 @@ const TopOses = ({ queryParams }) => {
 
   const fetchLinks = async () => {
     const linkId = params.id
+    console.log(queryParams, 'queryParams')
     const URL = makingUrl(apiRoutes.TOP_OSES, linkId, queryParams)
     await doFetch({
       url: URL,
@@ -25,9 +26,6 @@ const TopOses = ({ queryParams }) => {
     })
   }
 
-  useEffect(() => {
-    fetchLinks()
-  }, [])
   useEffect(() => {
     if (Object.keys(queryParams).length) {
       fetchLinks()

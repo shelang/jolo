@@ -82,7 +82,7 @@ const Links = () => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a onClick={(e) => navigate(`./links/${record.linkId}`)}>
+          <a onClick={(e) => navigate(`/dashboard/links/${record.linkId}`)}>
             View Report
           </a>
           <a
