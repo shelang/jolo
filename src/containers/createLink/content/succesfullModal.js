@@ -3,7 +3,6 @@ import { Col, Modal, Row, Input, Divider, Button } from 'antd'
 const { Search } = Input
 
 export const SuccefullModal = (props) => {
-  console.log(props)
   const {
     onCancel,
     onIsModalVisible,

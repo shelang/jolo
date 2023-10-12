@@ -3,13 +3,13 @@ import CreateLinkFromFile from './CreateLinkFromFile'
 import {
   Row,
   Col,
-  Form,
   Input,
   Button,
   Select,
+  Form,
   DatePicker,
   Switch,
-  Card,
+  Collapse,
   Space,
   Tooltip,
   Slider,
@@ -34,6 +34,7 @@ export const CreateLinkForm = ({
   altTypesData,
   onFinishForm,
   initialValues,
+  form,
 }) => {
   const [hash, setHash] = useState(false)
   const [iframe, setIframe] = useState(false)
@@ -41,8 +42,6 @@ export const CreateLinkForm = ({
   const [selectedOs, setSelectedOs] = useState({})
   const [selectedScript, setSelectedScript] = useState()
   const [selectedWebhook, setSelectedWebhook] = useState()
-
-  const [form] = Form.useForm()
 
   const onFinish = async ({ iframe, ...values }) => {
     const data = {
@@ -115,6 +114,127 @@ export const CreateLinkForm = ({
     11: '11',
     12: '12',
   }
+  const items = [
+    {
+      key: '1',
+      label: 'Advance Setting',
+      children: (
+        <>
+          <AppCard styles={{ marginBottom: 16 }}>
+            <Form.Item
+              label="Redirect Mode:"
+              name="redirectCode"
+              tooltip={tooltips.redirectMode}
+              rules={[
+                {
+                  required: false,
+                  message: 'Please input your Redirect Mode!',
+                },
+              ]}>
+              <Select>
+                {redirectModes.map((redirectMode, index) => {
+                  return (
+                    <Select.Option key={index} value={redirectMode}>
+                      {redirectMode}
+                    </Select.Option>
+                  )
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item label={hash ? 'Hash Url' : 'Hash Length'}>
+              <Switch checked={hash} onChange={setHash} />
+            </Form.Item>
+            <Form.Item
+              name={hash ? 'hash' : 'hashLength'}
+              tooltip={tooltips.hashUrl}>
+              {hash ? (
+                <Input placeholder="Hash Url" />
+              ) : (
+                <Slider min={5} max={12} marks={marks} step={1} />
+              )}
+            </Form.Item>
+
+            <Form.Item
+              label="Forward Parameters:"
+              name="forwardParameter"
+              tooltip={tooltips.forwardParameters}
+              valuePropName="checked">
+              <Switch />
+            </Form.Item>
+          </AppCard>
+
+          <AppCard styles={{ marginBottom: 16 }}>
+            <Row>
+              <Col xs={24}>
+                <Space
+                  direction="vertical"
+                  style={{ width: '100%' }}
+                  split={<Divider />}>
+                  <Spin spinning={altTypesData.isLoading}>
+                    <DeviceTargeting
+                      Form={Form}
+                      devices={altTypesData.response?.devices ?? []}
+                      selectedDevices={selectedDevices}
+                      setSelectedDevices={setSelectedDevices}
+                    />
+                  </Spin>
+                  <Spin spinning={altTypesData.isLoading}>
+                    <OperationSystemTargeting
+                      Form={Form}
+                      oss={altTypesData.response?.os ?? []}
+                      selectedOs={selectedOs}
+                      setSelectedOs={setSelectedOs}
+                    />
+                  </Spin>
+                </Space>
+              </Col>
+            </Row>
+          </AppCard>
+
+          <AppCard styles={{ marginBottom: 116 }}>
+            <Row>
+              <Col xs={24}>
+                <Space
+                  direction="vertical"
+                  style={{ width: '100%' }}
+                  split={<Divider />}>
+                  <Form.Item
+                    label="URL Masking:"
+                    name="iframe"
+                    valuePropName="checked"
+                    className="urlMasking">
+                    <Tooltip
+                      className={'customTooltip'}
+                      placement="top"
+                      title={tooltips.urlMask}>
+                      <Button>?</Button>
+                    </Tooltip>
+                    <Switch checked={iframe} onChange={setIframe} />
+                  </Form.Item>
+                  {!iframe && (
+                    <>
+                      <ScriptForm
+                        Form={Form}
+                        iframe={iframe}
+                        setIframe={setIframe}
+                        onSelectedScript={setSelectedScript}
+                      />
+                      <WebhookForm
+                        Form={Form}
+                        iframe={iframe}
+                        setIframe={setIframe}
+                        onSelectedWebhook={setSelectedWebhook}
+                      />
+                    </>
+                  )}
+                </Space>
+              </Col>
+            </Row>
+          </AppCard>
+        </>
+      ),
+    },
+  ]
 
   return (
     <>
@@ -129,11 +249,13 @@ export const CreateLinkForm = ({
         onFinishFailed={onFinishFailed}
         onFieldsChange={onFieldsChange}
         initialValues={
-          initialValues ?? {
-            status: 'ACTIVE',
-            redirectCode: 301,
-            hashLength: 6,
-          }
+          Object.keys(initialValues).length
+            ? initialValues
+            : {
+                status: 'ACTIVE',
+                redirectCode: 301,
+                hashLength: 6,
+              }
         }>
         <Sticky topOffset={-16}>
           <FormHeader isLoading={isLoading} />
@@ -183,26 +305,7 @@ export const CreateLinkForm = ({
               })}
             </Select>
           </Form.Item>
-          <Form.Item
-            label="Redirect Mode:"
-            name="redirectCode"
-            tooltip={tooltips.redirectMode}
-            rules={[
-              {
-                required: false,
-                message: 'Please input your Redirect Mode!',
-              },
-            ]}>
-            <Select>
-              {redirectModes.map((redirectMode) => {
-                return (
-                  <Select.Option value={redirectMode}>
-                    {redirectMode}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-          </Form.Item>
+
           <Form.Item
             label="Expiration Date:"
             name="expireAt"
@@ -227,86 +330,8 @@ export const CreateLinkForm = ({
             ]}>
             <TextArea maxLength={255} autoSize={{ minRows: 3, maxRows: 6 }} />
           </Form.Item>
-
-          <Form.Item label={hash ? 'Hash Url' : 'Hash Length'}>
-            <Switch checked={hash} onChange={setHash} />
-          </Form.Item>
-          <Form.Item
-            name={hash ? 'hash' : 'hashLength'}
-            tooltip={tooltips.hashUrl}>
-            {hash ? (
-              <Input placeholder="Hash Url" />
-            ) : (
-              <Slider
-                defaultValue={6}
-                min={5}
-                max={12}
-                marks={marks}
-                step={1}
-              />
-            )}
-          </Form.Item>
-
-          <Form.Item
-            label="Forward Parameters:"
-            name="forwardParameter"
-            tooltip={tooltips.forwardParameters}
-            valuePropName="checked">
-            <Switch />
-          </Form.Item>
         </AppCard>
-
-        <AppCard styles={{ marginBottom: 16 }}>
-          <Row>
-            <Col xs={24}>
-              <Space
-                direction="vertical"
-                style={{ width: '100%' }}
-                split={<Divider />}>
-                <Spin spinning={altTypesData.isLoading}>
-                  <DeviceTargeting
-                    Form={Form}
-                    devices={altTypesData.response?.devices ?? []}
-                    selectedDevices={selectedDevices}
-                    setSelectedDevices={setSelectedDevices}
-                  />
-                </Spin>
-                <Spin spinning={altTypesData.isLoading}>
-                  <OperationSystemTargeting
-                    Form={Form}
-                    oss={altTypesData.response?.os ?? []}
-                    selectedOs={selectedOs}
-                    setSelectedOs={setSelectedOs}
-                  />
-                </Spin>
-              </Space>
-            </Col>
-          </Row>
-        </AppCard>
-
-        <AppCard styles={{ marginBottom: 116 }}>
-          <Row>
-            <Col xs={24}>
-              <Space
-                direction="vertical"
-                style={{ width: '100%' }}
-                split={<Divider />}>
-                <ScriptForm
-                  Form={Form}
-                  iframe={iframe}
-                  setIframe={setIframe}
-                  onSelectedScript={setSelectedScript}
-                />
-                <WebhookForm
-                  Form={Form}
-                  iframe={iframe}
-                  setIframe={setIframe}
-                  onSelectedWebhook={setSelectedWebhook}
-                />
-              </Space>
-            </Col>
-          </Row>
-        </AppCard>
+        <Collapse items={items} bordered={false} ghost />
       </Form>
     </>
   )

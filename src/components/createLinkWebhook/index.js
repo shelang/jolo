@@ -92,18 +92,21 @@ const WebhookSection = (props) => {
           <Button>?</Button>
         </Tooltip>
       </Title>
-      <AutoComplete
-        dropdownMatchSelectWidth={252}
-        style={{ width: 300 }}
-        options={webhooks}
-        onSelect={onSelect}
-        onSearch={onSearch}
-        placeholder="Search Webhook"
-        value={selectedWebhook ? selectedWebhook.label : undefined}
-      />
-      <Divider />
-      <Space direction="vertical">
-        <Button type="primary" onClick={() => setWebhookModalVisible(true)}>
+      <Space>
+        <AutoComplete
+          popupMatchSelectWidth={252}
+          style={{ width: 300 }}
+          options={webhooks}
+          onSelect={onSelect}
+          onSearch={onSearch}
+          placeholder="Search Webhook"
+          value={selectedWebhook ? selectedWebhook.label : undefined}
+        />
+
+        <Button
+          type="primary"
+          style={{ width: 140 }}
+          onClick={() => setWebhookModalVisible(true)}>
           Add WebHook
         </Button>
       </Space>

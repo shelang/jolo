@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Spin } from 'antd'
+import { Spin, Form } from 'antd'
 
 import useFetch from '../../../hooks/asyncAction'
 import { booleanEnum } from '../../../utils/constants'
@@ -28,6 +28,8 @@ const CreateLink = () => {
   const [linkData, fetchLinkData] = useFetch()
   const [altTypesData, getAltTypeData] = useFetch()
 
+  const [form] = Form.useForm()
+
   const fetchDevices = async () => {
     getAltTypeData({
       url: 'links/alt/types',
@@ -39,8 +41,9 @@ const CreateLink = () => {
   }, [])
 
   const createNewLink = () => {
-    // setIsModalVisible(false)
-    // form.resetFields()
+    setIsModalVisible(false)
+    form.resetFields()
+    setMassCreateResponses([])
   }
 
   const onFinish = async (values) => {
@@ -92,6 +95,7 @@ const CreateLink = () => {
         <CreateLinkForm
           initialValues={linkData?.response ?? {}}
           onFinishForm={onFinish}
+          form={form}
           altTypesData={altTypesData}
         />
       </Spin>

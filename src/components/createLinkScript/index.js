@@ -80,19 +80,22 @@ export const ScriptSection = (props) => {
           <Button>?</Button>
         </Tooltip>
       </Title>
-      <AutoComplete
-        dropdownMatchSelectWidth={252}
-        style={{ width: 300 }}
-        options={scripts}
-        onSelect={onSelect}
-        onSearch={onSearch}
-        placeholder="Search Scripts"
-        value={selectedScript ? selectedScript.label : undefined}
-      />
-      <Divider />
-      <Space direction="vertical">
-        <Button type="primary" onClick={() => setScriptModalVisible(true)}>
-          add script
+      <Space>
+        <AutoComplete
+          popupMatchSelectWidth={252}
+          style={{ width: 300 }}
+          options={scripts}
+          onSelect={onSelect}
+          onSearch={onSearch}
+          placeholder="Search Scripts"
+          value={selectedScript ? selectedScript.label : undefined}
+        />
+
+        <Button
+          type="primary"
+          style={{ width: 140 }}
+          onClick={() => setScriptModalVisible(true)}>
+          Add Script
         </Button>
       </Space>
     </>

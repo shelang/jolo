@@ -5,7 +5,7 @@ import { tooltips } from '../../../utils/constants'
 import WebhookSection from '../../../components/createLinkWebhook'
 import useFetch from '../../../hooks/asyncAction'
 
-export const WebhookForm = ({ Form, iframe, setIframe, onSelectedWebhook }) => {
+export const WebhookForm = ({ onSelectedWebhook }) => {
   const [webhookData, fetchWebhook] = useFetch()
 
   const searchWebhook = async (searchText) => {
@@ -24,28 +24,11 @@ export const WebhookForm = ({ Form, iframe, setIframe, onSelectedWebhook }) => {
   }
 
   return (
-    <>
-      <Form.Item
-        label="URL Masking:"
-        name="iframe"
-        valuePropName="checked"
-        className="urlMasking">
-        <Tooltip
-          className={'customTooltip'}
-          placement="top"
-          title={tooltips.urlMask}>
-          <Button>?</Button>
-        </Tooltip>
-        <Switch checked={iframe} onChange={setIframe} />
-      </Form.Item>
-      {!iframe && (
-        <WebhookSection
-          webhookData={webhookData}
-          onSearch={onSearch}
-          isLoading={webhookData.isLoading}
-          onSelectedWebhook={onSelectedWebhook}
-        />
-      )}
-    </>
+    <WebhookSection
+      webhookData={webhookData}
+      onSearch={onSearch}
+      isLoading={webhookData.isLoading}
+      onSelectedWebhook={onSelectedWebhook}
+    />
   )
 }

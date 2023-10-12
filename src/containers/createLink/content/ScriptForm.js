@@ -5,7 +5,7 @@ import { tooltips } from '../../../utils/constants'
 import { ScriptSection } from '../../../components/createLinkScript'
 import useFetch from '../../../hooks/asyncAction'
 
-export const ScriptForm = ({ Form, iframe, setIframe, onSelectedScript }) => {
+export const ScriptForm = ({ onSelectedScript }) => {
   const [scriptData, fetchScripts] = useFetch()
 
   const searchScript = async (searchText) => {
@@ -25,27 +25,13 @@ export const ScriptForm = ({ Form, iframe, setIframe, onSelectedScript }) => {
 
   return (
     <>
-      <Form.Item
-        label="URL Masking:"
-        name="iframe"
-        valuePropName="checked"
-        className="urlMasking">
-        <Tooltip
-          className={'customTooltip'}
-          placement="top"
-          title={tooltips.urlMask}>
-          <Button>?</Button>
-        </Tooltip>
-        <Switch checked={iframe} onChange={setIframe} />
-      </Form.Item>
-      {!iframe && (
-        <ScriptSection
-          onScriptData={scriptData}
-          onSearch={onSearch}
-          isLoading={scriptData?.isLoading}
-          onSelectedScript={onSelectedScript}
-        />
-      )}
+      {' '}
+      <ScriptSection
+        onScriptData={scriptData}
+        onSearch={onSearch}
+        isLoading={scriptData?.isLoading}
+        onSelectedScript={onSelectedScript}
+      />
     </>
   )
 }
