@@ -11,7 +11,9 @@ const RefreshToken = () => {
 
   const refreshToken = () => {
     const cookies = parseCookies()
-    const user = JSON.parse(cookies.user)
+
+    const user = JSON.parse(cookies.linkComposerUser)
+
     if (user) {
       setCookie(
         null,

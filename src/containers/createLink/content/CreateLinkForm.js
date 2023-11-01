@@ -76,6 +76,7 @@ const CreateLink = () => {
     response && setMassCreateResponses([...massCreateResponses, response])
     response && setIsModalVisible(true)
   }, [response])
+
   useEffect(() => {
     if (linkId) {
       onFetchLinkData()

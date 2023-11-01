@@ -25,6 +25,7 @@ import { WebhookForm } from './webhookForm'
 
 import { AppCard } from '../../../components/appCard'
 import { Sticky } from '../../../components/sticky'
+import { parseCookies } from 'nookies'
 
 const { TextArea } = Input
 const { Title } = Typography
@@ -44,8 +45,11 @@ export const CreateLinkForm = ({
   const [selectedWebhook, setSelectedWebhook] = useState()
 
   const onFinish = async ({ iframe, ...values }) => {
+    const cookies = parseCookies()
+
     const data = {
       ...values,
+      workspaceId: cookies['x-wsid'],
       scriptId: selectedScript && selectedScript.value,
       type: iframe
         ? 'IFRAME'

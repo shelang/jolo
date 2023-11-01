@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Typography, Space, Skeleton } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
-import { setCookie } from 'nookies'
+import { setCookie, parseCookies } from 'nookies'
 import { useNavigate } from 'react-router-dom'
 import useFetch from '../../hooks/asyncAction'
 import './style.scss'
@@ -33,7 +33,7 @@ const Workspaces = () => {
   }
 
   const handleWorkspaceClick = (id) => {
-    setCookie(null, ' x-wsid', JSON.stringify(id))
+    setCookie(null, 'x-wsid', JSON.stringify(id))
     navigate('/dashboard')
   }
 

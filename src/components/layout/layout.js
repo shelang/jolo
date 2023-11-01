@@ -50,10 +50,9 @@ function AppLayout(props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            cursor: 'not-allowed',
           }}
           onClick={() => {
-            // history.push('/workspaces')
+            navigate('/workspaces')
           }}>
           <GlobalOutlined style={{ marginRight: 12 }} />
           Workspace

@@ -32,7 +32,7 @@ function Login() {
       setCookie(null, 'linkComposerUser', JSON.stringify(response), {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
-      navigate('/dashboard')
+      navigate('/workspaces')
     }
   }, [response])
 
