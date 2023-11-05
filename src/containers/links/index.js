@@ -9,11 +9,13 @@ import {
   Input,
   Modal,
   QRCode,
+  Tag,
 } from 'antd'
 import useFetch from '../../hooks/asyncAction'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 import { AppCard } from '../../components/appCard'
 import moment from 'moment'
+import { parseCookies } from 'nookies'
 
 const { Search } = Input
 
@@ -27,8 +29,10 @@ const Links = () => {
   const [{ response, isLoading }, doFetch] = useFetch()
 
   const fetchLinks = async () => {
+    const cookies = parseCookies()
+
     await doFetch({
-      url: `links?page=${currentPage}&q=${searchValue}`,
+      url: `links/workspaces/${cookies['x-wsid']}?page=${currentPage}&q=${searchValue}`,
       method: 'GET',
     })
   }
@@ -59,47 +63,68 @@ const Links = () => {
   const handleCancel = () => {
     setIsModalOpen(false)
   }
+  const tagColors = {
+    ACTIVE: 'blue',
+  }
 
   const columns = [
     {
-      title: 'Link ID',
-      dataIndex: 'linkId',
-      key: 'linkId',
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'URL',
+      dataIndex: 'url',
+      key: 'url',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
     },
     {
       title: 'Link Hash',
-      dataIndex: 'linkHash',
-      key: 'linkHash',
+      dataIndex: 'hash',
+      key: 'hash',
     },
     {
-      title: 'Created at',
-      dataIndex: 'createAt',
-      key: 'createAt',
-      render: (item) => moment(item).format('YYYY-MM-DD'),
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => (
+        <Tag color={tagColors[status]}>{status.toUpperCase()}</Tag>
+      ),
+    },
+    {
+      title: 'Redirect Code',
+      dataIndex: 'redirectCode',
+      key: 'redirectCode',
+      render: (tag) => <Tag>{tag}</Tag>,
     },
     {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a onClick={(e) => navigate(`/dashboard/links/${record.linkId}`)}>
+          <a onClick={(e) => navigate(`/dashboard/links/${record.id}`)}>
             View Report
           </a>
           <a
             onClick={(e) =>
-              navigate(`./create-link?id=${record.linkId}&isEditing=true`)
+              navigate(`./create-link?id=${record.id}&isEditing=true`)
             }>
             Edit
           </a>
           <a
             onClick={(e) =>
-              copyToClipboard(`${window.location.origin}/r/${record.linkHash}`)
+              copyToClipboard(`${window.location.origin}/r/${record.hash}`)
             }>
             Copy
           </a>
           <a
             onClick={() =>
-              showModal(`${window.location.origin}/r/${record.linkHash}`)
+              showModal(`${window.location.origin}/r/${record.hash}`)
             }>
             QRCode
           </a>
