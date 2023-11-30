@@ -1,5 +1,25 @@
 const rules = {
   admin: {
+    routes: ['/dashboard', '/workspaces'],
+    static: [
+     
+      'workspaces:list',
+      'workspaces:create',
+      'workspaces:create-with-role',
+      'workspaces:add-user',
+      'workspaces:delete-user',
+      'workspaces:details',
+      'workspaces:plan-details',
+     
+    ],
+    // dynamic: {
+    //   'posts:edit': ({ userId, postOwnerId }) => {
+    //     if (!userId || !postOwnerId) return false;
+    //     return userId === postOwnerId;
+    //   }
+    // }
+  },
+  boss: {
     routes: ['/dashboard'],
     static: [
       'dashboard:read',

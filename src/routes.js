@@ -7,6 +7,7 @@ import { Routes as ReactRoutes, Route, Navigate } from 'react-router-dom'
 const Login = React.lazy(() => import('./containers/auth'))
 const CreateLink = React.lazy(() => import('./containers/createLink'))
 const Links = React.lazy(() => import('./containers/links'))
+const Users = React.lazy(() => import('./containers/users'))
 const Scripts = React.lazy(() => import('./containers/scripts'))
 const Webhook = React.lazy(() => import('./containers/webhook'))
 const Profile = React.lazy(() => import('./containers/profile'))
@@ -15,6 +16,9 @@ const LinkDetail = React.lazy(() => import('./containers/linkDetail'))
 const Dashboard = React.lazy(() => import('./containers/dashboard'))
 const Workspaces = React.lazy(() => import('./containers/workspaces'))
 const Setting = React.lazy(() => import('./containers/setting'))
+const WorkspacesSetting = React.lazy(() =>
+  import('./containers/workspacesSetting'),
+)
 
 const Loading = () => {
   return (
@@ -77,6 +81,15 @@ function Routes() {
           }
         />
         <Route
+          path="/dashboard/users"
+          exact
+          element={
+            <Suspense fallback={<Loading />}>
+              <PrivateRoute element={<Users />} />
+            </Suspense>
+          }
+        />
+        <Route
           path="/dashboard/create-link"
           exact
           element={
@@ -127,6 +140,15 @@ function Routes() {
           element={
             <Suspense fallback={<Loading />}>
               <PrivateRoute element={<Profile />} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/dashboard/workspaces"
+          exact
+          element={
+            <Suspense fallback={<Loading />}>
+              <PrivateRoute element={<WorkspacesSetting />} />
             </Suspense>
           }
         />

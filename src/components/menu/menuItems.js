@@ -3,9 +3,10 @@ import {
   CodeOutlined,
   FileAddOutlined,
   LinkOutlined,
-  UserOutlined,
+  UserSwitchOutlined,
   HomeOutlined,
   SettingOutlined,
+  GlobalOutlined,
 } from '@ant-design/icons'
 
 const menuItems = [
@@ -15,6 +16,13 @@ const menuItems = [
     url: 'dashboard',
     id: 1,
     permission: 'dashboard:read',
+  },
+  {
+    title: 'Users',
+    icon: <UserSwitchOutlined />,
+    url: 'dashboard/users',
+    id: 7,
+    permission: 'users:read',
   },
   {
     title: 'Create Link',
@@ -37,7 +45,7 @@ const menuItems = [
     id: 4,
     permission: 'scripts:read',
   },
-  ,
+
   {
     title: 'Webhooks',
     icon: <CodeOutlined />,
@@ -46,10 +54,17 @@ const menuItems = [
     permission: 'webhooks:read',
   },
   {
+    title: 'Workspaces',
+    icon: <GlobalOutlined />,
+    url: 'dashboard/workspaces',
+    id: 6,
+    permission: 'webhooks:read',
+  },
+  {
     title: 'Settings',
     icon: <SettingOutlined />,
     url: 'dashboard/settings',
-    id: 6,
+    id: 8,
     permission: 'settings:read',
   },
 ]

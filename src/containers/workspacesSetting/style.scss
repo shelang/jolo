@@ -1,0 +1,11 @@
+.settingsMenu {
+  .ant-menu-item {
+    color: #172326;
+  }
+  .ant-menu-item:not(.ant-menu-item-selected):hover {
+    background-color: rgba(86, 135, 147, 0.4) !important;
+  }
+  .ant-menu-item-selected {
+    color: #fff;
+  }
+}

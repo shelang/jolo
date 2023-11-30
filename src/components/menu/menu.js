@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import menuItems from './menuItems'
 import { Menu } from 'antd'
 import { NavLink } from 'react-router-dom'
+import { Can } from '../can/can'
 import './style.scss'
 
 function KitMenu() {

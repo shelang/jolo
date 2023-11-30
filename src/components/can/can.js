@@ -1,31 +1,34 @@
+import { parseCookies } from 'nookies'
 import rules from '../../rules'
 
 const check = (rules, action, data, depth) => {
-  // const user = JSON.parse(window.localStorage.getItem('user'));
+  // const cookies = parseCookies()
+  // const user = cookies.linkComposerUser && JSON.parse(cookies.linkComposerUser)
+
   // const userRole =
-  //   user && user.roles[0] && user.roles[0].toLowerCase().replace('role_', '');
-  // const permissions = rules[userRole];
+  //   user && user.roles[0] && user.roles[0].toLowerCase().replace('role_', '')
+  // const permissions = rules[userRole]
   // if (!permissions) {
   //   // role is not present in the rules
-  //   return false;
+  //   return false
   // }
 
   // switch (depth) {
   //   case 0:
-  //     return checkRoutePermission(permissions);
+  //     return checkRoutePermission(permissions)
   //   case 1:
   //     return (
   //       checkRoutePermission(permissions) &&
   //       checkStaticPermission(action, permissions)
-  //     );
+  //     )
   //   case 2:
   //     return (
   //       checkRoutePermission(permissions) &&
   //       checkStaticPermission(action, permissions) &&
   //       checkDynamicPermission(action, permissions, data)
-  //     );
+  //     )
   //   default:
-  //     return false;
+  //     return false
   // }
   return true
 }
