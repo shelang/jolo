@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Button, Input, Table, Spin, Divider, Form } from 'antd'
+import { NavLink } from 'react-router-dom'
 import { AppCard } from '../../components/appCard'
 import useFetch from '../../hooks/asyncAction'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
@@ -78,9 +79,15 @@ const WorkspacesSetting = () => {
       dataIndex: 'name',
       key: 'name',
     },
+    {
+      title: 'Action',
+      dataIndex: 'id',
+      key: 'id',
+      render: (id) => {
+        return <NavLink to={`/dashboard/workspaces/${id}`}>Edit</NavLink>
+      },
+    },
   ]
-
-  console.log(response, 'response')
 
   return (
     <AppCard>
@@ -109,14 +116,7 @@ const WorkspacesSetting = () => {
               ]}>
               <Input />
             </Form.Item>
-            {/* <Form.Item
-              label="content"
-              name="content"
-              rules={[
-                { required: true, message: 'Please input your Script Content' },
-              ]}>
-              <TextArea rows={4} />
-            </Form.Item> */}
+
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button loading={isLoading} type="primary" htmlType="submit">
                 Submit

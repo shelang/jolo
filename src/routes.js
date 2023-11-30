@@ -16,6 +16,9 @@ const LinkDetail = React.lazy(() => import('./containers/linkDetail'))
 const Dashboard = React.lazy(() => import('./containers/dashboard'))
 const Workspaces = React.lazy(() => import('./containers/workspaces'))
 const Setting = React.lazy(() => import('./containers/setting'))
+const CreateUser = React.lazy(() => import('./containers/createUser'))
+const UserEdit = React.lazy(() => import('./containers/userEdit'))
+const WorkspacesEdit = React.lazy(() => import('./containers/workspacesEdit'))
 const WorkspacesSetting = React.lazy(() =>
   import('./containers/workspacesSetting'),
 )
@@ -90,6 +93,24 @@ function Routes() {
           }
         />
         <Route
+          path="/dashboard/users/create"
+          exact
+          element={
+            <Suspense fallback={<Loading />}>
+              <PrivateRoute element={<CreateUser />} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/dashboard/users/:id"
+          exact
+          element={
+            <Suspense fallback={<Loading />}>
+              <PrivateRoute element={<UserEdit />} />
+            </Suspense>
+          }
+        />
+        <Route
           path="/dashboard/create-link"
           exact
           element={
@@ -149,6 +170,15 @@ function Routes() {
           element={
             <Suspense fallback={<Loading />}>
               <PrivateRoute element={<WorkspacesSetting />} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/dashboard/workspaces/:id"
+          exact
+          element={
+            <Suspense fallback={<Loading />}>
+              <PrivateRoute element={<WorkspacesEdit />} />
             </Suspense>
           }
         />

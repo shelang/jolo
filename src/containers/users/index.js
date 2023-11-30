@@ -1,21 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import {
-  Table,
-  Space,
-  Spin,
-  message,
-  Divider,
-  Input,
-  Modal,
-  QRCode,
-  Tag,
-} from 'antd'
+import { Table, Button, Spin, Divider, Input, Modal, Form, Steps } from 'antd'
+import { NavLink } from 'react-router-dom'
 import useFetch from '../../hooks/asyncAction'
 import useDidMountEffect from '../../hooks/useDidMountEffect'
 import { AppCard } from '../../components/appCard'
-import moment from 'moment'
-import { parseCookies } from 'nookies'
 
 const { Search } = Input
 
@@ -36,19 +24,6 @@ const Users = () => {
     setSearchValue(value)
   }
 
-  const columns = [
-    {
-      title: '#',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
-    },
-  ]
-
   useEffect(() => {
     fetchUsers()
   }, [currentPage])
@@ -61,8 +36,33 @@ const Users = () => {
     }
   }, [searchValue])
 
+  const columns = [
+    {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'id',
+      key: 'id',
+      render: (id) => {
+        return <NavLink to={`/dashboard/users/${id}`}>Edit</NavLink>
+      },
+    },
+  ]
   return (
     <AppCard>
+      <Button type="primary">
+        <NavLink to={`/dashboard/users/create`}> Create New User</NavLink>
+      </Button>
+      <Divider />
+
       <Spin spinning={isLoading}>
         <Search onSearch={searchByName} enterButton="Search" />
         <Divider />
