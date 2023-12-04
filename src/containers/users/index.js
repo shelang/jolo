@@ -15,7 +15,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     await doFetch({
-      url: 'users',
+      url: `users/?page=${currentPage}&name=${searchValue}`,
       method: 'GET',
     })
   }
@@ -56,6 +56,7 @@ const Users = () => {
       },
     },
   ]
+
   return (
     <AppCard>
       <Button type="primary">

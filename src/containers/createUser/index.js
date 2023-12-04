@@ -15,6 +15,7 @@ const CreateUser = () => {
 
   const [createUserdata, createUser] = useFetch()
   const [userworkspacesData, userWorkspaces] = useFetch()
+  const [allWorkspacesData, allWorkspaces] = useFetch()
 
   const createNewUser = async (values) => {
     try {
@@ -26,6 +27,7 @@ const CreateUser = () => {
           needChangePassword: true,
         },
       })
+      toast.success('User Created Successfully ')
     } catch (e) {
     } finally {
     }
@@ -47,6 +49,14 @@ const CreateUser = () => {
         },
       })
       toast.success('Workspaces Added Successfully ')
+      userWorkspaces({
+        url: `users/${createUserdata?.response?.id}/workspaces`,
+        method: 'GET',
+      })
+      allWorkspaces({
+        url: 'users/workspaces',
+        method: 'GET',
+      })
     } catch (e) {
     } finally {
     }
@@ -60,6 +70,10 @@ const CreateUser = () => {
       setStep(1)
       form.resetFields()
       userWorkspaces({
+        url: `users/${createUserdata?.response?.id}/workspaces`,
+        method: 'GET',
+      })
+      allWorkspaces({
         url: 'users/workspaces',
         method: 'GET',
       })
@@ -110,9 +124,11 @@ const CreateUser = () => {
     1: (
       <Spin spinning={userworkspacesData.isLoading}>
         <Transfer
-          dataSource={userworkspacesData?.response?.workspaces ?? []}
+          dataSource={allWorkspacesData?.response?.workspaces ?? []}
           titles={['Source', 'Target']}
-          targetKeys={targetKeys}
+          targetKeys={userworkspacesData?.response?.workspaces?.map(
+            (w) => w.id,
+          )}
           selectedKeys={selectedKeys}
           onChange={onChange}
           onSelectChange={onSelectChange}

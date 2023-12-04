@@ -112,7 +112,7 @@ const Links = () => {
           </a>
           <a
             onClick={(e) =>
-              navigate(`./create-link?id=${record.id}&isEditing=true`)
+              navigate(`/dashboard/create-link?id=${record.id}&isEditing=true`)
             }>
             Edit
           </a>

@@ -9,25 +9,22 @@ import {
   Form,
   Space,
 } from 'antd'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { AppCard } from '../../components/appCard'
 import useFetch from '../../hooks/asyncAction'
 import './style.scss'
 
 const UserEdit = ({ query }) => {
-  const [targetKeys, setTargetKeys] = useState([])
   const [selectedKeys, setSelectedKeys] = useState([])
 
   const [{ response, isLoading }, doFetch] = useFetch()
   const [edittingData, editUser] = useFetch()
-  const [workspaceMembersData, workspaceMembers] = useFetch()
-  const [updateUsersWorkspaceData, updateUsersWorkspace] = useFetch()
-  const [usersData, users] = useFetch()
+  const [userworkspacesData, userWorkspaces] = useFetch()
+  const [allWorkspacesData, allWorkspaces] = useFetch()
 
   const params = useParams()
   const [form] = Form.useForm()
-  const navigate = useNavigate()
 
   const fetchUser = async () => {
     await doFetch({
@@ -35,15 +32,16 @@ const UserEdit = ({ query }) => {
       method: 'GET',
     })
   }
-  const fetchWorkspaceMembers = async () => {
-    await workspaceMembers({
-      url: `workspaces/${params?.id}/members`,
+
+  const fetchUserWorkspace = async () => {
+    await userWorkspaces({
+      url: `users/${params?.id}/workspaces`,
       method: 'GET',
     })
   }
-  const fetchUsers = async () => {
-    await users({
-      url: `users`,
+  const fetchAllWorkspace = async () => {
+    await allWorkspaces({
+      url: 'users/workspaces',
       method: 'GET',
     })
   }
@@ -67,45 +65,38 @@ const UserEdit = ({ query }) => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
-
-  useEffect(() => {
-    fetchUser()
-    // fetchUsers()
-    // fetchWorkspaceMembers()
-  }, [])
-  useEffect(() => {
-    form.setFieldsValue(response)
-  }, [response])
-  useEffect(() => {
-    if (workspaceMembersData?.response?.users) {
-      setTargetKeys(
-        workspaceMembersData?.response?.users.map((user) => user.id),
-      )
-    }
-  }, [workspaceMembersData])
-
+  const handleDeleteUser = () => {}
   const onChange = async (nextTargetKeys, direction, moveKeys) => {
-    setTargetKeys(nextTargetKeys)
     const method = direction === 'right' ? 'POST' : 'DELETE'
 
     try {
-      await updateUsersWorkspace({
-        url: `workspaces/${params?.id}/members`,
+      await userWorkspaces({
+        url: 'users/workspaces',
         method: method,
         data: {
-          memberIds: moveKeys,
+          userId: params?.id,
+          workspaceIds: moveKeys,
         },
       })
-      fetchWorkspaceMembers()
-      fetchUsers()
+      fetchUser()
+      fetchUserWorkspace()
+      fetchAllWorkspace()
     } catch (e) {
     } finally {
     }
   }
-
   const onSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys])
   }
+
+  useEffect(() => {
+    fetchUser()
+    fetchUserWorkspace()
+    fetchAllWorkspace()
+  }, [])
+  useEffect(() => {
+    form.setFieldsValue(response)
+  }, [response])
 
   return (
     <AppCard>
@@ -148,24 +139,41 @@ const UserEdit = ({ query }) => {
                   Update
                 </Button>
               </Form.Item>
+              {/* <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+                <Popconfirm
+                  title="Delete the User"
+                  description="Are you sure to delete this User?"
+                  onConfirm={handleDeleteUser}
+                  okText="Yes"
+                  cancelText="No">
+                  <Button loading={edittingData?.isLoading} danger>
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </Form.Item> */}
             </Space>
           </Form>
         </Spin>
         <Divider />
-        <Spin spinning={workspaceMembersData.isLoading || usersData?.isLoading}>
+        <Spin
+          spinning={
+            userworkspacesData.isLoading || allWorkspacesData?.isLoading
+          }>
           <Transfer
             listStyle={{
               width: 450,
               height: 300,
             }}
-            dataSource={usersData?.response?.users ?? []}
+            dataSource={allWorkspacesData?.response?.workspaces ?? []}
             titles={['All Workspaces', 'User Workspaces']}
-            targetKeys={targetKeys}
+            targetKeys={userworkspacesData?.response?.workspaces?.map(
+              (w) => w.id,
+            )}
             selectedKeys={selectedKeys}
             onChange={onChange}
             onSelectChange={onSelectChange}
             rowKey={(record) => record.id}
-            render={(item) => item.username}
+            render={(item) => item.name}
           />
         </Spin>
       </>

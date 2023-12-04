@@ -15,7 +15,9 @@ function checkStatus(response) {
 
 async function parseJSON(response) {
   if (response && response.headers) {
-    if (response.headers.get('Content-Type') === 'application/json') {
+    if (
+      response.headers.get('Content-Type') === 'application/json;charset=UTF-8'
+    ) {
       return await response.json()
     }
     if (response.headers.get('Content-Type') === 'text/plain;charset=UTF-8') {
