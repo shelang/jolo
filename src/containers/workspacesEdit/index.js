@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import { useParams, useNavigate } from 'react-router-dom'
 import difference from 'lodash/difference'
+import flatten from 'lodash/flatten'
 import debounce from 'lodash/debounce'
 
 import { AppCard } from '../../components/appCard'
@@ -23,6 +24,7 @@ const WorkspacesEdit = ({ query }) => {
   const [targetKeys, setTargetKeys] = useState([])
   const [currentPage, setCurrentPage] = useState({ left: 1, right: 1 })
   const [searchValue, setSearchValue] = useState({ left: '', right: '' })
+  const [allUsers, setAllUsers] = useState({})
 
   const [{ response, isLoading }, doFetch] = useFetch()
   const [edittingData, editWorkspace] = useFetch()
@@ -120,6 +122,14 @@ const WorkspacesEdit = ({ query }) => {
   useEffect(() => {
     form.setFieldsValue(response)
   }, [response])
+  useEffect(() => {
+    if (usersData?.response?.users) {
+      setAllUsers((prev) => ({
+        ...prev,
+        [currentPage.left]: usersData?.response?.users,
+      }))
+    }
+  }, [usersData])
 
   useEffect(() => {
     if (workspaceMembersData?.response?.users) {
@@ -210,7 +220,7 @@ const WorkspacesEdit = ({ query }) => {
         <Divider />
         <TableTransfer
           titles={['All Users', 'Workspace Members']}
-          dataSource={usersData?.response?.users ?? []}
+          dataSource={flatten(Object.values(allUsers)) ?? []}
           targetKeys={targetKeys}
           showSearch
           onChange={onChange}
