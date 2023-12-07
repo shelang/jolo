@@ -1,6 +1,7 @@
 import { useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ApiClient from '../utils/apiClient'
+import { toast } from 'react-toastify'
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
@@ -43,6 +44,16 @@ function useFetch(action) {
       if (e.status === 401) {
         navigate('/refresh')
       }
+
+      // console.log(e)
+
+      // const errorMessage =
+      //   e?.violations?.map((violation) => {
+      //     return `<strong>${violation.field}</strong>: ${violation.message}`
+      //   }) ?? ''
+
+      // toast.error(e.title + errorMessage)
+
       action && action.onError && action.onError(e)
       dispatch({ type: 'FETCH_FAILURE', payload: e })
     }

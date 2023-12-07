@@ -98,6 +98,7 @@ const CreateLink = () => {
           onFinishForm={onFinish}
           form={form}
           altTypesData={altTypesData}
+          isLoading={isLoading}
         />
       </Spin>
     </>

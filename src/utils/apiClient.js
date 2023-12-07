@@ -6,11 +6,27 @@ function formatUrl(path) {
   // return adjustedPath
 }
 
-function checkStatus(response) {
+async function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return parseJSON(response)
   }
-  return Promise.reject(response)
+  if (response.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(response.response.data)
+    console.log(response.response.status)
+    console.log(response.response.headers)
+  } else if (response.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(response.request)
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log('Error', response.message)
+  }
+  console.log(response.config)
+  return Promise.reject(await response.text())
 }
 
 async function parseJSON(response) {
@@ -62,5 +78,8 @@ async function ApiClient(path, options) {
   return fetch(url, { ...fetchOptions })
     .then(checkStatus)
     .then(parseJSON)
+    .catch((err) => {
+      console.log('caught it!', err)
+    })
 }
 export default ApiClient

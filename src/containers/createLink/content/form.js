@@ -91,8 +91,6 @@ export const CreateLinkForm = ({
         label: initialValues.scriptId,
       })
       form.setFieldsValue(values)
-
-      console.log(initialValues, 'initialValues')
     }
   }, [initialValues])
 

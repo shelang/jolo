@@ -39,7 +39,7 @@ export const Sticky = ({ children, topOffset = 0 }) => {
         })}
       </div>
     )
-  }, [isStick])
+  }, [isStick, children.props])
 
   useEffect(() => {
     document.querySelector('#content')?.addEventListener('scroll', handleScroll)
