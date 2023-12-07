@@ -6,10 +6,14 @@ import {
   Transfer,
   Spin,
   Popconfirm,
+  Table,
   Form,
+  Tag,
   Space,
 } from 'antd'
 import { useParams, useNavigate } from 'react-router-dom'
+import difference from 'lodash/difference'
+import debounce from 'lodash/debounce'
 
 import { AppCard } from '../../components/appCard'
 import useFetch from '../../hooks/asyncAction'
@@ -17,7 +21,8 @@ import './style.scss'
 
 const WorkspacesEdit = ({ query }) => {
   const [targetKeys, setTargetKeys] = useState([])
-  const [selectedKeys, setSelectedKeys] = useState([])
+  const [currentPage, setCurrentPage] = useState({ left: 1, right: 1 })
+  const [searchValue, setSearchValue] = useState({ left: '', right: '' })
 
   const [{ response, isLoading }, doFetch] = useFetch()
   const [edittingData, editWorkspace] = useFetch()
@@ -35,15 +40,19 @@ const WorkspacesEdit = ({ query }) => {
       method: 'GET',
     })
   }
-  const fetchWorkspaceMembers = async () => {
+  const fetchWorkspaceMembers = async (page, search) => {
     await workspaceMembers({
-      url: `workspaces/${params?.id}/members`,
+      url: `workspaces/${params?.id}/members?page=${
+        page ?? currentPage.right
+      }&name=${search ?? searchValue.right}`,
       method: 'GET',
     })
   }
-  const fetchUsers = async () => {
+  const fetchUsers = async (page, search) => {
     await users({
-      url: `users`,
+      url: `users/?page=${page ?? currentPage.left}&name=${
+        search ?? searchValue.left
+      }`,
       method: 'GET',
     })
   }
@@ -74,6 +83,32 @@ const WorkspacesEdit = ({ query }) => {
       navigate('/dashboard/workspaces')
     } catch (e) {
     } finally {
+    }
+  }
+  const handleSearch = debounce((direction, value) => {
+    setSearchValue((prev) => ({
+      ...prev,
+      [direction]: value,
+    }))
+    setCurrentPage((prev) => ({
+      ...prev,
+      [direction]: 1,
+    }))
+    if (direction === 'left') {
+      fetchUsers(1, value)
+    } else {
+      fetchWorkspaceMembers(1, value)
+    }
+  }, 400)
+  const handlePageChange = (page, direction) => {
+    setCurrentPage((prev) => ({
+      ...prev,
+      [direction]: page,
+    }))
+    if (direction === 'left') {
+      fetchUsers(page)
+    } else {
+      fetchWorkspaceMembers(page)
     }
   }
 
@@ -113,9 +148,17 @@ const WorkspacesEdit = ({ query }) => {
     }
   }
 
-  const onSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
-    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys])
-  }
+  const TableColumns = [
+    {
+      dataIndex: 'id',
+      title: 'ID',
+    },
+
+    {
+      dataIndex: 'username',
+      title: 'UserName',
+    },
+  ]
 
   return (
     <AppCard>
@@ -165,25 +208,97 @@ const WorkspacesEdit = ({ query }) => {
           </Form>
         </Spin>
         <Divider />
-        <Spin spinning={workspaceMembersData.isLoading || usersData?.isLoading}>
-          <Transfer
-            listStyle={{
-              width: 450,
-              height: 300,
-            }}
-            dataSource={usersData?.response?.users ?? []}
-            titles={['All Users', 'Workspace Members']}
-            targetKeys={targetKeys}
-            selectedKeys={selectedKeys}
-            onChange={onChange}
-            onSelectChange={onSelectChange}
-            rowKey={(record) => record.id}
-            render={(item) => item.username}
-          />
-        </Spin>
+        <TableTransfer
+          titles={['All Users', 'Workspace Members']}
+          dataSource={usersData?.response?.users ?? []}
+          targetKeys={targetKeys}
+          showSearch
+          onChange={onChange}
+          onSearch={handleSearch}
+          rowKey={(record) => record.id}
+          filterOption={(inputValue, item) =>
+            item.title?.indexOf(inputValue) !== -1 ||
+            item.tag.indexOf(inputValue) !== -1
+          }
+          leftColumns={TableColumns}
+          rightColumns={TableColumns}
+          currentPage={currentPage}
+          setCurrentPage={handlePageChange}
+          leftSideLoading={usersData?.isLoading}
+          rightSideLoading={workspaceMembersData.isLoading}
+        />
       </>
     </AppCard>
   )
 }
 
+const TableTransfer = ({
+  leftColumns,
+  rightColumns,
+  currentPage,
+  setCurrentPage,
+  leftSideLoading,
+  rightSideLoading,
+  ...restProps
+}) => (
+  <Transfer {...restProps}>
+    {({
+      direction,
+      filteredItems,
+      onItemSelectAll,
+      onItemSelect,
+      selectedKeys: listSelectedKeys,
+      disabled: listDisabled,
+    }) => {
+      const columns = direction === 'left' ? leftColumns : rightColumns
+      const loading = direction === 'left' ? leftSideLoading : rightSideLoading
+
+      const rowSelection = {
+        getCheckboxProps: (item) => ({
+          disabled: listDisabled || item.disabled,
+        }),
+        onSelectAll(selected, selectedRows) {
+          const treeSelectedKeys = selectedRows
+            .filter((item) => !item.disabled)
+            .map(({ key }) => key)
+          const diffKeys = selected
+            ? difference(treeSelectedKeys, listSelectedKeys)
+            : difference(listSelectedKeys, treeSelectedKeys)
+          onItemSelectAll(diffKeys, selected)
+        },
+        onSelect({ key }, selected) {
+          onItemSelect(key, selected)
+        },
+        selectedRowKeys: listSelectedKeys,
+      }
+
+      return (
+        <Spin spinning={loading}>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={filteredItems}
+            size="small"
+            style={{ pointerEvents: listDisabled ? 'none' : undefined }}
+            onRow={({ key, disabled: itemDisabled }) => ({
+              onClick: () => {
+                if (itemDisabled || listDisabled) return
+                onItemSelect(key, !listSelectedKeys.includes(key))
+              },
+            })}
+            pagination={{
+              position: ['bottomCenter'],
+              size: 'small',
+              current: currentPage[direction],
+              total: currentPage[direction] * 4 + 40,
+              onChange: (page) => {
+                setCurrentPage(page, direction)
+              },
+            }}
+          />
+        </Spin>
+      )
+    }}
+  </Transfer>
+)
 export default WorkspacesEdit
