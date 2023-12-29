@@ -52,7 +52,7 @@ const WorkspacesEdit = ({ query }) => {
   }
   const fetchUsers = async (page, search) => {
     await users({
-      url: `users/?page=${page ?? currentPage.left}&name=${
+      url: `users/?page=${page ?? currentPage.left}&username=${
         search ?? searchValue.left
       }`,
       method: 'GET',
@@ -136,6 +136,10 @@ const WorkspacesEdit = ({ query }) => {
       setTargetKeys(
         workspaceMembersData?.response?.users.map((user) => user.id),
       )
+      setAllUsers((prev) => ({
+        ...prev,
+        [currentPage.left]: workspaceMembersData?.response?.users,
+      }))
     }
   }, [workspaceMembersData])
 

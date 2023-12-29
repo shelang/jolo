@@ -15,7 +15,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     await doFetch({
-      url: `users/?page=${currentPage}&name=${searchValue}`,
+      url: `users/?page=${currentPage}&username=${searchValue}`,
       method: 'GET',
     })
   }

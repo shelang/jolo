@@ -34,29 +34,24 @@ function useFetch(action) {
   })
   const navigate = useNavigate()
 
-  async function performAction(options) {
-    try {
-      dispatch({ type: 'FETCH_INIT' })
-      const res = await ApiClient(options.url, options)
-      action && action.onSuccess && action.onSuccess(res)
-      dispatch({ type: 'FETCH_SUCCESS', payload: res })
-    } catch (e) {
-      if (e.status === 401) {
-        navigate('/refresh')
+  function performAction(options) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        dispatch({ type: 'FETCH_INIT' })
+        const res = await ApiClient(options.url, options)
+        action && action.onSuccess && action.onSuccess(res)
+        dispatch({ type: 'FETCH_SUCCESS', payload: res })
+        resolve(res)
+      } catch (e) {
+        if (e.status === 401) {
+          navigate('/refresh')
+        }
+        reject()
+
+        action && action.onError && action.onError(e)
+        dispatch({ type: 'FETCH_FAILURE', payload: e })
       }
-
-      // console.log(e)
-
-      // const errorMessage =
-      //   e?.violations?.map((violation) => {
-      //     return `<strong>${violation.field}</strong>: ${violation.message}`
-      //   }) ?? ''
-
-      // toast.error(e.title + errorMessage)
-
-      action && action.onError && action.onError(e)
-      dispatch({ type: 'FETCH_FAILURE', payload: e })
-    }
+    })
   }
 
   return [state, performAction]

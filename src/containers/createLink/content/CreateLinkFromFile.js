@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Col, Row, Typography } from 'antd'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Alert, Progress, Space, Typography } from 'antd'
 import readXlsxFile from 'read-excel-file'
 import { FromFileModal } from './fromFileModal'
 import useFetch from '../../../hooks/asyncAction'
@@ -16,55 +16,78 @@ const CreateLinkFromFile = () => {
   const [normalizedLinks, setNormalizedLinks] = useState([])
   const [massCreateErrorCount, setMassCreateErrorCount] = useState(0)
   const [fileList, setFileList] = useState([])
+  const [percent, setPercent] = useState(0)
 
   const [{ response, isLoading, error }, doFetch] = useFetch({
-    onError: () => {
-      setMassCreateErrorCount(massCreateErrorCount + 1)
-    },
+    onError: () => {},
+    onSuccess: () => {},
   })
 
-  const createNewLinks = () => {
-    normalizedLinks.forEach(async (normalizedLink) => {
+  const fileFormats = {
+    CSV: 'text/csv',
+    XLSX: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  }
+
+  const createNewLinks = useCallback(async () => {
+    setIsCreateLinkModalVisible(false)
+
+    for (let i = 0; i < normalizedLinks.length; i++) {
       try {
         await doFetch({
           url: 'links',
           method: 'POST',
           data: {
-            ...normalizedLink,
+            ...normalizedLinks[i],
           },
         })
-      } catch (e) {}
-    })
+      } catch (e) {
+        setMassCreateErrorCount((prevCount) => prevCount + 1)
+      } finally {
+        setPercent((prevPercent) =>
+          Math.floor(prevPercent + 100 / normalizedLinks.length),
+        )
+      }
+    }
 
     if (massCreateErrorCount) {
-      toast.error('Creation Failed')
-    } else {
       toast.success('Links Successfully Created')
-      setIsCreateLinkModalVisible(false)
+    } else {
     }
+  }, [normalizedLinks])
+
+  const normalizeXlsxFile = (rows) => {
+    const normalizedRows = rows.reduce((total, row, index) => {
+      if (index === 0) {
+        return total
+      } else {
+        total.push({})
+        keysTemplate.map((key, keyIndex) => {
+          if (row[keyIndex]) {
+            return (total[index - 1][key] = row[keyIndex])
+          } else {
+            toast.error(`${key} Is Required`)
+          }
+        })
+        return total
+      }
+    }, [])
+    setNormalizedLinks(normalizedRows)
   }
-
   useEffect(() => {
-    readXlsxFile(fileList[0]).then((rows) => {
-      // `rows` is an array of rows
-      // each row being an array of cells.
-      const normalizedRows = rows.reduce((total, row, index) => {
-        if (index === 0) {
-          return total
-        } else {
-          total.push({})
-          keysTemplate.map((key, keyIndex) => {
-            if (row[keyIndex]) {
-              return (total[index - 1][key] = row[keyIndex])
-            } else {
-              toast.error(`${key} Is Required`)
-            }
-          })
-          return total
+    fileList.forEach((file) => {
+      switch (file.type) {
+        case fileFormats.CSV: {
         }
-      }, [])
-
-      setNormalizedLinks(normalizedRows)
+        case fileFormats.XLSX: {
+          readXlsxFile(fileList[0]).then((rows) => {
+            // `rows` is an array of rows
+            // each row being an array of cells.
+            normalizeXlsxFile(rows)
+          })
+        }
+        default: {
+        }
+      }
     })
   }, [fileList])
 
@@ -81,9 +104,10 @@ const CreateLinkFromFile = () => {
     },
     fileList,
   }
+  const twoColors = { '0%': '#108ee9', '100%': '#87d068' }
 
   return (
-    <>
+    <Space>
       <FromFileModal
         onIsCreateLinkModalVisible={isCreateLinkModalVisible}
         onCancel={() => setIsCreateLinkModalVisible(false)}
@@ -94,7 +118,19 @@ const CreateLinkFromFile = () => {
         <FileAddOutlined style={{ marginRight: 4 }} />
         Creating Link From File
       </Link>
-    </>
+      {isLoading && (
+        <>
+          <div
+            style={{ width: 200, marginBottom: -8, flexDirection: 'column' }}>
+            <Progress percent={percent} strokeColor={twoColors} />
+          </div>
+          <Alert
+            message="Please Wait untill all your links creates"
+            type="warning"
+          />
+        </>
+      )}
+    </Space>
   )
 }
 

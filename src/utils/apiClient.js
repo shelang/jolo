@@ -25,7 +25,7 @@ async function checkStatus(response) {
     // Something happened in setting up the request that triggered an Error
     console.log('Error', response.message)
   }
-  console.log(response.config)
+
   return Promise.reject(await response.text())
 }
 
@@ -78,8 +78,5 @@ async function ApiClient(path, options) {
   return fetch(url, { ...fetchOptions })
     .then(checkStatus)
     .then(parseJSON)
-    .catch((err) => {
-      console.log('caught it!', err)
-    })
 }
 export default ApiClient

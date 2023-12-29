@@ -89,7 +89,6 @@ const WorkspacesSetting = () => {
     },
   ]
 
-  console.log(response, 'response')
   return (
     <AppCard>
       <>
