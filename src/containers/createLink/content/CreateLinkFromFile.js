@@ -9,6 +9,16 @@ import { FileAddOutlined } from '@ant-design/icons'
 const { Title, Link } = Typography
 
 const keysTemplate = ['title', 'url']
+const keyEnums = {
+  'Friendly Name': 'title',
+  'Destination URL': 'url',
+  Status: 'status',
+  'Redirect Mode': 'redirectCode',
+  'Expiration Date': 'expireAt',
+  Note: 'description',
+  'Hash URL': 'hash',
+  'Forward Parameters': 'forwardParameter',
+}
 
 const CreateLinkFromFile = () => {
   const [isCreateLinkModalVisible, setIsCreateLinkModalVisible] =
@@ -26,6 +36,31 @@ const CreateLinkFromFile = () => {
   const fileFormats = {
     CSV: 'text/csv',
     XLSX: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  }
+
+  function processData(csvFile) {
+    const reader = new FileReader()
+    let lines = []
+    reader.onload = (evt) => {
+      const value = evt.target.result
+      const allTextLines = value.split(/\r\n|\n/)
+      const headers = allTextLines[0].split(',')
+
+      for (let i = 1; i < allTextLines.length; i++) {
+        const data = allTextLines[i].split(',')
+        if (data.length === headers.length) {
+          let tarr = {}
+          for (let j = 0; j < headers.length; j++) {
+            if (keyEnums[headers[j]] && data[j])
+              tarr[keyEnums[headers[j]]] = data[j]
+          }
+          lines.push(tarr)
+        }
+      }
+
+      setNormalizedLinks((prevs) => [...prevs, ...lines])
+    }
+    reader.readAsText(csvFile)
   }
 
   const createNewLinks = useCallback(async () => {
@@ -71,19 +106,24 @@ const CreateLinkFromFile = () => {
         return total
       }
     }, [])
-    setNormalizedLinks(normalizedRows)
+    setNormalizedLinks((prevs) => [...prevs, ...normalizedRows])
   }
   useEffect(() => {
+    setNormalizedLinks([])
     fileList.forEach((file) => {
       switch (file.type) {
         case fileFormats.CSV: {
+          processData(file)
+
+          break
         }
         case fileFormats.XLSX: {
-          readXlsxFile(fileList[0]).then((rows) => {
+          readXlsxFile(file).then((rows) => {
             // `rows` is an array of rows
             // each row being an array of cells.
             normalizeXlsxFile(rows)
           })
+          break
         }
         default: {
         }
