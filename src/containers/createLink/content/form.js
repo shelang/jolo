@@ -49,7 +49,7 @@ export const CreateLinkForm = ({
 
     const data = {
       ...values,
-      workspaceId: cookies['x-wsid'],
+      // workspaceId: cookies['x-wsid'],
       scriptId: selectedScript && selectedScript.value,
       type: iframe
         ? 'IFRAME'

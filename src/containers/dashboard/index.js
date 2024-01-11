@@ -24,7 +24,6 @@ const Dashboard = () => {
     to: dayjs().utc().format(),
   })
 
-  console.log(time)
   return (
     <Row gutter={10} style={{ marginBottom: 24 }}>
       <Sticky topOffset={-16}>

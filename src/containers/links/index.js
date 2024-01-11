@@ -32,7 +32,7 @@ const Links = () => {
     const cookies = parseCookies()
 
     await doFetch({
-      url: `links/workspaces/${cookies['x-wsid']}?page=${currentPage}&q=${searchValue}`,
+      url: `links?page=${currentPage}&q=${searchValue}`,
       method: 'GET',
     })
   }

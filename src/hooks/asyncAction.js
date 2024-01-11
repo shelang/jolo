@@ -1,5 +1,4 @@
 import { useReducer } from 'react'
-import { useNavigate } from 'react-router-dom'
 import ApiClient from '../utils/apiClient'
 import { toast } from 'react-toastify'
 
@@ -32,7 +31,6 @@ function useFetch(action) {
     error: null,
     response: null,
   })
-  const navigate = useNavigate()
 
   function performAction(options) {
     return new Promise(async (resolve, reject) => {
@@ -43,9 +41,8 @@ function useFetch(action) {
         dispatch({ type: 'FETCH_SUCCESS', payload: res })
         resolve(res)
       } catch (e) {
-        if (e.status === 401) {
-          navigate('/refresh')
-        }
+        console.log(e, 'e')
+
         reject()
 
         action && action.onError && action.onError(e)

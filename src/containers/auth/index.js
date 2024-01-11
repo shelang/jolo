@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
-import Logo from '../../assets/logo-light-New.png'
 import useFetch from '../../hooks/asyncAction'
 import { useNavigate } from 'react-router-dom'
-import { Form, Input, Button, Space, Row, Col, Typography, Image } from 'antd'
-import { setCookie } from 'nookies'
+import { Form, Input, Button, Row, Col, Typography } from 'antd'
+import { setCookie, destroyCookie } from 'nookies'
 import './auth.scss'
 
 const { Title } = Typography
@@ -28,11 +27,15 @@ function Login() {
   }
 
   useEffect(() => {
+    destroyCookie(null, 'linkComposerUser')
+  }, [])
+
+  useEffect(() => {
     if (response) {
       setCookie(null, 'linkComposerUser', JSON.stringify(response), {
         maxAge: process.env.REACT_APP_BASE_EXPIRE_DATE,
       })
-      navigate('/workspaces')
+      navigate('/dashboard')
     }
   }, [response])
 

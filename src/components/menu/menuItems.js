@@ -17,13 +17,13 @@ const menuItems = [
     id: 1,
     permission: 'dashboard:read',
   },
-  {
-    title: 'Users',
-    icon: <UserSwitchOutlined />,
-    url: 'dashboard/users',
-    id: 7,
-    permission: 'users:read',
-  },
+  // {
+  //   title: 'Users',
+  //   icon: <UserSwitchOutlined />,
+  //   url: 'dashboard/users',
+  //   id: 7,
+  //   permission: 'users:read',
+  // },
   {
     title: 'Create Link',
     icon: <FileAddOutlined />,
@@ -53,13 +53,13 @@ const menuItems = [
     id: 5,
     permission: 'webhooks:read',
   },
-  {
-    title: 'Workspaces',
-    icon: <GlobalOutlined />,
-    url: 'dashboard/workspaces',
-    id: 6,
-    permission: 'webhooks:read',
-  },
+  // {
+  //   title: 'Workspaces',
+  //   icon: <GlobalOutlined />,
+  //   url: 'dashboard/workspaces',
+  //   id: 6,
+  //   permission: 'webhooks:read',
+  // },
   {
     title: 'Settings',
     icon: <SettingOutlined />,

@@ -18,8 +18,6 @@ import { Sticky } from '../../components/sticky'
 import { SubBar } from '../../components/subBar'
 import { AppCard } from '../../components/appCard'
 
-const { Title } = Typography
-const { Option } = Select
 dayjs.extend(utc)
 
 const LinkDetail = (props) => {
@@ -28,7 +26,7 @@ const LinkDetail = (props) => {
     from: dayjs().startOf('day').utc().format(),
     to: dayjs().utc().format(),
   })
-  const [bucket, setBucket] = useState(null)
+  const [bucket, setBucket] = useState('daily')
 
   const params = useParams()
 
@@ -45,8 +43,6 @@ const LinkDetail = (props) => {
       bucket,
     })
 
-    console.log(queryParams, 'queryParams')
-    console.log(params, 'params')
     await doFetch({
       url: `analytics/${params?.id}?${queryParams}`,
       method: 'GET',
@@ -86,7 +82,7 @@ const LinkDetail = (props) => {
 
         <Row>
           <Col span={24} style={{ marginBottom: 24 }}>
-            <AgentNames queryParams={time} />
+            <AgentNames queryParams={time} linkData={response} />
           </Col>
 
           {bucket ? (

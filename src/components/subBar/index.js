@@ -14,7 +14,7 @@ export const SubBar = ({ onChange, hasBucket = false, isStick }) => {
   const [startDate, setStartDate] = useState(dayjs())
   const [endDate, setEndDate] = useState(dayjs())
   const [timeFrame, setTimeFrame] = useState('0')
-  const [bucket, setBucket] = useState(null)
+  const [bucket, setBucket] = useState('daily')
 
   const handleChangeTimeFrame = (value) => {
     setTimeFrame(value)

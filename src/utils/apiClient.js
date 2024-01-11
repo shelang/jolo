@@ -1,4 +1,5 @@
 import { parseCookies } from 'nookies'
+import { Navigate } from 'react-router-dom'
 
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? `/${path}` : path
@@ -7,24 +8,29 @@ function formatUrl(path) {
 }
 
 async function checkStatus(response) {
+  console.log(response, 'response', response.headers.get('Content-Type'))
   if (response.status >= 200 && response.status < 300) {
     return parseJSON(response)
   }
-  if (response.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.log(response.response.data)
-    console.log(response.response.status)
-    console.log(response.response.headers)
-  } else if (response.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    console.log(response.request)
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log('Error', response.message)
+  if (response.status === 401 && window.location.href !== 'login') {
+    Navigate({ to: 'refresh' })
   }
+
+  // if (response.response) {
+  //   // The request was made and the server responded with a status code
+  //   // that falls out of the range of 2xx
+  //   console.log(response.response.data)
+  //   console.log(response.response.status)
+  //   console.log(response.response.headers)
+  // } else if (response.request) {
+  //   // The request was made but no response was received
+  //   // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+  //   // http.ClientRequest in node.js
+  //   console.log(response.request)
+  // } else {
+  //   // Something happened in setting up the request that triggered an Error
+  //   console.log('Error', response.message)
+  // }
 
   return Promise.reject(await response.text())
 }
@@ -70,9 +76,9 @@ async function ApiClient(path, options) {
 
   if (Object.keys(cookies).length !== 0 && cookies.linkComposerUser) {
     const user = JSON.parse(cookies.linkComposerUser)
-    const workspaceID = cookies['x-wsid'] && JSON.parse(cookies['x-wsid'])
+    // const workspaceID = cookies['x-wsid'] && JSON.parse(cookies['x-wsid'])
     fetchOptions.headers.Authorization = `Bearer ${user.token}`
-    if (workspaceID) fetchOptions.headers['x-wsid'] = workspaceID
+    // if (workspaceID) fetchOptions.headers['x-wsid'] = workspaceID
   }
 
   return fetch(url, { ...fetchOptions })
