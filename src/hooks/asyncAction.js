@@ -1,4 +1,5 @@
 import { useReducer } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ApiClient from '../utils/apiClient'
 import { toast } from 'react-toastify'
 
@@ -31,24 +32,22 @@ function useFetch(action) {
     error: null,
     response: null,
   })
+  const navigate = useNavigate()
 
-  function performAction(options) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        dispatch({ type: 'FETCH_INIT' })
-        const res = await ApiClient(options.url, options)
-        action && action.onSuccess && action.onSuccess(res)
-        dispatch({ type: 'FETCH_SUCCESS', payload: res })
-        resolve(res)
-      } catch (e) {
-        console.log(e, 'e')
-
-        reject()
-
-        action && action.onError && action.onError(e)
-        dispatch({ type: 'FETCH_FAILURE', payload: e })
+  async function performAction(options) {
+    try {
+      dispatch({ type: 'FETCH_INIT' })
+      const res = await ApiClient(options.url, options)
+      action && action.onSuccess && action.onSuccess(res)
+      dispatch({ type: 'FETCH_SUCCESS', payload: res })
+    } catch (e) {
+      if (e.status === 401) {
+        navigate('/refresh')
       }
-    })
+
+      action && action.onError && action.onError(e)
+      dispatch({ type: 'FETCH_FAILURE', payload: e })
+    }
   }
 
   return [state, performAction]

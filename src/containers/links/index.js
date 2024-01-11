@@ -69,62 +69,46 @@ const Links = () => {
 
   const columns = [
     {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-    },
-    {
-      title: 'URL',
-      dataIndex: 'url',
-      key: 'url',
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
+      title: 'Link ID',
+      dataIndex: 'linkId',
+      key: 'linkId',
     },
     {
       title: 'Link Hash',
-      dataIndex: 'hash',
-      key: 'hash',
+      dataIndex: 'linkHash',
+      key: 'linkHash',
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => (
-        <Tag color={tagColors[status]}>{status.toUpperCase()}</Tag>
-      ),
-    },
-    {
-      title: 'Redirect Code',
-      dataIndex: 'redirectCode',
-      key: 'redirectCode',
-      render: (tag) => <Tag>{tag}</Tag>,
+      title: 'Created at',
+      dataIndex: 'createAt',
+      key: 'createAt',
+      render: (item) => moment(item).format('YYYY-MM-DD'),
     },
     {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a onClick={(e) => navigate(`/dashboard/links/${record.id}`)}>
+          <a onClick={(e) => navigate(`/dashboard/links/${record.linkId}`)}>
             View Report
           </a>
           <a
             onClick={(e) =>
-              navigate(`/dashboard/create-link?id=${record.id}&isEditing=true`)
+              navigate(
+                `/dashboard/create-link?id=${record.linkId}&isEditing=true`,
+              )
             }>
             Edit
           </a>
           <a
             onClick={(e) =>
-              copyToClipboard(`${window.location.origin}/r/${record.hash}`)
+              copyToClipboard(`${window.location.origin}/r/${record.linkHash}`)
             }>
             Copy
           </a>
           <a
             onClick={() =>
-              showModal(`${window.location.origin}/r/${record.hash}`)
+              showModal(`${window.location.origin}/r/${record.linkHash}`)
             }>
             QRCode
           </a>
@@ -163,7 +147,7 @@ const Links = () => {
 
         <Table
           columns={columns}
-          dataSource={response ? response.links : []}
+          dataSource={response?.links ?? []}
           pagination={{
             position: ['bottomCenter'],
             size: 'small',
